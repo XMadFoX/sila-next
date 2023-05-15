@@ -3,7 +3,7 @@ import { Button } from 'ui';
 export default function Page() {
 	return (
 		<>
-			<Button>Beep</Button>
+			<Button intent="primary">Beep beep Beep</Button>
 		</>
 	);
 }
