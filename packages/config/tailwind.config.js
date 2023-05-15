@@ -9,6 +9,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			backgroundImage: {
+				primary: 'var(--gradient)',
+			},
 			colors: {
 				black: '#454444',
 				'dark-grey': '#A3A2A2',
@@ -16,10 +19,9 @@ module.exports = {
 				blue: '#2E89DC',
 				error: '#CB1212',
 				green: '#73E63D',
-				primary: '#2E89DC',
-				'primary-a': '#2E89DC',
-				'primary-b': '#4361EE',
-				'primary-c': '#FB6F92',
+				'primary-a': 'var(--primary-start)',
+				'primary-b': 'var(--primary-via)',
+				'primary-c': 'var(--primary-end)',
 			},
 		},
 	},

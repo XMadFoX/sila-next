@@ -9,3 +9,15 @@
 }
 }
  */
+
+:root {
+	--primary-start: #2e89dc;
+	--primary-via: #4361ee;
+	--primary-end: #fb6f92;
+	--gradient: linear-gradient(
+		90deg,
+		var(--primary-start) 0%,
+		var(--primary-via) 50%,
+		var(--primary-end) 100%
+	);
+}
