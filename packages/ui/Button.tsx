@@ -3,7 +3,7 @@ import * as React from 'react';
 import { gradientClassNames, GradientWrapper } from './GradientWrapper';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
-	intent?: 'primary' | 'clear' | 'outlined';
+	intent?: 'primary' | 'clear' | 'outlined' | 'img';
 	gradientDirection?: 'r' | 'l' | 't' | 'b';
 	size?: 'sm' | 'md' | 'lg';
 	bg?: string;
@@ -47,7 +47,7 @@ export function Button(props: ButtonProps) {
 		</button>
 	) : (
 		<GradientWrapper
-			className="text-white from-primary-a to-primary-c"
+			className="mr-2 mb-2 text-white from-primary-a to-primary-c"
 			gradientDirection={gradientDirection}
 		>
 			<button
