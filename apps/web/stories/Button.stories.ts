@@ -27,6 +27,13 @@ export const Secondary: Story = {
 	},
 };
 
+export const Outlined: Story = {
+	args: {
+		children: 'Outline',
+		intent: 'outlined',
+	},
+};
+
 export const Long: Story = {
 	args: {
 		children: 'Button beep boop',
