@@ -1,5 +1,6 @@
 import { Badge } from './Badge';
 import { Button } from './Button';
+import { GradientWrapper } from './GradientWrapper';
 
 interface CardProps {
 	children: React.ReactNode;
@@ -104,7 +105,13 @@ interface CardProps {
 }
 
 export function Card({ children }: CardProps) {
-	return <figure>{children}</figure>;
+	return (
+		<GradientWrapper className="overflow-hidden rounded-[20px] bg-primary max-w-[670px] h-[640px]">
+			<span className="bg-white rounded-[19px] max-w-[668px] h-[638px]">
+				<figure className="flex flex-col p-6">{children}</figure>
+			</span>
+		</GradientWrapper>
+	);
 }
 
 Card.Preview = CardPreview;

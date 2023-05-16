@@ -24,13 +24,13 @@ interface GradientWrapperProps {
 }
 
 export function GradientWrapper(props: GradientWrapperProps) {
-	const { as: Tag, gradientDirection, children } = props;
+	const { as: Tag, gradientDirection, rounded, children } = props;
 
 	return (
 		<Tag
 			className={clsx(
 				'inline-flex overflow-hidden relative justify-center items-center p-[1px]',
-				rounds[props?.rounded || 'full'],
+				rounded && rounds[rounded],
 				gradientClassNames[gradientDirection || 'r'],
 				props.className
 			)}
