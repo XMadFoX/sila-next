@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { gradientClassNames, GradientWrapper } from './GradientWrapper';
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 	intent?: 'primary' | 'clear' | 'outlined' | 'img';

@@ -5,6 +5,7 @@ const gradientClassNames = {
 	l: 'bg-gradient-to-l',
 	t: 'bg-gradient-to-t',
 	b: 'bg-gradient-to-b',
+	br: 'bg-gradient-to-br',
 };
 
 const rounds = {
@@ -18,7 +19,7 @@ const rounds = {
 interface GradientWrapperProps {
 	as: keyof JSX.IntrinsicElements;
 	className?: string;
-	gradientDirection?: 'r' | 'l' | 't' | 'b';
+	gradientDirection?: keyof typeof gradientClassNames;
 	rounded?: keyof typeof rounds;
 	children: React.ReactNode;
 }

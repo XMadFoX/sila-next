@@ -34,7 +34,6 @@ export const Default: Story = {
 export const MaxContent: Story = {
 	args: {
 		children: [
-			// Allah forgive me for this
 			<Card.Preview {...(DefaultPreview.args as any)} />,
 			<Card.Details {...(MaxContentDetails.args as any)} />,
 		],
