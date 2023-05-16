@@ -48,6 +48,7 @@ export function Button(props: ButtonProps) {
 	) : (
 		<GradientWrapper
 			className="mr-2 mb-2 text-white from-primary-a to-primary-c"
+			rounded="full"
 			gradientDirection={gradientDirection}
 		>
 			<button

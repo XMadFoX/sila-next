@@ -16,8 +16,8 @@
 	--primary-end: #fb6f92;
 	--gradient: linear-gradient(
 		90deg,
-		var(--primary-start) 0%,
-		var(--primary-via) 50%,
+		var(--primary-start) -30%,
+		var(--primary-via) 30%,
 		var(--primary-end) 100%
 	);
 }

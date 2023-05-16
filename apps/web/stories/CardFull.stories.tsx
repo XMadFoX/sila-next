@@ -25,8 +25,8 @@ type Story = StoryObj<typeof Card>;
 export const Default: Story = {
 	args: {
 		children: [
-			<Card.Preview {...DefaultPreview.args} />,
-			<Card.Details {...DefaultDetails.args} />,
+			<Card.Preview {...(DefaultPreview.args as any)} />,
+			<Card.Details {...(DefaultDetails.args as any)} />,
 		],
 	},
 };
@@ -34,8 +34,9 @@ export const Default: Story = {
 export const MaxContent: Story = {
 	args: {
 		children: [
-			<Card.Preview {...DefaultPreview.args} />,
-			<Card.Details {...MaxContentDetails.args} />,
+			// Allah forgive me for this
+			<Card.Preview {...(DefaultPreview.args as any)} />,
+			<Card.Details {...(MaxContentDetails.args as any)} />,
 		],
 	},
 };

@@ -4,7 +4,7 @@ import { Button, GradientWrapper } from 'ui';
 
 const meta: Meta<typeof GradientWrapper> = {
 	title: 'Example/GradientWrapper',
-	component: GradientWrapper,
+	component: (args) => <GradientWrapper {...args} />,
 	tags: ['autodocs'],
 };
 
