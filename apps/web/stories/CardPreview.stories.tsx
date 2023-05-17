@@ -3,7 +3,6 @@ import Image from 'next/image';
 
 import { Card } from 'ui';
 
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta: Meta<typeof Card.Preview> = {
 	title: 'Card/Preview',
 	component: Card.Preview,
@@ -16,13 +15,22 @@ const meta: Meta<typeof Card.Preview> = {
 export default meta;
 type Story = StoryObj<typeof Card.Preview>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Default: Story = {
 	args: {
 		image: 'https://picsum.photos/624/330',
 		big: true,
 		alt: 'Random image',
 		badges: ['Free', 'Online'],
+		as: Image,
+	},
+};
+
+export const Small: Story = {
+	args: {
+		image: 'https://picsum.photos/377/200',
+		big: false,
+		alt: 'Random image',
+		badges: ['Free', 'Obline'],
 		as: Image,
 	},
 };

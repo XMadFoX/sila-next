@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Button, Controls, GradientWrapper } from 'ui';
 
 const meta: Meta<typeof Button> = {
-	title: 'Sleder/Controls',
+	title: 'Slider/Controls',
 	component: Button,
 	tags: ['autodocs'],
 };

@@ -8,7 +8,7 @@ interface CardProps {
 
 interface CardPreviewProps {
 	image: string;
-	big: boolean;
+	big?: boolean;
 	alt: string;
 	badges: string[];
 	as: React.ElementType;
@@ -102,12 +102,21 @@ function CardDetails(props: CardDetailsProps) {
 
 interface CardProps {
 	children: React.ReactNode;
+	big?: boolean;
 }
 
-export function Card({ children }: CardProps) {
+export function Card({ children, big }: CardProps) {
 	return (
-		<GradientWrapper className="overflow-hidden rounded-[20px] bg-primary max-w-[670px] h-[640px]">
-			<span className="bg-white rounded-[19px] max-w-[668px] h-[638px]">
+		<GradientWrapper
+			className={`overflow-hidden rounded-[20px] bg-primary ${
+				big ? 'max-w-[670px] h-[640px]' : 'max-w-[427px]'
+			}`}
+		>
+			<span
+				className={`bg-white rounded-[19px] ${
+					big ? 'max-w-[668px] h-[638px]' : ''
+				}`}
+			>
 				<figure className="flex flex-col p-6">{children}</figure>
 			</span>
 		</GradientWrapper>
