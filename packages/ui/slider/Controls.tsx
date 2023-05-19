@@ -5,20 +5,28 @@ import { IconButton } from '../IconButton';
 
 interface ControlsProps extends React.HTMLAttributes<HTMLButtonElement> {
 	next?: true;
+	disabled?: boolean;
 }
 
 export const Controls = (props: ControlsProps) => {
+	const { next, className, disabled, ...args } = props;
+
 	return (
 		<GradientWrapper
 			className={clsx(
 				'from-10% from-primary-a via-30% via-primary-b to-primary-c',
-				props.next && '-scale-x-100',
-				props.className || 'w-14 h-14'
+				next && '-scale-x-100',
+				className || 'w-14 h-14',
+				disabled && 'opacity-50'
 			)}
 			gradientDirection="br"
 			rounded="full"
 		>
-			<IconButton className="flex justify-center items-center w-full h-full">
+			<IconButton
+				className="flex justify-center items-center w-full h-full"
+				disabled={disabled}
+				{...args}
+			>
 				<svg
 					width="18"
 					height="32"

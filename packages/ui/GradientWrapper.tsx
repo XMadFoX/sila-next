@@ -30,7 +30,7 @@ export function GradientWrapper(props: GradientWrapperProps) {
 	return (
 		<Tag
 			className={clsx(
-				'inline-flex overflow-hidden relative justify-center items-center p-[1px]',
+				'inline-flex overflow-hidden justify-center items-center p-[1px]',
 				rounded && rounds[rounded],
 				gradientClassNames[gradientDirection || 'r'],
 				props.className

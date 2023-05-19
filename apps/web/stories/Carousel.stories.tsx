@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Card } from 'ui';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Card, Slider } from 'ui';
+import { SwiperSlide } from 'swiper/react';
 
 import { Default as DefaultCard, Small as SmallCard } from './CardFull.stories';
 
-const meta: Meta<typeof Swiper> = {
+import React from 'react';
+
+const meta: Meta<typeof Slider> = {
 	title: 'Slider/Full',
-	component: Swiper,
+	component: Slider,
 	tags: ['autodocs'],
 	parameters: {
 		layout: 'centered',
@@ -15,10 +17,8 @@ const meta: Meta<typeof Swiper> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Swiper>;
 
-import 'swiper/css';
-
+type Story = StoryObj<typeof Slider>;
 export const Default: Story = {
 	args: {
 		slidesPerView: 2,
@@ -29,23 +29,6 @@ export const Default: Story = {
 				{Array.from({ length: 7 }, (_, i) => (
 					<SwiperSlide>
 						<Card {...(DefaultCard.args as any)} />
-					</SwiperSlide>
-				))}
-			</>
-		),
-	},
-};
-
-export const SmallCards: Story = {
-	args: {
-		slidesPerView: 3,
-		spaceBetween: 20,
-		className: 'mx-auto max-w-[1400px]',
-		children: (
-			<>
-				{Array.from({ length: 7 }, (_, i) => (
-					<SwiperSlide>
-						<Card {...(SmallCard.args as any)} />
 					</SwiperSlide>
 				))}
 			</>
