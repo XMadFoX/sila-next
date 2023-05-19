@@ -93,7 +93,10 @@ function CardDetails(props: CardDetailsProps) {
 			<p className="mt-4 text-sm text-black">
 				{cutText(props.description, 190)}
 			</p>
-			<a className="mt-5 underline text-dark-grey" href={props.org.link}>
+			<a
+				className="mt-5 text-sm underline text-dark-grey"
+				href={props.org.link}
+			>
 				Организатор: {props.org.name}
 			</a>
 		</figcaption>
