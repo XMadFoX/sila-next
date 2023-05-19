@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button, GradientWrapper } from 'ui';
 
 const meta: Meta<typeof GradientWrapper> = {
-	title: 'Example/GradientWrapper',
+	title: 'General/GradientWrapper',
 	component: (args) => <GradientWrapper {...args} />,
 	tags: ['autodocs'],
 };
