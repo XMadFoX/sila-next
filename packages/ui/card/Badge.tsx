@@ -1,4 +1,4 @@
-import { GradientWrapper } from './GradientWrapper';
+import { GradientWrapper } from '../general/GradientWrapper';
 
 interface BadgeProps {
 	children: React.ReactNode;

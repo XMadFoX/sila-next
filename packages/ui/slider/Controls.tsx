@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { GradientWrapper } from '../GradientWrapper';
-import { IconButton } from '../IconButton';
+import { GradientWrapper, IconButton } from '../general';
 
 interface ControlsProps extends React.HTMLAttributes<HTMLButtonElement> {
 	next?: true;
