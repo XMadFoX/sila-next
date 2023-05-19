@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Card, Slider } from 'ui';
 import { SwiperSlide } from 'swiper/react';
 
-import { Default as DefaultCard, Small as SmallCard } from './CardFull.stories';
+import { Default as DefaultCard } from '../card/CardFull.stories';
 
 import React from 'react';
 
