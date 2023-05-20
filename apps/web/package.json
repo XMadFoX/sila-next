@@ -3,12 +3,14 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev ",
-		"build": "next build",
+		"dev": "conc 'npm:dev:next' 'npm:dev:storybook'",
+		"dev:next": "next dev",
+		"dev:storybook": "storybook dev -p 6006 --no-open",
+		"build": "conc 'npm:build:next' 'npm:build:storybook'",
+		"build:next": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"storybook": "storybook dev -p 6006 --no-open",
-		"build-storybook": "storybook build"
+		"build:storybook": "storybook build"
 	},
 	"dependencies": {
 		"clsx": "^1.2.1",
@@ -29,10 +31,11 @@
 		"@types/react": "^18.0.22",
 		"@types/react-dom": "^18.0.7",
 		"autoprefixer": "^10.4.14",
+		"concurrently": "^8.0.1",
 		"eslint-config-custom": "workspace:*",
-		"tailwind-config": "workspace:*",
 		"postcss": "^8.4.23",
 		"storybook": "^7.0.11",
+		"tailwind-config": "workspace:*",
 		"tailwindcss": "^3.3.2",
 		"tsconfig": "workspace:*",
 		"typescript": "^4.5.3"
