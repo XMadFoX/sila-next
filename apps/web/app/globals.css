@@ -2,18 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer components {
-
-.primary {
-  @apply bg-gradient-to-r from-blue-500 to-green-500;
-}
-}
- */
-
 :root {
 	--primary-start: #2e89dc;
 	--primary-via: #4361ee;
 	--primary-end: #fb6f92;
+	--white: #ffffff;
+	--black: #454444l;
+	--dark-grey: #a3a2a2;
+	--grey: #efeeee;
+	--blue: #2e89dc;
+	--error: #cb1212;
+	--green: #73e63d;
 	--gradient: linear-gradient(
 		90deg,
 		var(--primary-start) -30%,
