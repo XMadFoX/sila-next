@@ -53,3 +53,11 @@ export const Small: Story = {
 		children: 'Button',
 	},
 };
+
+export const AsLink: Story = {
+	args: {
+		intent: 'primary',
+		children: 'Link styled as button',
+		href: 'https://google.com',
+	},
+};

@@ -8,6 +8,8 @@ const gradientClassNames = {
 	br: 'bg-gradient-to-br',
 };
 
+type GradientDirection = keyof typeof gradientClassNames;
+
 const rounds = {
 	full: 'rounded-full',
 	sm: 'rounded-sm',
@@ -19,7 +21,7 @@ const rounds = {
 interface GradientWrapperProps {
 	as: keyof JSX.IntrinsicElements;
 	className?: string;
-	gradientDirection?: keyof typeof gradientClassNames;
+	gradientDirection?: GradientDirection;
 	rounded?: keyof typeof rounds;
 	children: React.ReactNode;
 }
@@ -45,4 +47,4 @@ GradientWrapper.defaultProps = {
 	as: 'span',
 };
 
-export { gradientClassNames };
+export { gradientClassNames, GradientDirection };
