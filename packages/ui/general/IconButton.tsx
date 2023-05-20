@@ -15,7 +15,7 @@ export const IconButton = (props: IconButtonProps) => {
 		<Button
 			intent="img"
 			className={clsx(
-				'flex justify-center items-center w-full h-full',
+				'flex justify-center items-center',
 				className,
 				props.disabled && 'cursor-not-allowed'
 			)}
