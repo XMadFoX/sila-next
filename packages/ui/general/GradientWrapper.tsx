@@ -19,7 +19,7 @@ const rounds = {
 };
 
 interface GradientWrapperProps {
-	as: keyof JSX.IntrinsicElements;
+	as?: keyof JSX.IntrinsicElements;
 	className?: string;
 	gradientDirection?: GradientDirection;
 	rounded?: keyof typeof rounds;
@@ -27,7 +27,13 @@ interface GradientWrapperProps {
 }
 
 export function GradientWrapper(props: GradientWrapperProps) {
-	const { as: Tag, gradientDirection, rounded, children } = props;
+	const {
+		as: Tag = 'span',
+		gradientDirection,
+		rounded,
+		children,
+		className,
+	} = props;
 
 	return (
 		<Tag
@@ -35,7 +41,7 @@ export function GradientWrapper(props: GradientWrapperProps) {
 				'inline-flex overflow-hidden justify-center items-center p-[1px]',
 				rounded && rounds[rounded],
 				gradientClassNames[gradientDirection || 'r'],
-				props.className
+				className
 			)}
 		>
 			{children}
@@ -43,8 +49,5 @@ export function GradientWrapper(props: GradientWrapperProps) {
 	);
 }
 
-GradientWrapper.defaultProps = {
-	as: 'span',
-};
-
-export { gradientClassNames, GradientDirection };
+export { gradientClassNames };
+export type { GradientDirection };

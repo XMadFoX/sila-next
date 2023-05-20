@@ -1,12 +1,12 @@
 'use client';
 import { Controls } from './';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
 import React from 'react';
 
 export function Slider({ ...props }) {
-	const swiperRef = React.useRef<Swiper>(null);
+	const swiperRef = React.useRef<SwiperRef>(null);
 	const [controlsDisabled, setControlsDisabled] = React.useState([true, false]);
 
 	const goNext = () => {
@@ -22,14 +22,12 @@ export function Slider({ ...props }) {
 	};
 
 	React.useEffect(() => {
-		if (swiperRef.current && swiperRef.current.swiper) {
-			swiperRef.current.swiper.on('slideChange', () => {
-				setControlsDisabled([
-					swiperRef.current.swiper.isBeginning,
-					swiperRef.current.swiper.isEnd,
-				]);
-			});
-		}
+		swiperRef.current?.swiper.on('slideChange', () => {
+			setControlsDisabled([
+				swiperRef.current?.swiper.isBeginning || false,
+				swiperRef.current?.swiper.isEnd || false,
+			]);
+		});
 	}, []);
 
 	return (

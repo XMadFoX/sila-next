@@ -27,7 +27,7 @@ export const Default: Story = {
 		children: (
 			<>
 				{Array.from({ length: 7 }, (_, i) => (
-					<SwiperSlide>
+					<SwiperSlide key={i}>
 						<Card {...(DefaultCard.args as any)} />
 					</SwiperSlide>
 				))}

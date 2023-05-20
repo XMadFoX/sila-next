@@ -1,0 +1,9 @@
+{
+	"name": "tailwind-config",
+	"version": "0.0.0",
+	"main": "tailwind.config.js",
+	"license": "MIT",
+	"dependencies": {
+		"tailwindcss": "^3.3.2"
+	}
+}

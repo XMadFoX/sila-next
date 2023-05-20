@@ -17,7 +17,7 @@ const meta: Meta<typeof Card> = {
 	parameters: {
 		layout: 'centered',
 		backgrounds: {
-			default: 'white',
+			default: 'light',
 		},
 	},
 };

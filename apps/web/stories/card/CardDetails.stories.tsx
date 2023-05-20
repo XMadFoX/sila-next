@@ -9,7 +9,7 @@ const meta: Meta<typeof Card.Details> = {
 	parameters: {
 		layout: 'centered',
 		backgrounds: {
-			default: 'white',
+			default: 'light',
 		},
 	},
 };

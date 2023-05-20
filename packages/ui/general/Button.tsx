@@ -15,13 +15,20 @@ type SharedProps = {
 	bg?: string;
 };
 
-type ButtonProps = SharedProps & React.ComponentPropsWithoutRef<'button'>;
-type LinkProps = SharedProps & NextLinkProps;
+type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
+type LinkProps = Partial<Pick<NextLinkProps, 'href' | 'as'>>;
 type ButtonOrLink = ButtonProps & LinkProps;
 type ButtonOrLinkProps = ButtonOrLink & SharedProps;
 
 export function Button(props: ButtonOrLinkProps) {
-	const { gradientDirection, size, bg, intent, children, ...args } = props;
+	const {
+		gradientDirection = 'r',
+		size = 'md',
+		bg = 'grey',
+		intent = 'primary',
+		children,
+		...args
+	} = props;
 	let themed = '';
 
 	switch (intent) {
@@ -47,6 +54,8 @@ export function Button(props: ButtonOrLinkProps) {
 		case 'lg':
 			sizeClass = 'text-lg py-6 px-12';
 			break;
+		default:
+			sizeClass = 'text-base py-4 px-8';
 	}
 
 	// hacky, couldn't make ts happy with dynamic tag
@@ -54,7 +63,7 @@ export function Button(props: ButtonOrLinkProps) {
 		return Wrap(
 			<Link
 				className={clsx('rounded-full font-medium', themed, sizeClass)}
-				{...(args as LinkProps)}
+				{...(args as unknown as NextLinkProps)}
 			>
 				{props.children}
 			</Link>,
@@ -82,10 +91,10 @@ export function Wrap(
 	doWrap: boolean,
 	bgColor: string | undefined = undefined,
 	gradientDirection: GradientDirection | undefined = undefined
-): React.ReactNode {
+): React.ReactElement {
 	if (doWrap) {
 		const modified = React.cloneElement(children, {
-			style: { backgroundColor: bgColor || 'grey' },
+			style: { backgroundColor: bgColor },
 		});
 
 		return (
@@ -100,12 +109,3 @@ export function Wrap(
 	}
 	return children;
 }
-
-const defaultProps: Partial<ButtonOrLinkProps> = {
-	intent: 'primary',
-	size: 'md',
-	gradientDirection: 'r',
-	bg: 'grey',
-};
-
-Button.defaultProps = defaultProps;

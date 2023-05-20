@@ -1,12 +1,15 @@
 import clsx from 'clsx';
 import React from 'react';
+import { UrlObject } from 'url';
 import { Button } from './Button';
 
 interface IconButtonProps
-	extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	href?: string | UrlObject;
+}
 
 export const IconButton = (props: IconButtonProps) => {
-	const { className, disabled, ...args } = props;
+	const { className, ...args } = props;
 
 	return (
 		<Button
@@ -14,7 +17,7 @@ export const IconButton = (props: IconButtonProps) => {
 			className={clsx(
 				'flex justify-center items-center w-full h-full',
 				className,
-				disabled && 'cursor-not-allowed'
+				props.disabled && 'cursor-not-allowed'
 			)}
 			{...args}
 		>

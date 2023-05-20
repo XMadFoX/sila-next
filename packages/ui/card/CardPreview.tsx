@@ -26,7 +26,7 @@ export function CardPreview({
 			/>
 			<ul className="flex absolute right-3 bottom-3 gap-4">
 				{badges.map((text) => (
-					<li>
+					<li key={text}>
 						<Badge>{text}</Badge>
 					</li>
 				))}
