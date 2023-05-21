@@ -1,9 +1,9 @@
-import { Button } from 'ui';
+import HeroSection from '../components/sections/HeroSection';
 
 export default function Page() {
 	return (
-		<>
-			<Button intent="primary">Beep beep Beep</Button>
-		</>
+		<div className="flex flex-col items-center text-black">
+			<HeroSection />
+		</div>
 	);
 }
