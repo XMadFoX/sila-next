@@ -27,6 +27,7 @@ export function Button(props: ButtonOrLinkProps) {
 		bg = 'grey',
 		intent = 'primary',
 		children,
+		className,
 		...args
 	} = props;
 	let themed = '';
@@ -62,7 +63,12 @@ export function Button(props: ButtonOrLinkProps) {
 	if (args.href) {
 		return Wrap(
 			<Link
-				className={clsx('rounded-full font-medium', themed, sizeClass)}
+				className={clsx(
+					'rounded-full font-medium',
+					themed,
+					intent !== 'img' && sizeClass,
+					className
+				)}
 				{...(args as unknown as NextLinkProps)}
 			>
 				{props.children}
@@ -75,7 +81,12 @@ export function Button(props: ButtonOrLinkProps) {
 
 	return Wrap(
 		<button
-			className={clsx('rounded-full font-medium', themed, sizeClass)}
+			className={clsx(
+				'rounded-full font-medium',
+				themed,
+				intent !== 'img' && sizeClass,
+				className
+			)}
 			{...args}
 		>
 			{props.children}

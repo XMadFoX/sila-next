@@ -10,7 +10,7 @@ export const LikeButton = ({ liked: defaultLiked }: LikeButtonProps) => {
 
 	return (
 		<IconButton
-			className="flex absolute top-3 right-3 justify-center items-center p-1 w-10 h-10 rounded-full bg-black/50"
+			className="flex absolute top-3 right-3 justify-center items-center p-1 w-10 h-10 rounded-full bg-[#454444]/60"
 			onClick={() => setLiked((liked) => !liked)}
 		>
 			{liked ? (
