@@ -24,6 +24,7 @@ export function CardPreview({
 				alt={alt}
 				height={big ? 330 : 200}
 				width={big ? 624 : 377}
+				draggable={false}
 			/>
 			<ul className="flex absolute right-3 bottom-3 gap-4">
 				{badges.map((text) => (
