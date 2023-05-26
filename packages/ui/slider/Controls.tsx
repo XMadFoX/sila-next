@@ -13,7 +13,7 @@ export const Controls = (props: ControlsProps) => {
 	return (
 		<GradientWrapper
 			className={clsx(
-				'from-10% from-primary-a via-30% via-primary-b to-primary-c',
+				'from-10% from-primary-a via-30% via-primary-b to-primary-c transition-opacity duration-300 ease-in-out',
 				next && '-scale-x-100',
 				className || 'w-14 h-14',
 				disabled && 'opacity-50'
@@ -22,7 +22,7 @@ export const Controls = (props: ControlsProps) => {
 			rounded="full"
 		>
 			<IconButton
-				className="flex justify-center items-center w-full h-full"
+				className="flex justify-center items-center mr-0.5 w-full h-full"
 				disabled={disabled}
 				{...args}
 			>

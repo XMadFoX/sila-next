@@ -10,18 +10,17 @@
 	"devDependencies": {
 		"@types/react": "^18.2.0",
 		"@types/react-dom": "^18.2.0",
-		"eslint-config-custom": "workspace:*",
-		"tailwind-config": "workspace:*",
 		"eslint": "^7.32.0",
+		"eslint-config-custom": "workspace:*",
 		"prop-types": "^15.8.1",
 		"react": "^18",
 		"react-dom": "^18.2.0",
+		"tailwind-config": "workspace:*",
 		"tailwindcss": "^3.3.2",
 		"tsconfig": "workspace:*",
 		"typescript": "^4.5.3"
 	},
 	"dependencies": {
-		"clsx": "^1.2.1",
-		"swiper": "^9.3.2"
+		"clsx": "^1.2.1"
 	}
 }

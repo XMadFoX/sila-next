@@ -13,6 +13,7 @@
 		"build:storybook": "storybook build"
 	},
 	"dependencies": {
+		"@use-gesture/react": "^10.2.27",
 		"clsx": "^1.2.1",
 		"next": "^13.4.3",
 		"react": "^18.2.0",

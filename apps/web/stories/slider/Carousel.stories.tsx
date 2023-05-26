@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Card, Slider } from 'ui';
-import { SwiperSlide } from 'swiper/react';
 
 import { Default as DefaultCard } from '../card/CardFull.stories';
 
@@ -13,6 +12,7 @@ const meta: Meta<typeof Slider> = {
 	tags: ['autodocs'],
 	parameters: {
 		layout: 'centered',
+		width: '100%',
 	},
 };
 
@@ -21,15 +21,13 @@ export default meta;
 type Story = StoryObj<typeof Slider>;
 export const Default: Story = {
 	args: {
-		slidesPerView: 2,
-		spaceBetween: 60,
 		className: 'mx-auto max-w-[1400px]',
 		children: (
 			<>
 				{Array.from({ length: 7 }, (_, i) => (
-					<SwiperSlide key={i}>
-						<Card {...(DefaultCard.args as any)} />
-					</SwiperSlide>
+					<Slider.Slide key={i}>
+						<Card gradientClass="min-w-max" {...(DefaultCard.args as any)} />
+					</Slider.Slide>
 				))}
 			</>
 		),
