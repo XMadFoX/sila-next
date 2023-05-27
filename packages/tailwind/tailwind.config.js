@@ -12,6 +12,10 @@ module.exports = {
 			backgroundImage: {
 				primary: 'var(--gradient)',
 			},
+			flex: {
+				'card-full': '0 0 100%',
+				card: '0 0 200px',
+			},
 		},
 		colors: {
 			transparent: 'transparent',

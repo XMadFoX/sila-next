@@ -2,7 +2,7 @@ import { GradientWrapper } from '../general';
 import { CardPreview } from './CardPreview';
 import { CardDetails } from './CardDetails';
 
-interface CardProps {
+export interface CardProps {
 	children: React.ReactNode;
 	big?: boolean;
 	gradientClass?: string;
