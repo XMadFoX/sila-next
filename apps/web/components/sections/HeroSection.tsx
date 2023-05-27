@@ -4,7 +4,7 @@ import { Button, GradientWrapper } from 'ui';
 
 export default function HeroSection() {
 	return (
-		<section className="flex flex-col justify-center p-4 xl:flex-row min-h-[100vh] max-w-[1600px]">
+		<section className="flex overflow-x-hidden flex-col justify-center p-4 xl:flex-row min-h-[100vh] xl:max-w-[1600px]">
 			<div className="flex flex-col justify-center">
 				<h1 className="text-3xl md:text-5xl font-bold leading-[130%] uppercase">
 					Сила
@@ -31,13 +31,15 @@ export default function HeroSection() {
 					Присоединиться
 				</Button>
 			</div>
-			<Image
-				src="/sila.jpg"
-				className="absolute -right-36 bottom-40 my-auto -ml-16 h-auto md:bottom-auto xl:relative brightness-150 saturate-75 -z-10 xl:right-auto xl:brightness-100"
-				alt=""
-				width={530}
-				height={650}
-			/>
+			<div className="overflow-hidden absolute right-0 my-auto xl:static xl:-ml-20 h-[650px] w-[530px]">
+				<Image
+					src="/sila.jpg"
+					className="absolute top-12 -right-16 h-auto scale-75 md:bottom-auto xl:top-auto xl:right-auto xl:m-0 xl:scale-100 brightness-150 saturate-75 -z-10 xl:relativ xl:brightness-100"
+					alt=""
+					width={530}
+					height={650}
+				/>
+			</div>
 		</section>
 	);
 }

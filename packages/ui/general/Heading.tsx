@@ -14,7 +14,7 @@ export const Heading = ({ as, children, className }: HeadingProps) => {
 		<Tag
 			className={clsx(
 				className || 'text-3xl text-black font-medium',
-				'relative before:absolute before:w-[134px] before:h-1 before:bg-primary before:-bottom-1'
+				'relative before:absolute before:w-[134px] before:h-1 before:bg-primary before:-bottom-1 text-center md:text-start'
 			)}
 		>
 			{children}

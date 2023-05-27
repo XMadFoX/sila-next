@@ -55,7 +55,7 @@ export function Slider({
 		<div className="relative">
 			<ul
 				className={clsx(
-					'flex overflow-x-scroll gap-[60px] max-w-[670px] snap-x snap-mandatory scroll-smooth lg:max-w-[1400px] hidden-scrollbar',
+					'flex overflow-x-scroll gap-[60px] max-w-[670px] snap-x snap-mandatory scroll-smooth 2xl:max-w-[1400px] hidden-scrollbar',
 					className
 				)}
 				ref={ref}
