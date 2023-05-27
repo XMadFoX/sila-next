@@ -1,6 +1,7 @@
+'use client';
+
 import React from 'react';
 import { useDrag } from '@use-gesture/react';
-import Slide from './Slide';
 import clsx from 'clsx';
 import { Controls } from './Controls';
 
@@ -76,5 +77,3 @@ export function Slider({
 		</div>
 	);
 }
-
-Slider.Slide = Slide;

@@ -1,7 +1,5 @@
-'use client';
-
 import React from 'react';
-import { Button, Card, GradientWrapper, Heading, Slider } from 'ui';
+import { Button, Card, GradientWrapper, Heading, Slider, Slide } from 'ui';
 import { cardMock } from '../mock';
 import CardList from '../landing/CardsContainer';
 
@@ -21,12 +19,12 @@ export default function EventsSection() {
 				<div className="flex mx-auto max-w-fit">
 					<Slider className="mx-auto mt-8">
 						{Array.from({ length: 9 }, (_, i) => (
-							<Slider.Slide key={i}>
+							<Slide key={i}>
 								<Card big gradientClass="min-w-max">
 									<Card.Preview big {...cardMock.preview} />
 									<Card.Details {...cardMock.details} />
 								</Card>
-							</Slider.Slide>
+							</Slide>
 						))}
 					</Slider>
 				</div>

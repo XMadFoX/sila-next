@@ -25,9 +25,6 @@ importers:
       clsx:
         specifier: ^1.2.1
         version: 1.2.1
-      glider-js:
-        specifier: ^1.7.8
-        version: 1.7.8
       next:
         specifier: ^13.4.3
         version: 13.4.3(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
@@ -37,9 +34,6 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      react-glider:
-        specifier: ^4.0.2
-        version: 4.0.2(react-dom@18.2.0)(react@18.2.0)
       ui:
         specifier: workspace:*
         version: link:../../packages/ui
@@ -5894,10 +5888,6 @@ packages:
     resolution: {integrity: sha512-wIh+gKBI9Nshz2o46B0B3f5k/W+WI9ZAv6y5Dn5WJ5SK1t0TnDimB4WE5rmTD05ZAIn8HALCZVmCsvj0w0v0lw==}
     dev: true
 
-  /glider-js@1.7.8:
-    resolution: {integrity: sha512-env4+yfoNYaeHJmEBGygjcZDpZ5LRUjGhCB6Ag+XNQfvuLVD5PhCYQShBVCAd5On7XfknM57O+V2Fwfcsii3Dw==}
-    dev: false
-
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -7909,17 +7899,6 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       react-is: 18.1.0
     dev: true
-
-  /react-glider@4.0.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-nZnkV4x8mSzfhGgrTkMrlL/g07T6hR0bLHg0q1iRumuORwfX+kqxCYoRy4/WXTRhlmurhcFKTaH007Vz2HjeHA==}
-    peerDependencies:
-      react: ^18.0.0
-      react-dom: ^18.0.0
-    dependencies:
-      glider-js: 1.7.8
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /react-inspector@6.0.1(react@18.2.0):
     resolution: {integrity: sha512-cxKSeFTf7jpSSVddm66sKdolG90qURAX3g1roTeaN6x0YEbtWc8JpmFN9+yIqLNH2uEkYerWLtJZIXRIFuBKrg==}
