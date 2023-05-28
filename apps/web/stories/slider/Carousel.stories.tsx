@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Card, Slider } from 'ui';
+import { Card, Slide, Slider } from 'ui';
 
 import { Default as DefaultCard } from '../card/CardFull.stories';
 
@@ -25,9 +25,9 @@ export const Default: Story = {
 		children: (
 			<>
 				{Array.from({ length: 7 }, (_, i) => (
-					<Slider.Slide key={i}>
+					<Slide key={i}>
 						<Card gradientClass="min-w-max" {...(DefaultCard.args as any)} />
-					</Slider.Slide>
+					</Slide>
 				))}
 			</>
 		),

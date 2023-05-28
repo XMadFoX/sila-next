@@ -6,17 +6,18 @@ import { cardMock } from '../mock';
 export default function BusinessCooperationSection() {
 	return (
 		<section className="flex flex-col justify-center mt-24 max-w-[1400px]">
-			<h2 className="text-4xl font-bold uppercase">
-				Деловое{' '}
+			<h2 className="text-3xl font-bold uppercase md:text-4xl">
+				Деловое
+				<br />
 				<GradientWrapper className="text-transparent bg-clip-text bg-primary bg-[length:200%] bg-[275%]">
 					сотрудничество
 				</GradientWrapper>
 			</h2>
-			<div className="flex">
-				<p className="mt-10 text-2xl font-medium">
+			<div className="px-4 md:flex md:px-0">
+				<p className="mt-10 text-xl font-medium md:w-1/2 md:text-2xl">
 					Мы стремимся развивать деловые связи между участниками сообщества.
 				</p>
-				<div className="mt-10 text-lg">
+				<div className="mt-10 text-lg md:w-1/2">
 					<p>
 						Здесь представлена информация о коммерческих и социальных проектах
 						участниках сообщества, в которых вы можете принять участие.
@@ -35,8 +36,12 @@ export default function BusinessCooperationSection() {
 					<Slider className="mx-auto mt-8">
 						{Array.from({ length: 9 }, (_, i) => (
 							<Slide key={i}>
-								<Card big gradientClass="min-w-max">
-									<Card.Preview big {...cardMock.preview} />
+								<Card big gradientClass="min-w-max w-full">
+									<Card.Preview
+										className="max-w-min"
+										big
+										{...cardMock.preview}
+									/>
 									<Card.Details {...cardMock.details} />
 								</Card>
 							</Slide>
@@ -44,13 +49,13 @@ export default function BusinessCooperationSection() {
 					</Slider>
 				</div>
 			</section>
-			<section className="mx-auto mt-20 w-auto">
-				<Heading className="inline mx-auto w-auto text-3xl font-medium" as="h3">
+			<section className="flex flex-col mx-auto mt-20 w-auto">
+				<Heading className="inline w-full text-3xl font-medium" as="h3">
 					Другие проекты
 				</Heading>
 				<CardList>
 					{Array.from({ length: 6 }, (_, i) => (
-						<li className="mx-auto" key={i}>
+						<li className="mx-auto min-w-fit" key={i}>
 							<Card key={i} gradientClass="h-full">
 								<Card.Preview {...cardMock.preview} />
 								<Card.Details {...cardMock.details} />

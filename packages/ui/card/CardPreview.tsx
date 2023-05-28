@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Button } from '../general';
 import { Badge } from './Badge';
 import { LikeButton } from './LikeButton';
@@ -7,6 +8,7 @@ interface CardPreviewProps {
 	big?: boolean;
 	alt: string;
 	badges: string[];
+	className?: string;
 	as: React.ElementType;
 }
 
@@ -15,10 +17,16 @@ export function CardPreview({
 	big,
 	alt,
 	badges,
+	className,
 	as: Tag,
 }: CardPreviewProps) {
 	return (
-		<div className="overflow-hidden relative rounded-lg">
+		<div
+			className={clsx(
+				'overflow-hidden relative rounded-lg min-w-fit md:max-w-[624px]',
+				className
+			)}
+		>
 			<Tag
 				src={image}
 				alt={alt}

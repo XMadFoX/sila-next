@@ -55,7 +55,7 @@ export function Slider({
 		<div className="relative">
 			<ul
 				className={clsx(
-					'flex overflow-x-scroll gap-[60px] max-w-[670px] snap-x snap-mandatory scroll-smooth 2xl:max-w-[1400px] hidden-scrollbar',
+					'flex overflow-x-scroll px-2 gap-[52px] w-[90vw] snap-x snap-mandatory scroll-smooth 2xl:max-w-[1400px] hidden-scrollbar',
 					className
 				)}
 				ref={ref}
@@ -65,12 +65,12 @@ export function Slider({
 			</ul>
 			<Controls
 				onClick={() => changeSlide('prev')}
-				className="absolute -left-6 w-12 h-12 top-[164px]"
+				className="absolute left-0 w-12 h-12 sm:-left-6 top-[164px]"
 				disabled={scroll < 100}
 			/>
 			<Controls
 				onClick={() => changeSlide('next')}
-				className="absolute -right-6 w-12 h-12 top-[164px]"
+				className="absolute right-0 w-12 h-12 sm:-right-6 top-[164px]"
 				disabled={scroll > scrollMax - 300}
 				next
 			/>
