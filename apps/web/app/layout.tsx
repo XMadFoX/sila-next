@@ -1,5 +1,8 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { Header } from 'ui';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -14,7 +17,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={inter.className}>
-			<body>{children}</body>
+			<body className="flex flex-col justify-center">
+				<Header image={Image} link={Link} />
+				{children}
+			</body>
 		</html>
 	);
 }

@@ -22,7 +22,7 @@ export const navLinks = [
 
 export function Header({ image: Image, link: Link }: HeaderProps) {
 	return (
-		<header className="flex flex-col max-w-[1400px]">
+		<header className="flex flex-col mx-auto w-full h-28 max-w-[1400px]">
 			<nav>
 				<ul className="flex items-center">
 					<Link href="/">
@@ -39,8 +39,8 @@ export function Header({ image: Image, link: Link }: HeaderProps) {
 					</Button>
 				</ul>
 			</nav>
-			<nav className="mx-auto">
-				<ul className="flex gap-8 text-sm font-medium text-black uppercase">
+			<nav className="mx-auto mt-7">
+				<ul className="flex flex-wrap gap-8 text-sm font-medium text-black uppercase">
 					{navLinks.map((link) => (
 						<li key={link.href}>
 							<Link href={link.href}>{link.title}</Link>
