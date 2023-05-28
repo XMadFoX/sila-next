@@ -1,7 +1,7 @@
-import BlogSection from '../components/sections/BlogSection';
-import BusinessCooperationSection from '../components/sections/BusinessCooperationSection';
-import EventsSection from '../components/sections/EventsSection';
-import HeroSection from '../components/sections/HeroSection';
+import BlogSection from '../components/landing/sections/BlogSection';
+import BusinessCooperationSection from '../components/landing/sections/BusinessCooperationSection';
+import EventsSection from '../components/landing/sections/EventsSection';
+import HeroSection from '../components/landing/sections/HeroSection';
 
 export default function Page() {
 	return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, GradientWrapper, Heading, Slider, Slide } from 'ui';
-import { cardMock } from '../mock';
-import CardList from '../landing/CardsContainer';
+import { cardMock } from '../../mock';
+import CardList from '../CardsContainer';
 
 export default function EventsSection() {
 	return (

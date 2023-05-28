@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { Card, Heading, IconButton } from 'ui';
-import CardList from '../landing/CardsContainer';
-import { cardMock } from '../mock';
+import { Card, Heading } from 'ui';
+import CardList from '../CardsContainer';
+import { cardMock } from '../../mock';
 
 export default function BlogSection() {
 	return (

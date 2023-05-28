@@ -1,7 +1,7 @@
 import React from 'react';
 import { GradientWrapper, Heading, Slider, Card, Button, Slide } from 'ui';
-import CardList from '../landing/CardsContainer';
-import { cardMock } from '../mock';
+import CardList from '../CardsContainer';
+import { cardMock } from '../../mock';
 
 export default function BusinessCooperationSection() {
 	return (
