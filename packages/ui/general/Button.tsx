@@ -11,7 +11,7 @@ type SharedProps = {
 	children: React.ReactNode;
 	intent?: 'primary' | 'clear' | 'outlined' | 'img';
 	gradientDirection?: GradientDirection;
-	size?: 'sm' | 'md' | 'lg';
+	size?: 'sm' | 'md' | 'lg' | null;
 	bg?: string;
 };
 
@@ -46,6 +46,8 @@ export function Button(props: ButtonOrLinkProps) {
 	let sizeClass = '';
 
 	switch (props.size) {
+		case null:
+			break;
 		case 'sm':
 			sizeClass = 'text-sm py-2 px-4';
 			break;
