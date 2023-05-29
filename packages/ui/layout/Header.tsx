@@ -27,7 +27,7 @@ export function Header({ image: Image, link: NextLink }: HeaderProps) {
   const pathname = usePathname();
 
   return (
-    <header className="flex flex-col mx-auto w-full h-28 max-w-[1400px]">
+    <header className="flex flex-col pt-4 mx-auto w-full h-28 max-w-[1400px]">
       <nav>
         <ul className="flex items-center">
           <NextLink href="/">
