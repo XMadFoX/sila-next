@@ -1,6 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { Header } from 'ui';
+import { Footer, Header } from 'ui';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -17,9 +17,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={inter.className}>
-			<body className="flex flex-col justify-center min-h-screen">
+			<body className="flex flex-col items-center min-h-screen">
 				<Header image={Image} link={Link} />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	);
