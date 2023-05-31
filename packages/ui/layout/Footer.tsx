@@ -1,13 +1,14 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import React from 'react';
+import { EnvironmentContext } from '../EnvironmentContext';
 import { Button } from '../general';
 import { footerLinks } from './navLinks';
 
 export function Footer() {
 	const pathname = usePathname();
+	const { Link, Image } = React.useContext(EnvironmentContext);
 
 	return (
 		<footer className="flex flex-col items-center mt-32 w-full min-w-max text-white rounded-t-[40px] bg-primary">
