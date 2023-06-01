@@ -1,25 +1,21 @@
 'use client';
 
-import React from 'react';
+import { useContext } from 'react';
 import { Button } from '../general';
-import { usePathname } from 'next/navigation';
 import { navLinks } from './navLinks';
+import { EnvironmentContext } from '../env/';
 
-interface HeaderProps {
-	image: React.ElementType;
-	link: React.ElementType;
-}
-
-export function Header({ image: Image, link: NextLink }: HeaderProps) {
+export function Header() {
+	const { Image, Link, usePathname } = useContext(EnvironmentContext);
 	const pathname = usePathname();
 
 	return (
-		<header className="flex flex-col pt-4 mx-auto w-full h-28 max-w-[1400px]">
+		<header className="flex flex-col pt-4 mx-auto w-full max-w-[1400px]">
 			<nav>
 				<ul className="flex items-center">
-					<NextLink href="/">
+					<Link href="/">
 						<Image src="/logo.png" alt="logo" width={64} height={64} />
-					</NextLink>
+					</Link>
 					{/* <input
             type="text"
             placeholder="Search"
@@ -34,10 +30,10 @@ export function Header({ image: Image, link: NextLink }: HeaderProps) {
 			<nav className="mx-auto mt-7">
 				<ul className="flex flex-wrap gap-8 text-sm font-medium text-black uppercase">
 					{navLinks.map((link) => (
-						<Link
+						<NavLink
 							key={link.href}
 							link={link}
-							component={NextLink}
+							component={Link}
 							current={pathname}
 						/>
 					))}
@@ -47,7 +43,7 @@ export function Header({ image: Image, link: NextLink }: HeaderProps) {
 	);
 }
 
-const Link = ({ component: Link, link, current }: any) => {
+const NavLink = ({ component: Link, link, current }: any) => {
 	const pathname = current;
 	return (
 		<li key={link.href}>

@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import React from 'react';
-import { EnvironmentContext } from '../EnvironmentContext';
+import { EnvironmentContext } from '../env';
 import { Button } from '../general';
 import { footerLinks } from './navLinks';
 
@@ -48,7 +48,7 @@ export function Footer() {
 					</Button>
 				)}
 			</div>
-			<div className="flex gap-4 pt-7 pb-16 w-full max-w-[1400px]">
+			<div className="flex gap-4 items-center pt-7 pb-16 w-full max-w-[1400px]">
 				<Link className="ml-auto" href="#">
 					Пользовательское соглашение
 				</Link>
@@ -63,8 +63,8 @@ export function Footer() {
 				</Link>
 				<Link href="#">
 					<Image
-						src="/icons/telegram_solid_white.svg"
-						alt="Telegram"
+						src="/icons/youtube_solid_white.svg"
+						alt="YouTube"
 						height={22}
 						width={22}
 					/>

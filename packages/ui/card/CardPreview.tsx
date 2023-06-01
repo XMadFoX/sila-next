@@ -1,5 +1,8 @@
+'use client';
+
 import clsx from 'clsx';
-import { Button } from '../general';
+import { useContext } from 'react';
+import { EnvironmentContext } from '../env';
 import { Badge } from './Badge';
 import { LikeButton } from './LikeButton';
 
@@ -9,7 +12,6 @@ interface CardPreviewProps {
 	alt: string;
 	badges: string[];
 	className?: string;
-	as: React.ElementType;
 }
 
 export function CardPreview({
@@ -18,8 +20,9 @@ export function CardPreview({
 	alt,
 	badges,
 	className,
-	as: Tag,
 }: CardPreviewProps) {
+	const { Image } = useContext(EnvironmentContext);
+
 	return (
 		<div
 			className={clsx(
@@ -27,7 +30,7 @@ export function CardPreview({
 				className
 			)}
 		>
-			<Tag
+			<Image
 				src={image}
 				alt={alt}
 				height={big ? 330 : 200}
