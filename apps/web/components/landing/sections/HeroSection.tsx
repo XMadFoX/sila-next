@@ -4,7 +4,7 @@ import { Button, GradientWrapper } from 'ui';
 
 export default function HeroSection() {
 	return (
-		<section className="flex overflow-x-hidden flex-col justify-center p-4 xl:flex-row min-h-[100vh] xl:max-w-[1600px]">
+		<section className="flex overflow-x-hidden flex-col justify-center p-4 xl:flex-row min-h-[90vh] xl:max-w-[1600px]">
 			<div className="flex flex-col justify-center">
 				<h1 className="text-3xl md:text-5xl font-bold leading-[130%] uppercase">
 					Сила

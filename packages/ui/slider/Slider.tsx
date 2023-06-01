@@ -44,7 +44,6 @@ export function Slider({
 		if (!ref.current) return;
 		ref.current.addEventListener('scroll', () => {
 			if (!ref.current) return;
-			console.log(ref.current.scrollLeft);
 			setScroll(ref.current.scrollLeft || 0);
 			setScrollMax(getScrollLeftMax(ref.current));
 		});

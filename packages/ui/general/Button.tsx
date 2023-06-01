@@ -1,26 +1,30 @@
+'use client';
+
 import clsx from 'clsx';
 import * as React from 'react';
+import { EnvironmentContext, LinkProps as EnvLinkProps } from '../env';
 import {
 	gradientClassNames,
 	GradientDirection,
 	GradientWrapper,
 } from './GradientWrapper';
-import Link, { LinkProps as NextLinkProps } from 'next/link';
 
 type SharedProps = {
 	children: React.ReactNode;
 	intent?: 'primary' | 'clear' | 'outlined' | 'img';
 	gradientDirection?: GradientDirection;
-	size?: 'sm' | 'md' | 'lg';
+	size?: 'sm' | 'md' | 'lg' | null;
 	bg?: string;
 };
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
-type LinkProps = Partial<Pick<NextLinkProps, 'href' | 'as'>>;
+type LinkProps = Partial<Pick<EnvLinkProps, 'href'>>;
 type ButtonOrLink = ButtonProps & LinkProps;
 type ButtonOrLinkProps = ButtonOrLink & SharedProps;
 
 export function Button(props: ButtonOrLinkProps) {
+	const { Link } = React.useContext(EnvironmentContext);
+
 	const {
 		gradientDirection = 'r',
 		size = 'md',
@@ -46,6 +50,8 @@ export function Button(props: ButtonOrLinkProps) {
 	let sizeClass = '';
 
 	switch (props.size) {
+		case null:
+			break;
 		case 'sm':
 			sizeClass = 'text-sm py-2 px-4';
 			break;
@@ -69,7 +75,7 @@ export function Button(props: ButtonOrLinkProps) {
 					intent !== 'img' && sizeClass,
 					className
 				)}
-				{...(args as unknown as NextLinkProps)}
+				{...(args as unknown as LinkProps)}
 			>
 				{props.children}
 			</Link>,

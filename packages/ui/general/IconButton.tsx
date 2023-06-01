@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
-import { UrlObject } from 'url';
 import { Button } from './Button';
 
 interface IconButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-	href?: string | UrlObject;
+	href?: string;
 }
 
 export const IconButton = (props: IconButtonProps) => {

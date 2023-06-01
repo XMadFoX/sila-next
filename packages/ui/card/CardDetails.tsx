@@ -1,3 +1,8 @@
+'use client';
+
+import { useContext } from 'react';
+import { EnvironmentContext } from '../env';
+
 interface CardDetailsProps {
 	title: string;
 	location: { city: string; address?: string };
@@ -18,6 +23,8 @@ function cutText(text: string, maxLength: number) {
 }
 
 export function CardDetails(props: CardDetailsProps) {
+	const { Link } = useContext(EnvironmentContext);
+
 	return (
 		<figcaption className="flex flex-col mt-4">
 			<h2 className="text-xl font-medium text-black">{props.title}</h2>
@@ -40,12 +47,12 @@ export function CardDetails(props: CardDetailsProps) {
 			<p className="mt-4 text-sm text-black">
 				{cutText(props.description, 190)}
 			</p>
-			<a
+			<Link
 				className="mt-5 text-sm underline text-dark-grey"
 				href={props.org.link}
 			>
 				Организатор: {props.org.name}
-			</a>
+			</Link>
 		</figcaption>
 	);
 }
