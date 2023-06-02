@@ -13,12 +13,17 @@
 		"build:storybook": "storybook build"
 	},
 	"dependencies": {
+		"@tanstack/react-query": "^4.29.12",
+		"@trpc/client": "^10.29.0",
+		"@trpc/react-query": "^10.29.0",
+		"@trpc/server": "^10.29.0",
 		"@use-gesture/react": "^10.2.27",
 		"clsx": "^1.2.1",
 		"next": "^13.4.4",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"ui": "workspace:*"
+		"ui": "workspace:*",
+		"@sila/api": "workspace:*"
 	},
 	"devDependencies": {
 		"@storybook/addon-essentials": "^7.0.11",
