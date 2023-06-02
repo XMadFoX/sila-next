@@ -1,10 +1,9 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Card, Slide, Slider } from 'ui';
 
 import { Default as DefaultCard } from '../card/CardFull.stories';
-
-import React from 'react';
 
 const meta: Meta<typeof Slider> = {
 	title: 'Slider/Full',

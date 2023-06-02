@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Image from 'next/image';
 
 import { Card } from 'ui';
 
@@ -21,7 +20,6 @@ export const Default: Story = {
 		big: true,
 		alt: 'Random image',
 		badges: ['Free', 'Online'],
-		as: Image,
 	},
 };
 
@@ -31,6 +29,5 @@ export const Small: Story = {
 		big: false,
 		alt: 'Random image',
 		badges: ['Free', 'Obline'],
-		as: Image,
 	},
 };

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Image from 'next/image';
 
-import { Button, Controls, GradientWrapper } from 'ui';
+import { Button, Controls } from 'ui';
 
 const meta: Meta<typeof Button> = {
 	title: 'Slider/Controls',

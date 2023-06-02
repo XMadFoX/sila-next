@@ -75,7 +75,7 @@ export function Button(props: ButtonOrLinkProps) {
 					intent !== 'img' && sizeClass,
 					className
 				)}
-				{...(args as unknown as LinkProps)}
+				{...(args as unknown as EnvLinkProps)}
 			>
 				{props.children}
 			</Link>,
