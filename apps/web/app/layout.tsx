@@ -6,6 +6,7 @@ import { Footer, Header } from 'ui';
 import { usePathname } from 'next/navigation';
 import { EnvironmentContext } from 'ui/env';
 import { Image, Link } from '../lib/EnvComponents';
+import { TrpcProvider } from '../lib/TrpcProvider';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -28,9 +29,11 @@ export default function RootLayout({
 						usePathname: usePathname,
 					}}
 				>
-					<Header />
-					{children}
-					<Footer />
+					<TrpcProvider>
+						<Header />
+						{children}
+						<Footer />
+					</TrpcProvider>
 				</EnvironmentContext.Provider>
 			</body>
 		</html>
