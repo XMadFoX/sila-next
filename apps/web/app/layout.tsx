@@ -2,6 +2,8 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { Footer, Header } from 'ui';
 import { TrpcProvider } from '../lib/TrpcProvider';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './api/auth/[...nextauth]/route';
 import EnvWrapper from '../lib/EnvWrapper';
 
 const inter = Inter({
@@ -10,11 +12,12 @@ const inter = Inter({
 	variable: '--font-inter',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const session = await getServerSession(authOptions);
 	return (
 		<html lang="en" className={inter.className}>
 			<body className="flex flex-col items-center min-h-screen">

@@ -12,7 +12,8 @@
 		"drizzle-orm": "^0.26.5",
 		"superjson": "^1.12.3",
 		"trpc": "^0.11.3",
-		"zod": "^3.21.4"
+		"zod": "^3.21.4",
+		"tsconfig": "workspace:*"
 	},
 	"devDependencies": {
 		"drizzle-kit": "^0.18.1"
