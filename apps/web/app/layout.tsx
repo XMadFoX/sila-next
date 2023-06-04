@@ -1,12 +1,8 @@
-'use client';
-
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Footer, Header } from 'ui';
-import { usePathname } from 'next/navigation';
-import { EnvironmentContext } from 'ui/env';
-import { Image, Link } from '../lib/EnvComponents';
 import { TrpcProvider } from '../lib/TrpcProvider';
+import EnvWrapper from '../lib/EnvWrapper';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -22,19 +18,13 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={inter.className}>
 			<body className="flex flex-col items-center min-h-screen">
-				<EnvironmentContext.Provider
-					value={{
-						Link: Link,
-						Image: Image,
-						usePathname: usePathname,
-					}}
-				>
-					<TrpcProvider>
+				<TrpcProvider>
+					<EnvWrapper session={session}>
 						<Header />
 						{children}
 						<Footer />
-					</TrpcProvider>
-				</EnvironmentContext.Provider>
+					</EnvWrapper>
+				</TrpcProvider>
 			</body>
 		</html>
 	);
