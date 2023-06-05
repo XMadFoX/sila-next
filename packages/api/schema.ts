@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/libsql';
-import { migrate as dMigrate } from 'drizzle-orm/mysql2/migrator';
+import { migrate as dMigrate } from 'drizzle-orm/libsql/migrator';
 import { createClient } from '@libsql/client';
 
 const connection = createClient({
