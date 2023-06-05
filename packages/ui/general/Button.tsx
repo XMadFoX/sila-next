@@ -61,8 +61,6 @@ export function Button(props: ButtonOrLinkProps) {
 		case 'lg':
 			sizeClass = 'text-lg py-6 px-12';
 			break;
-		default:
-			sizeClass = 'text-base py-4 px-8';
 	}
 
 	// hacky, couldn't make ts happy with dynamic tag
