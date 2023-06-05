@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Image from 'next/image';
 
 import { Header } from 'ui';
 
@@ -16,11 +15,7 @@ export default meta;
 type Story = StoryObj<typeof Header>;
 
 export const Default: Story = {
-	args: {
-		image: Image,
-		// passing of next/link is broken
-		link: 'a',
-	},
+	args: {},
 };
 
 /* export const SignedIn: Story = {
