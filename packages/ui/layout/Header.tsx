@@ -5,7 +5,7 @@ import { Button } from '../general';
 import { navLinks } from './navLinks';
 import { EnvironmentContext } from '../env/';
 
-export function Header() {
+export function Header({ signIn }: { signIn: () => void }) {
 	const { Image, Link, usePathname } = useContext(EnvironmentContext);
 	const pathname = usePathname();
 
@@ -22,7 +22,11 @@ export function Header() {
             disabled
             className="rounded-full"
           /> */}
-					<Button size={null} className="px-8 ml-auto h-12 text-sm uppercase">
+					<Button
+						size={null}
+						onClick={signIn}
+						className="px-8 ml-auto h-12 text-sm uppercase"
+					>
 						Войти
 					</Button>
 				</ul>
@@ -50,8 +54,9 @@ const NavLink = ({ component: Link, link, current }: any) => {
 			<Link
 				href={link.href}
 				className={
-					pathname === link.href &&
-					'relative before:absolute before:w-full before:h-0.5 before:bg-primary before:-bottom-2'
+					pathname === link.href
+						? 'relative before:absolute before:w-full before:h-0.5 before:bg-primary before:-bottom-2'
+						: undefined
 				}
 			>
 				{link.title}

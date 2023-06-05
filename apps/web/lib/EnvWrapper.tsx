@@ -4,8 +4,9 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import { EnvironmentContext } from 'ui/env';
 import { Link, Image } from './EnvComponents';
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider, signIn } from 'next-auth/react';
 import type { Session } from 'next-auth';
+import { Header } from 'ui';
 
 export default function EnvWrapper({
 	children,
@@ -23,6 +24,7 @@ export default function EnvWrapper({
 					usePathname: usePathname,
 				}}
 			>
+				<Header signIn={signIn} />
 				{children}
 			</EnvironmentContext.Provider>
 		</SessionProvider>
