@@ -4,10 +4,12 @@ import { useContext } from 'react';
 import { Button } from '../general';
 import { navLinks } from './navLinks';
 import { EnvironmentContext } from '../env/';
+import { useSession, signOut } from 'next-auth/react';
 
 export function Header({ signIn }: { signIn: () => void }) {
 	const { Image, Link, usePathname } = useContext(EnvironmentContext);
 	const pathname = usePathname();
+	const { data: session, status } = useSession();
 
 	return (
 		<header className="flex flex-col pt-4 mx-auto w-full max-w-[1400px]">
@@ -22,13 +24,26 @@ export function Header({ signIn }: { signIn: () => void }) {
             disabled
             className="rounded-full"
           /> */}
-					<Button
-						size={null}
-						onClick={signIn}
-						className="px-8 ml-auto h-12 text-sm uppercase"
-					>
-						Войти
-					</Button>
+					{status === 'authenticated' ? (
+						<div className="flex gap-2 items-center ml-auto">
+							<p>{session?.user?.name}</p>
+							<div className="w-11 h-11 rounded-full bg-dark-grey"></div>
+							<Button
+								onClick={() => signOut()}
+								className="px-8 h-11 text-sm uppercase"
+							>
+								Выйти
+							</Button>
+						</div>
+					) : (
+						<Button
+							size={null}
+							onClick={signIn}
+							className="px-8 ml-auto h-11 text-sm uppercase"
+						>
+							Войти
+						</Button>
+					)}
 				</ul>
 			</nav>
 			<nav className="mx-auto mt-7">
