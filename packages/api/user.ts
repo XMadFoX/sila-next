@@ -72,6 +72,33 @@ export async function authorize(credentials: {
 	return user;
 }
 
+export async function verifyEmail(token: string) {
+	const verificationToken = await db
+		.select()
+		.from(verificationTokens)
+		.where(eq(verificationTokens.token, token))
+		.get();
+	if (!verificationToken || !verificationToken.userId)
+		throw new Error('Invalid token');
+	if (verificationToken.expires < new Date()) throw new Error('Token expired');
+	const user = await db
+		.select()
+		.from(users)
+		.where(eq(users.id, verificationToken.userId))
+		.get();
+	if (!user) throw new Error('User not found');
+	await db
+		.delete(verificationTokens)
+		.where(eq(verificationTokens.token, token))
+		.run();
+	await db
+		.update(users)
+		.set({ emailVerified: new Date() })
+		.where(eq(users.id, verificationToken.userId))
+		.run();
+	return true;
+}
+
 async function hashPassword(password: string) {
 	const salt = crypto.randomBytes(16).toString('hex');
 	const hash = crypto
