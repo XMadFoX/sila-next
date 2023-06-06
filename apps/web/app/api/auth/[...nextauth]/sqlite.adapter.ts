@@ -152,7 +152,11 @@ export function SQLiteDrizzleAdapter(
 
 		createVerificationToken: (token) => {
 			console.log('createVerificationToken', token);
-			return client.insert(verificationTokens).values(token).returning().get();
+			return client
+				.insert(verificationTokens)
+				.values({ ...token, userId: null })
+				.returning()
+				.get();
 		},
 
 		useVerificationToken: (token) => {

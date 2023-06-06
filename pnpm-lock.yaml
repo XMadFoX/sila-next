@@ -149,9 +149,15 @@ importers:
       '@trpc/server':
         specifier: ^10.29.0
         version: 10.29.0
+      '@types/nodemailer':
+        specifier: ^6.4.8
+        version: 6.4.8
       drizzle-orm:
         specifier: ^0.26.5
         version: 0.26.5(@libsql/client@0.1.6)(@planetscale/database@1.7.0)
+      nodemailer:
+        specifier: ^6.9.3
+        version: 6.9.3
       superjson:
         specifier: ^1.12.3
         version: 1.12.3
@@ -3542,6 +3548,12 @@ packages:
 
   /@types/node@17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+
+  /@types/nodemailer@6.4.8:
+    resolution: {integrity: sha512-oVsJSCkqViCn8/pEu2hfjwVO+Gb3e+eTWjg3PcjeFKRItfKpKwHphQqbYmPQrlMk+op7pNNWPbsJIEthpFN/OQ==}
+    dependencies:
+      '@types/node': 17.0.45
+    dev: false
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}

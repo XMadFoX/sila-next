@@ -60,6 +60,7 @@ export const verificationTokens = sqliteTable(
 	'verificationToken',
 	{
 		identifier: text('identifier', { length: 255 }).notNull(),
+		userId: text('userId', { length: 255 }),
 		token: text('token', { length: 255 }).notNull(),
 		expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
 	},

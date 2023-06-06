@@ -31,6 +31,7 @@ export function Header({ signIn }: { signIn: () => void }) {
 							<Button
 								onClick={() => signOut()}
 								className="px-8 h-11 text-sm uppercase"
+								size={null}
 							>
 								Выйти
 							</Button>
