@@ -1,4 +1,9 @@
-import { InsertUser, users, verificationTokens } from './schema/user.schema';
+import {
+	InsertUser,
+	User,
+	users,
+	verificationTokens,
+} from './schema/user.schema';
 import { db } from './schema';
 import { eq } from 'drizzle-orm';
 import crypto from 'node:crypto';
@@ -10,6 +15,15 @@ export async function createUser(data: InsertUser, trx?: any) {
 
 export async function findOne(email: string) {
 	return await db.select().from(users).where(eq(users.email, email)).get();
+}
+
+function shortUser(user: User) {
+	return {
+		name: user.name,
+		email: user.email,
+		emailVerified: user.emailVerified,
+		createdAt: user.createdAt,
+	};
 }
 
 export async function authorize(credentials: {
@@ -24,7 +38,7 @@ export async function authorize(credentials: {
 			user.password &&
 			(await verifyPassword(credentials.password, user.password))
 		)
-			return user;
+			return shortUser(user);
 		throw new Error('Invalid email, password or authentication method');
 	}
 	// hash password
