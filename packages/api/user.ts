@@ -22,7 +22,6 @@ function shortUser(user: User) {
 		name: user.name,
 		email: user.email,
 		emailVerified: user.emailVerified,
-		createdAt: user.createdAt,
 	};
 }
 
@@ -31,6 +30,7 @@ export async function authorize(credentials: {
 	name: string;
 	password: string;
 }) {
+	// TODO: resend verification email if expired
 	const user = await findOne(credentials.email);
 	if (user) {
 		// try to log in
@@ -83,7 +83,10 @@ export async function authorize(credentials: {
 		html: `Click <a href="${process.env.NEXTAUTH_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
 	});
 
-	return user;
+	return {
+		name: credentials.name,
+		email: credentials.email,
+	};
 }
 
 export async function verifyEmail(token: string) {
