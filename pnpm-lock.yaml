@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -155,6 +159,9 @@ importers:
       drizzle-orm:
         specifier: ^0.26.5
         version: 0.26.5(@libsql/client@0.1.6)(@planetscale/database@1.7.0)
+      next-auth:
+        specifier: ^4.22.1
+        version: 4.22.1(next@13.4.4)(nodemailer@6.9.3)(react-dom@18.2.0)(react@18.2.0)
       nodemailer:
         specifier: ^6.9.3
         version: 6.9.3

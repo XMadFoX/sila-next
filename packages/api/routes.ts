@@ -1,13 +1,15 @@
 import { z } from 'zod';
-import { initTRPC } from '@trpc/server';
-import superjson from 'superjson';
+import {
+	createTRPCRouter,
+	protectedProcedure,
+	publicProcedure,
+} from './trpc-server';
 
-const t = initTRPC.create({
-	transformer: superjson,
-});
-
-export const routes = {
-	hello: t.procedure.input(z.string().optional()).query(async (req) => {
+export const routes = createTRPCRouter({
+	hello: publicProcedure.input(z.string().optional()).query(async (req) => {
 		return req.input || 'world!';
 	}),
-};
+	helloMe: protectedProcedure.query(async (req) => {
+		return req.ctx.session.user.name;
+	}),
+});
