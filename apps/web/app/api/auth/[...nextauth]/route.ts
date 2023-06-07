@@ -29,8 +29,8 @@ export const authOptions: AuthOptions = {
 					type: 'password',
 				},
 			},
-			async authorize(credentials, req) {
-				return await authorize(req.body as any);
+			async authorize(_, req) {
+				return await authorize(req.body);
 			},
 		}),
 		GoogleProvider({

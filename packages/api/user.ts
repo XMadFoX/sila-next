@@ -8,6 +8,7 @@ import { db } from './schema';
 import { eq } from 'drizzle-orm';
 import crypto from 'node:crypto';
 import NodeMailer from 'nodemailer';
+import { z } from 'zod';
 
 export async function createUser(data: InsertUser, trx?: any) {
 	return await (trx || db).insert(users).values(data).returning().get();
@@ -17,20 +18,33 @@ export async function findOne(email: string) {
 	return await db.select().from(users).where(eq(users.email, email)).get();
 }
 
-function shortUser(user: User) {
+export interface ShortUser
+	extends Pick<User, 'id' | 'name' | 'email' | 'emailVerified'> {}
+
+function shortUser(user: User): ShortUser {
 	return {
+		id: user.id,
 		name: user.name,
 		email: user.email,
 		emailVerified: user.emailVerified,
 	};
 }
 
-export async function authorize(credentials: {
-	email: string;
-	name: string;
-	password: string;
-}) {
+function parseAuthorizeInput(user: Record<string, any>) {
+	return z
+		.object({
+			name: z.string().min(3).max(32).optional(),
+			email: z.string().email().min(3).max(128),
+			password: z.string().min(8).max(255),
+		})
+		.parse(user);
+}
+
+export async function authorize(
+	input: Record<string, any>
+): Promise<ShortUser> {
 	// TODO: resend verification email if expired
+	const credentials = parseAuthorizeInput(input);
 	const user = await findOne(credentials.email);
 	if (user) {
 		// try to log in
@@ -41,6 +55,7 @@ export async function authorize(credentials: {
 			return shortUser(user);
 		throw new Error('Invalid email, password or authentication method');
 	}
+	if (!credentials.name) throw new Error('Name is required');
 	// hash password
 	const { salt, hash } = await hashPassword(credentials.password);
 	// use nodemailer to send verification email
@@ -68,7 +83,7 @@ export async function authorize(credentials: {
 			{
 				id: userId,
 				email: credentials.email,
-				name: credentials.name,
+				name: credentials.name!,
 				password: `${salt}:${hash}`,
 			},
 			trx
@@ -84,8 +99,10 @@ export async function authorize(credentials: {
 	});
 
 	return {
+		id: userId,
 		name: credentials.name,
 		email: credentials.email,
+		emailVerified: null,
 	};
 }
 
