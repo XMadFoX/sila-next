@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { Adapter, AdapterAccount } from '@auth/core/adapters';
 import { eq, and } from 'drizzle-orm';
-import { users, accounts, sessions, verificationTokens, db } from '@sila/api';
+import { users, accounts, sessions, verificationTokens, db } from './';
 
 export type DbClient = typeof db;
 
