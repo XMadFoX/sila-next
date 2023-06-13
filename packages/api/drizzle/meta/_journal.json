@@ -15,6 +15,13 @@
       "when": 1686020355575,
       "tag": "0001_lively_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1686510507061,
+      "tag": "0002_open_talos",
+      "breakpoints": true
     }
   ]
 }

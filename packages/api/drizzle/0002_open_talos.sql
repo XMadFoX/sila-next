@@ -1,0 +1,1 @@
+ALTER TABLE users ADD `totpSecret` text(255);

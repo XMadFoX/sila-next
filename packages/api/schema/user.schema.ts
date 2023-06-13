@@ -18,6 +18,7 @@ export const users = sqliteTable(
 		password: text('password', { length: 255 }),
 		createdAt: integer('created_at', { mode: 'timestamp_ms' }),
 		image: text('avatar', { length: 255 }),
+		totpSecret: text('totpSecret', { length: 255 }),
 		organization: integer('organization'),
 	},
 	(table) => ({
