@@ -22,6 +22,13 @@
       "when": 1686510507061,
       "tag": "0002_open_talos",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1686699914423,
+      "tag": "0003_sleepy_cassandra_nova",
+      "breakpoints": true
     }
   ]
 }
