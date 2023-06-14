@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { authenticator } from 'otplib';
 import { z } from 'zod';
 import { db, users } from './schema';
+import crypto from 'crypto';
 
 import { createTRPCRouter, protectedProcedure } from './trpc-server';
 
@@ -36,10 +37,12 @@ export const authRoutes = createTRPCRouter({
 				req.ctx.session.user.totpSecret
 			);
 			if (!isValid) throw new Error('Invalid code');
+			const random = crypto.randomBytes(10).toString('hex');
 			await db
 				.update(users)
 				.set({
 					totpEnabled: new Date(),
+					totp: random,
 				})
 				.where(eq(users.id, req.ctx.session.user.id))
 				.run();

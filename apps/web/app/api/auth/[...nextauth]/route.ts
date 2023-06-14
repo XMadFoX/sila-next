@@ -1,4 +1,4 @@
-import { db } from '@sila/api';
+import { checkTotpCode, db } from '@sila/api';
 import NextAuth, { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
@@ -45,6 +45,23 @@ export const authOptions: AuthOptions = {
 	adapter: SQLiteDrizzleAdapter(db) as any,
 	session: {
 		strategy: 'jwt',
+	},
+	callbacks: {
+		async jwt({ token, trigger, session }) {
+			if (trigger === 'update') {
+				const totpSecret = await checkTotpCode(
+					session.totpToken,
+					token.email
+				).catch(() => {});
+				token.totp = totpSecret || null;
+			}
+			return token;
+		},
+
+		async session({ session, token }) {
+			session.user.totp = token.totp;
+			return session;
+		},
 	},
 };
 
