@@ -35,6 +35,18 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 			message: 'UNVERIFIED',
 		});
 	}
+	if (user.totpEnabled) {
+		if (!ctx.session?.user?.totp) {
+			throw new TRPCError(403, {
+				message: 'TOTP_REQUIRED',
+			});
+		}
+		if (user.totp !== ctx.session.user.totp) {
+			throw new TRPCError(403, {
+				message: 'TOTP_INVALID',
+			});
+		}
+	}
 	return next({
 		ctx: {
 			// Infers the `session` as non-nullable
