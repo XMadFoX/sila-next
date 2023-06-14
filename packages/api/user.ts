@@ -19,7 +19,9 @@ export async function findOne(email: string) {
 }
 
 export interface ShortUser
-	extends Pick<User, 'id' | 'name' | 'email' | 'emailVerified'> {}
+	extends Pick<User, 'id' | 'name' | 'email' | 'emailVerified'> {
+	totp: string | null;
+}
 
 function shortUser(user: User): ShortUser {
 	return {
