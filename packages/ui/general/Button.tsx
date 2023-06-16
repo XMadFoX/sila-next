@@ -1,5 +1,6 @@
 'use client';
 
+import { rounding, Rounding } from '@/lib/utils';
 import clsx from 'clsx';
 import * as React from 'react';
 import { EnvironmentContext, LinkProps as EnvLinkProps } from '../env';
@@ -15,6 +16,7 @@ type SharedProps = {
 	gradientDirection?: GradientDirection;
 	size?: 'sm' | 'md' | 'lg' | null;
 	bg?: string;
+	rounded?: Rounding;
 };
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
@@ -32,6 +34,7 @@ export function Button(props: ButtonOrLinkProps) {
 		intent = 'primary',
 		children,
 		className,
+		rounded = 'full',
 		...args
 	} = props;
 	let themed = '';
@@ -88,7 +91,8 @@ export function Button(props: ButtonOrLinkProps) {
 	return Wrap(
 		<button
 			className={clsx(
-				'rounded-full font-medium',
+				'font-medium',
+				rounding[rounded],
 				themed,
 				intent !== 'img' && sizeClass,
 				className
