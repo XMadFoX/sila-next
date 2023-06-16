@@ -49,5 +49,5 @@ module.exports = {
 			sans: ['var(--font-inter)', 'sans-serif'],
 		},
 	},
-	plugins: [],
+	plugins: ['@tailwindcss/forms', require('tailwindcss-animate')],
 };

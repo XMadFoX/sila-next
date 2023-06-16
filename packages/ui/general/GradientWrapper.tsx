@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { rounding, Rounding } from '../lib';
 
 const gradientClassNames = {
 	r: 'bg-gradient-to-r',
@@ -10,19 +11,11 @@ const gradientClassNames = {
 
 type GradientDirection = keyof typeof gradientClassNames;
 
-const rounds = {
-	full: 'rounded-full',
-	sm: 'rounded-sm',
-	md: 'rounded-md',
-	lg: 'rounded-lg',
-	xl: 'rounded-xl',
-};
-
 interface GradientWrapperProps {
 	as?: keyof JSX.IntrinsicElements;
 	className?: string;
 	gradientDirection?: GradientDirection;
-	rounded?: keyof typeof rounds;
+	rounded?: Rounding;
 	children: React.ReactNode;
 }
 
@@ -39,7 +32,7 @@ export function GradientWrapper(props: GradientWrapperProps) {
 		<Tag
 			className={clsx(
 				'inline-flex overflow-hidden justify-center items-center p-[1px]',
-				rounded && rounds[rounded],
+				rounded && rounding[rounded],
 				gradientClassNames[gradientDirection || 'r'],
 				className
 			)}

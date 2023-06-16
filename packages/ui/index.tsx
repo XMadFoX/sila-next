@@ -3,3 +3,4 @@ export * from './general/';
 export * from './card/';
 export * from './slider/';
 export * from './layout/';
+export * from './lib/';
