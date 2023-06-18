@@ -1,12 +1,5 @@
 {
 	"extends": "tsconfig/base.json",
-	"include": [
-		".",
-		"./schema/**/*.ts"
-	],
-	"exclude": [
-		"dist",
-		"build",
-		"node_modules"
-	]
+	"include": [".", "./schema/**/*.ts"],
+	"exclude": ["dist", "build", "node_modules"]
 }

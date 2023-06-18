@@ -1,6 +1,6 @@
 'use client';
 
-import { rounding, Rounding } from '@/lib/utils';
+import { rounding, Rounding } from '../lib/utils';
 import clsx from 'clsx';
 import * as React from 'react';
 import { EnvironmentContext, LinkProps as EnvLinkProps } from '../env';
