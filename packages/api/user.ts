@@ -29,6 +29,7 @@ function shortUser(user: User): ShortUser {
 		name: user.name,
 		email: user.email,
 		emailVerified: user.emailVerified,
+		totp: user.totp,
 	};
 }
 
@@ -105,6 +106,7 @@ export async function authorize(
 		name: credentials.name,
 		email: credentials.email,
 		emailVerified: null,
+		totp: null,
 	};
 }
 

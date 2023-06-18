@@ -59,7 +59,7 @@ export const authOptions: AuthOptions = {
 		},
 
 		async session({ session, token }) {
-			session.user.totp = token.totp;
+			session.user.totp = token?.totp as string;
 			return session;
 		},
 	},

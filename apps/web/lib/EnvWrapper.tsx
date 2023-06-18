@@ -7,6 +7,7 @@ import { Link, Image } from './EnvComponents';
 import { SessionProvider, signIn } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import { Header } from 'ui';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export default function EnvWrapper({
 	children,
@@ -24,7 +25,9 @@ export default function EnvWrapper({
 					usePathname: usePathname,
 				}}
 			>
-				<Header signIn={signIn} />
+				<ErrorBoundary fallback={<div>Oops. Failed to load header</div>}>
+					<Header signIn={signIn} />
+				</ErrorBoundary>
 				{children}
 			</EnvironmentContext.Provider>
 		</SessionProvider>
