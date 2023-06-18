@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -8,6 +8,7 @@ import { Button, InputField } from '..';
 import { ErrorMessage } from '@hookform/error-message';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
+import { signIn } from 'next-auth/react';
 
 export function Auth() {
 	const [value, setValue] = React.useState('default');
@@ -28,6 +29,16 @@ export function Auth() {
 		formState: { errors },
 	} = methods;
 	const [showPassword, setShowPassword] = React.useState(false);
+	const [redirectUrl, setRedirectUrl] = React.useState('');
+
+	useEffect(() => {
+		try {
+			console.log('referrer', document.referrer);
+			setRedirectUrl(new URL(document.referrer)?.pathname);
+		} catch (e) {
+			console.log('failed to set callback url', e);
+		}
+	}, []);
 
 	return (
 		<div>
@@ -36,6 +47,13 @@ export function Auth() {
 					className="flex flex-col gap-4 p-4"
 					onSubmit={handleSubmit((d) => {
 						console.log(d);
+						signIn('credentials', {
+							email: d.email,
+							...(isRegister && { name: d.name }),
+							password: d.password,
+							register: isRegister,
+							callbackUrl: redirectUrl,
+						}).catch((e) => console.log(e));
 					})}
 				>
 					<RadioGroup.Root
