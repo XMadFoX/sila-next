@@ -39,8 +39,8 @@ export function Header({ signIn }: { signIn: () => void }) {
 					) : (
 						<Button
 							size={null}
-							onClick={signIn}
-							className="px-8 ml-auto h-11 text-sm uppercase"
+							href="/login"
+							className="flex items-center px-8 ml-auto h-11 text-sm uppercase"
 						>
 							Войти
 						</Button>
