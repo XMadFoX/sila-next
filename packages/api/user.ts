@@ -61,7 +61,7 @@ export async function authorize(
 				(await verifyPassword(credentials.password, user.password))
 			)
 				return shortUser(user);
-			throw new Error('Invalid email, password or authentication method');
+			return null;
 		}
 	} else {
 		return await register(credentials);
@@ -71,7 +71,7 @@ export async function authorize(
 
 async function register(credentials: CreateUserInput) {
 	// TODO: resend verification email if expired
-	if (!credentials?.name) throw new Error('Name is required');
+	if (!credentials?.name) return null;
 	// hash password
 	const { salt, hash } = await hashPassword(credentials.password);
 	// use nodemailer to send verification email
