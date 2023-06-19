@@ -33,32 +33,45 @@ function shortUser(user: User): ShortUser {
 	};
 }
 
+const createUserSchema = z.object({
+	name: z.string().min(3).max(32).optional(),
+	email: z.string().email().min(3).max(128),
+	password: z.string().min(8).max(255),
+	register: z.string(),
+});
+
+type CreateUserInput = z.infer<typeof createUserSchema>;
+
 function parseAuthorizeInput(user: Record<string, any>) {
-	return z
-		.object({
-			name: z.string().min(3).max(32).optional(),
-			email: z.string().email().min(3).max(128),
-			password: z.string().min(8).max(255),
-		})
-		.parse(user);
+	return createUserSchema.parse(user);
 }
 
 export async function authorize(
 	input: Record<string, any>
-): Promise<ShortUser> {
-	// TODO: resend verification email if expired
+): Promise<ShortUser | null> {
 	const credentials = parseAuthorizeInput(input);
-	const user = await findOne(credentials.email);
-	if (user) {
-		// try to log in
-		if (
-			user.password &&
-			(await verifyPassword(credentials.password, user.password))
-		)
-			return shortUser(user);
-		throw new Error('Invalid email, password or authentication method');
+	if (credentials.register === 'false') {
+		const user = await findOne(credentials.email);
+		if (user) {
+			// try to log in
+			if (
+				// check is password set
+				user.password &&
+				// and matches
+				(await verifyPassword(credentials.password, user.password))
+			)
+				return shortUser(user);
+			throw new Error('Invalid email, password or authentication method');
+		}
+	} else {
+		return await register(credentials);
 	}
-	if (!credentials.name) throw new Error('Name is required');
+	return null;
+}
+
+async function register(credentials: CreateUserInput) {
+	// TODO: resend verification email if expired
+	if (!credentials?.name) throw new Error('Name is required');
 	// hash password
 	const { salt, hash } = await hashPassword(credentials.password);
 	// use nodemailer to send verification email
