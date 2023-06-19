@@ -1,4 +1,5 @@
-import { migrate as dMigrate } from 'drizzle-orm/libsql/migrator';
+import { migrate as dMigrate } from 'drizzle-orm/better-sqlite3/migrator';
+import Database from 'better-sqlite3';
 import { db } from './schema';
 
 async function migrate() {
