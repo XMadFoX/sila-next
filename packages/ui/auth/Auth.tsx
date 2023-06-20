@@ -44,10 +44,10 @@ export function Auth() {
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4 p-4"
-					onSubmit={handleSubmit((d: z.infer<typeof schema>) => {
+					onSubmit={handleSubmit(async (d: z.infer<typeof schema>) => {
 						console.log(d);
-						signIn('credentials', {
-							refirect: false,
+						const res = await signIn('credentials', {
+							redirect: false,
 							email: d.email,
 							...(isRegister && { name: d.name }),
 							password: d.password,

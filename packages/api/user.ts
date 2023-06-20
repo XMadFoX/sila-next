@@ -48,7 +48,7 @@ function parseAuthorizeInput(user: Record<string, any>) {
 
 export async function authorize(
 	input: Record<string, any>
-): Promise<ShortUser | null> {
+): Promise<ShortUser> {
 	const credentials = parseAuthorizeInput(input);
 	if (credentials.register === 'false') {
 		const user = await findOne(credentials.email);
@@ -61,17 +61,17 @@ export async function authorize(
 				(await verifyPassword(credentials.password, user.password))
 			)
 				return shortUser(user);
-			return null;
+			throw new Error('Invalid credentials');
 		}
 	} else {
 		return await register(credentials);
 	}
-	return null;
+	throw new Error('Invalid credentials');
 }
 
-async function register(credentials: CreateUserInput) {
+async function register(credentials: CreateUserInput): Promise<ShortUser> {
 	// TODO: resend verification email if expired
-	if (!credentials?.name) return null;
+	if (!credentials?.name) throw new Error('Name is required');
 	// hash password
 	const { salt, hash } = await hashPassword(credentials.password);
 	// use nodemailer to send verification email
