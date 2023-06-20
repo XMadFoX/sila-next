@@ -92,7 +92,10 @@ export function Auth() {
 						type={showPassword ? 'text' : 'password'}
 						errors={errors}
 						rightItem={
-							<button onClick={() => setShowPassword((prev) => !prev)}>
+							<button
+								type="button"
+								onClick={() => setShowPassword((prev) => !prev)}
+							>
 								👁
 							</button>
 						}
