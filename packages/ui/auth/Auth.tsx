@@ -28,16 +28,6 @@ export function Auth() {
 		formState: { errors },
 	} = methods;
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [redirectUrl, setRedirectUrl] = React.useState('');
-
-	useEffect(() => {
-		try {
-			console.log('referrer', document.referrer);
-			setRedirectUrl(new URL(document.referrer)?.pathname);
-		} catch (e) {
-			console.log('failed to set callback url', e);
-		}
-	}, []);
 
 	return (
 		<div>
@@ -53,6 +43,7 @@ export function Auth() {
 							password: d.password,
 							register: isRegister,
 						});
+						console.log('res', res);
 					})}
 				>
 					<RadioGroup.Root
