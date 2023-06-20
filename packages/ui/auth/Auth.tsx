@@ -7,7 +7,7 @@ import * as z from 'zod';
 import { Button, InputField } from '..';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
-import { signIn } from 'next-auth/react';
+import { signIn, SignInResponse } from 'next-auth/react';
 
 export function Auth() {
 	const [value, setValue] = React.useState('default');
@@ -25,9 +25,18 @@ export function Auth() {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = methods;
 	const [showPassword, setShowPassword] = React.useState(false);
+
+	const handleResponse = (res: SignInResponse) => {
+		if (res.error) {
+			setError('password', {});
+			setError('email', {});
+			setError('root', { message: res.error, type: 'credentials' });
+		}
+	};
 
 	return (
 		<div>
@@ -44,6 +53,7 @@ export function Auth() {
 							register: isRegister,
 						});
 						console.log('res', res);
+						res && handleResponse(res);
 					})}
 				>
 					<RadioGroup.Root
@@ -91,6 +101,13 @@ export function Auth() {
 							</button>
 						}
 					/>
+					{errors?.root && (
+						<label className="text-error">
+							{errors.root.type === 'credentials'
+								? 'Не правильный логин или пароль'
+								: errors.root.message}
+						</label>
+					)}
 					<Button
 						type="submit"
 						rounded="lg"
