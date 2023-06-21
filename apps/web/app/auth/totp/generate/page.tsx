@@ -1,11 +1,11 @@
 import React from 'react';
-import { Auth } from 'ui/auth';
+import { GenerateTOTP } from 'ui/auth/totp';
 import { StandaloneModal } from 'ui/utils';
 
 export default function page() {
 	return (
 		<StandaloneModal>
-			<Auth />
+			<GenerateTOTP />
 		</StandaloneModal>
 	);
 }

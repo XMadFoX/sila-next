@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../general';
@@ -13,7 +13,7 @@ const schema = z.object({
 });
 
 export function LinkTOTP() {
-	const { mutate, data, error } = trpc.auth.linkTotp.useMutation();
+	const { mutate, error } = trpc.auth.linkTotp.useMutation();
 	const methods = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		mode: 'onChange',
@@ -23,7 +23,7 @@ export function LinkTOTP() {
 		register,
 		handleSubmit,
 		setError,
-		formState: { isValid, errors },
+		formState: { isValid },
 	} = methods;
 
 	useEffect(() => {

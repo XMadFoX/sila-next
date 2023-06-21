@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { cn } from '../../lib';
 import { Button } from '../../general';
 
-export function GenerateTOTP({ afterLogin = false }: { afterLogin?: boolean }) {
+export function GenerateTOTP() {
 	const { mutate, data, isError } = trpc.auth.generateTotp.useMutation();
 	const canvasRef = React.useRef(null);
 	const [loaded, setLoaded] = useState(false);
@@ -58,7 +58,7 @@ export function GenerateTOTP({ afterLogin = false }: { afterLogin?: boolean }) {
 
 			<canvas
 				className={cn(
-					'mx-auto w-64 bg-black transition-all duration-1000',
+					'mx-auto my-2 w-64 bg-black transition-all duration-1000',
 					!loaded && 'animate-pulse',
 					isError ? 'h-0' : 'h-64'
 				)}

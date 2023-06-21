@@ -9,6 +9,7 @@ import { cn } from '../lib/utils';
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	rightItem?: React.ReactNode;
+	labelVisible?: boolean;
 	errors?: {
 		[x: string]: any;
 	};
@@ -37,7 +38,7 @@ const wrapper = cva('flex relative flex-col transition-all duration-300', {
 });
 
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
-	({ rightItem, errors, ...props }, ref) => {
+	({ rightItem, errors, labelVisible, ...props }, ref) => {
 		const { fieldState, field } = useController({ name: props.name! });
 		const variant = calcilateVariant({
 			invalid: fieldState.invalid,
@@ -46,8 +47,11 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 
 		return (
 			<div className="flex flex-col">
-				<label className="invisible w-0 h-0" aria-label={props.name}>
-					{props.placeholder}
+				<label
+					className={labelVisible ? 'mb-2' : 'invisible w-0 h-0'}
+					aria-label={props.name}
+				>
+					{labelVisible ? props['aria-label'] : props.placeholder}
 				</label>
 				<GradientWrapper className={wrapper({ intent: variant })} rounded="lg">
 					<input
