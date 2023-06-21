@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -8,6 +8,7 @@ import { Button, InputField } from '..';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
 import { signIn, SignInResponse } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export function Auth() {
 	const [value, setValue] = React.useState('default');
@@ -29,13 +30,18 @@ export function Auth() {
 		formState: { errors },
 	} = methods;
 	const [showPassword, setShowPassword] = React.useState(false);
+	const router = useRouter();
 
 	const handleResponse = (res: SignInResponse) => {
 		if (res.error) {
 			setError('password', {});
 			setError('email', {});
 			setError('root', { message: res.error, type: 'credentials' });
+			return;
 		}
+		isRegister
+			? router.replace('/auth/success?type=register_email')
+			: router.back();
 	};
 
 	return (
