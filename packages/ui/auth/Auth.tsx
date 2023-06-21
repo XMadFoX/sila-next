@@ -60,6 +60,7 @@ export function Auth() {
 						});
 						console.log('res', res);
 						res && handleResponse(res);
+						// TODO: check is TOTP enabled on account, if not, send snackbar with link opening modal to enable
 					})}
 				>
 					<RadioGroup.Root
