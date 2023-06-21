@@ -47,4 +47,36 @@ export const authRoutes = createTRPCRouter({
 				.where(eq(users.id, req.ctx.session.user.id))
 				.run();
 		}),
+	verifyTotp: protectedProcedure
+		.input(z.string().length(6).regex(/^\d+$/))
+		.mutation(async (req) => {
+			if (!req.ctx.session.user.totpSecret)
+				throw new Error('No secret generated yet');
+			const isValid = authenticator.check(
+				req.input,
+				req.ctx.session.user.totpSecret
+			);
+			if (!isValid) throw new Error('Invalid code');
+		}),
+	unlinkTotp: protectedProcedure
+		.input(z.string().length(6))
+		.mutation(async (req) => {
+			if (!req.ctx.session.user.totpEnabled)
+				throw new Error('TOTP not enabled');
+			if (!req.ctx.session.user.totpSecret)
+				throw new Error('No secret generated yet');
+			const isValid = authenticator.check(
+				req.input,
+				req.ctx.session.user.totpSecret
+			);
+			if (!isValid) throw new Error('Invalid code');
+			await db
+				.update(users)
+				.set({
+					totpEnabled: null,
+					totp: null,
+				})
+				.where(eq(users.id, req.ctx.session.user.id))
+				.run();
+		}),
 });
