@@ -13,7 +13,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
 			transformer: superjson,
 			links: [
 				httpBatchLink({
-					url: process.env.NEXT_PUBLIC_TRPC_ENDPOINT,
+					url: process.env.NEXT_PUBLIC_TRPC_ENDPOINT as string,
 				}),
 			],
 		})

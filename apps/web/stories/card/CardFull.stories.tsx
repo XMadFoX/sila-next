@@ -31,7 +31,9 @@ export const Default: Story = {
 		children: (
 			<>
 				<Card.Preview
-					{...(DefaultPreview.args as Required<typeof DefaultPreview.args>)}
+					{...(DefaultPreview.args as Required<
+						typeof DefaultPreview.args
+					> as any)}
 				/>
 				,
 				<Card.Details {...(DefaultDetails.args as any)} />,

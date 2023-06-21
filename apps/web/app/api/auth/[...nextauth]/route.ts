@@ -30,18 +30,20 @@ export const authOptions: AuthOptions = {
 				},
 			},
 			async authorize(_, req) {
+				console.log('body', req.body);
 				return await authorize(req.body);
 			},
 		}),
-		GoogleProvider({
-			clientId: process.env.GOOGLE_ID,
-			clientSecret: process.env.GOOGLE_SECRET,
-		}),
-		EmailProvider({
-			server: 'smtp://username:password@localhost:2525',
-			from: 'username@email.com',
-		}),
+		// GoogleProvider({
+		// 	clientId: process.env.GOOGLE_ID,
+		// 	clientSecret: process.env.GOOGLE_SECRET,
+		// }),
+		// EmailProvider({
+		// 	server: 'smtp://username:password@localhost:2525',
+		// 	from: 'username@email.com',
+		// }),
 	],
+	debug: true,
 	adapter: SQLiteDrizzleAdapter(db) as any,
 	session: {
 		strategy: 'jwt',
@@ -49,10 +51,11 @@ export const authOptions: AuthOptions = {
 	callbacks: {
 		async jwt({ token, trigger, session }) {
 			if (trigger === 'update') {
+				if (!token?.email) return token;
 				const totpSecret = await checkTotpCode(
 					session.totpToken,
 					token.email
-				).catch(() => {});
+				).catch(() => { });
 				token.totp = totpSecret || null;
 			}
 			return token;

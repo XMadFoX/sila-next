@@ -76,7 +76,7 @@ export function SQLiteDrizzleAdapter(
 
 			return client
 				.update(users)
-				.set(data)
+				.set(data as any)
 				.where(eq(users.id, data.id))
 				.returning()
 				.get();
@@ -96,7 +96,10 @@ export function SQLiteDrizzleAdapter(
 			console.log('linkAccount', rawAccount);
 			const updatedAccount = await client
 				.insert(accounts)
-				.values({ ...rawAccount, expires_at: new Date(rawAccount.expires_at) })
+				.values({
+					...rawAccount,
+					expires_at: new Date(rawAccount?.expires_at || new Date()),
+				})
 				.returning()
 				.get();
 
@@ -108,7 +111,7 @@ export function SQLiteDrizzleAdapter(
 				id_token: updatedAccount.id_token ?? undefined,
 				refresh_token: updatedAccount.refresh_token ?? undefined,
 				scope: updatedAccount.scope ?? undefined,
-				expires_at: updatedAccount.expires_at.getMilliseconds() ?? undefined,
+				expires_at: updatedAccount?.expires_at?.getMilliseconds() ?? undefined,
 				session_state: updatedAccount.session_state ?? undefined,
 			};
 
@@ -159,25 +162,25 @@ export function SQLiteDrizzleAdapter(
 				.get();
 		},
 
-		useVerificationToken: (token) => {
-			console.log('useVerificationToken', token);
-			try {
-				return (
-					client
-						.delete(verificationTokens)
-						.where(
-							and(
-								eq(verificationTokens.identifier, token.identifier),
-								eq(verificationTokens.token, token.token)
-							)
-						)
-						.returning()
-						.get() ?? null
-				);
-			} catch (err) {
-				throw new Error('No verification token found.');
-			}
-		},
+		// useVerificationToken: (token) => {
+		// 	console.log('useVerificationToken', token);
+		// 	try {
+		// 		return (
+		// 			client
+		// 				.delete(verificationTokens)
+		// 				.where(
+		// 					and(
+		// 						eq(verificationTokens.identifier, token.identifier),
+		// 						eq(verificationTokens.token, token.token)
+		// 					)
+		// 				)
+		// 				.returning()
+		// 				.get() ?? null
+		// 		);
+		// 	} catch (err) {
+		// 		throw new Error('No verification token found.');
+		// 	}
+		// },
 
 		deleteUser: (id) => {
 			console.log('deleteUser', id);

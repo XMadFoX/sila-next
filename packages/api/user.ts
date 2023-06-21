@@ -42,12 +42,12 @@ const createUserSchema = z.object({
 
 type CreateUserInput = z.infer<typeof createUserSchema>;
 
-function parseAuthorizeInput(user: Record<string, any>) {
+function parseAuthorizeInput(user: Record<string, any> | undefined) {
 	return createUserSchema.parse(user);
 }
 
 export async function authorize(
-	input: Record<string, any>
+	input: Record<string, any> | undefined
 ): Promise<ShortUser> {
 	const credentials = parseAuthorizeInput(input);
 	if (credentials.register === 'false') {

@@ -5,8 +5,8 @@ const LinkWrapper = (props: LinkProps) => {
 	return <Link {...props} />;
 };
 
-const ImageWrapper = (props: ImageProps) => {
-	return <Image alt={props.alt} {...props} />;
+const ImageWrapper = ({ alt, ...props }: ImageProps) => {
+	return <Image alt={alt} {...props} />;
 };
 
 export { LinkWrapper as Link, ImageWrapper as Image };
