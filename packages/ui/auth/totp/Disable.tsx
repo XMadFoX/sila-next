@@ -1,8 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../general';
 import { InputField } from '../../input';
@@ -12,8 +12,9 @@ const schema = z.object({
 	code: z.string().length(6),
 });
 
-export function LinkTOTP() {
-	const { mutate, data, error } = trpc.auth.linkTotp.useMutation();
+export function DisableTOTP() {
+	const { mutate, error } = trpc.auth.unlinkTotp.useMutation();
+
 	const methods = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		mode: 'onChange',
@@ -23,7 +24,7 @@ export function LinkTOTP() {
 		register,
 		handleSubmit,
 		setError,
-		formState: { isValid, errors },
+		formState: { isValid },
 	} = methods;
 
 	useEffect(() => {
@@ -33,6 +34,9 @@ export function LinkTOTP() {
 	return (
 		<div>
 			<FormProvider {...methods}>
+				<legend className="text-xl font-bold">
+					Отключить двухфакторную аутентификацию
+				</legend>
 				<form
 					className="flex flex-col gap-4 p-4"
 					onSubmit={handleSubmit(async (d: z.infer<typeof schema>) => {
@@ -40,24 +44,24 @@ export function LinkTOTP() {
 						mutate(d.code);
 					})}
 				>
-					<legend className="text-xl font-bold">
-						Включить двухфакторную аутентификацию
-					</legend>
 					<InputField
-						type="number"
-						placeholder="000000"
+						aria-label="Код из аутентфикатора"
 						labelVisible
-						aria-label="Код из аутентификатора"
+						placeholder="000000"
+						type="number"
 						min={0}
 						max={999999}
 						{...register('code')}
 					/>
+					<p className="underline text-error text-bold">
+						Это сделает Ваш аккаунт более уязвимым!
+					</p>
 					<Button
 						className="disabled:opacity-50"
 						disabled={!isValid}
 						type="submit"
 					>
-						Включить
+						Подтвердить
 					</Button>
 				</form>
 			</FormProvider>

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { cn } from '../../lib';
 import { Button } from '../../general';
 
-export function Generate({ afterLogin = false }: { afterLogin?: boolean }) {
+export function GenerateTOTP({ afterLogin = false }: { afterLogin?: boolean }) {
 	const { mutate, data, isError } = trpc.auth.generateTotp.useMutation();
 	const canvasRef = React.useRef(null);
 	const [loaded, setLoaded] = useState(false);
