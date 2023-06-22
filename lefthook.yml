@@ -3,8 +3,8 @@ pre-commit:
   commands:
     prettier:
       glob: '*.{js,ts,jsx,tsx}'
-      run: prettier --write {staged_files}
+      run: pnpm prettier --write {staged_files}
     eslint:
       glob: '*.{js,ts,jsx,tsx}'
-      run: eslint -c .eslintrc.js --fix {staged_files}
+      run: pnpm eslint -c .eslintrc.js --fix {staged_files}
       stage_fixed: true

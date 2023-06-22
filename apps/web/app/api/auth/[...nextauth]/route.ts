@@ -55,7 +55,7 @@ export const authOptions: AuthOptions = {
 				const totpSecret = await checkTotpCode(
 					session.totpToken,
 					token.email
-				).catch(() => { });
+				).catch(() => {});
 				token.totp = totpSecret || null;
 			}
 			return token;
