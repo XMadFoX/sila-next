@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button, InputField } from '..';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
-import { signIn, SignInResponse } from 'next-auth/react';
+import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export function Auth() {
@@ -32,6 +32,7 @@ export function Auth() {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const router = useRouter();
 
+	const [loggedIn, setLoggedIn] = React.useState(false);
 	const handleResponse = (res: SignInResponse) => {
 		if (res.error) {
 			setError('password', {});
@@ -39,10 +40,17 @@ export function Auth() {
 			setError('root', { message: res.error, type: 'credentials' });
 			return;
 		}
-		isRegister
-			? router.replace('/auth/success?type=register_email')
-			: router.back();
+		if (isRegister) router.replace('/auth/success?type=register_email');
+		else setLoggedIn(true);
 	};
+
+	const session = useSession();
+
+	useEffect(() => {
+		if (loggedIn && session?.data?.user?.totpEnabled)
+			setTimeout(() => router.replace('/auth/totp/verify'), 500);
+		else if (loggedIn) router.back();
+	}, [loggedIn, session]);
 
 	return (
 		<div>
