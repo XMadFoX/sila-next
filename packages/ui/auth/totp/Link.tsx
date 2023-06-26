@@ -5,12 +5,10 @@ import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../general';
-import { InputField } from '../../input';
 import { trpc } from '../../lib/trpc';
-
-const schema = z.object({
-	code: z.string().length(6),
-});
+import { useSession } from 'next-auth/react';
+import { CodeInput } from './CodeInput';
+import { schema } from './schema';
 
 export function LinkTOTP() {
 	const { mutate, error } = trpc.auth.linkTotp.useMutation();
@@ -43,15 +41,7 @@ export function LinkTOTP() {
 					<legend className="text-xl font-bold">
 						Включить двухфакторную аутентификацию
 					</legend>
-					<InputField
-						type="number"
-						placeholder="000000"
-						labelVisible
-						aria-label="Код из аутентификатора"
-						min={0}
-						max={999999}
-						{...register('code')}
-					/>
+					<CodeInput {...register('code')} />
 					<Button
 						className="disabled:opacity-50"
 						disabled={!isValid}

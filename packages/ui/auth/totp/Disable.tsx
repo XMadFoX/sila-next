@@ -5,12 +5,9 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../general';
-import { InputField } from '../../input';
 import { trpc } from '../../lib/trpc';
-
-const schema = z.object({
-	code: z.string().length(6),
-});
+import { CodeInput } from './CodeInput';
+import { schema } from './schema';
 
 export function DisableTOTP() {
 	const { mutate, error } = trpc.auth.unlinkTotp.useMutation();
@@ -44,15 +41,7 @@ export function DisableTOTP() {
 						mutate(d.code);
 					})}
 				>
-					<InputField
-						aria-label="Код из аутентфикатора"
-						labelVisible
-						placeholder="000000"
-						type="number"
-						min={0}
-						max={999999}
-						{...register('code')}
-					/>
+					<CodeInput {...register('code')} />
 					<p className="underline text-error text-bold">
 						Это сделает Ваш аккаунт более уязвимым!
 					</p>
