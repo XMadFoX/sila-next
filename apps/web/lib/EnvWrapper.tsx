@@ -17,7 +17,7 @@ export default function EnvWrapper({
 	session?: Session | null;
 }) {
 	return (
-		<SessionProvider session={session}>
+		<SessionProvider session={session} refetchOnWindowFocus={false}>
 			<EnvironmentContext.Provider
 				value={{
 					Link: Link,

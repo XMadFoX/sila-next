@@ -39,7 +39,7 @@ export function Header({ signIn }: { signIn: () => void }) {
 					) : (
 						<Button
 							size={null}
-							href="/login"
+							href="/auth/login"
 							className="flex items-center px-8 ml-auto h-11 text-sm uppercase"
 						>
 							Войти

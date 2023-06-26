@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import crypto from 'node:crypto';
 import NodeMailer from 'nodemailer';
 import { z } from 'zod';
+import { omit } from 'remeda';
 
 export async function createUser(data: InsertUser, trx?: any) {
 	return await (trx || db).insert(users).values(data).returning().get();
@@ -19,18 +20,15 @@ export async function findOne(email: string) {
 }
 
 export interface ShortUser
-	extends Pick<User, 'id' | 'name' | 'email' | 'emailVerified'> {
-	totp: string | null;
+	extends Pick<
+		User,
+		'id' | 'name' | 'email' | 'emailVerified' | 'totpEnabled'
+	> {
+	totp?: string | null;
 }
 
-function shortUser(user: User): ShortUser {
-	return {
-		id: user.id,
-		name: user.name,
-		email: user.email,
-		emailVerified: user.emailVerified,
-		totp: user.totp,
-	};
+export function shortUser(user: User): ShortUser {
+	return omit(user, ['totp', 'password', 'createdAt', 'totpSecret']);
 }
 
 const createUserSchema = z.object({
@@ -120,6 +118,7 @@ async function register(credentials: CreateUserInput): Promise<ShortUser> {
 		email: credentials.email,
 		emailVerified: null,
 		totp: null,
+		totpEnabled: null,
 	};
 }
 

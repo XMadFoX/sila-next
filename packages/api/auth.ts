@@ -8,7 +8,7 @@ import { createTRPCRouter, protectedProcedure } from './trpc-server';
 
 export const authRoutes = createTRPCRouter({
 	generateTotp: protectedProcedure.mutation(async (req) => {
-		if (req.ctx.session.user.totpEnabled)
+		if (req.ctx.session.user.totpEnabled && req.ctx.session.user.totp)
 			throw new Error('TOTP already enabled');
 		const secret = authenticator.generateSecret();
 		const otpAuthUri = authenticator.keyuri(

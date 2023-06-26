@@ -4,7 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
 import { SQLiteDrizzleAdapter } from '@sila/api/sqlite.adapter';
-import { authorize } from '@sila/api/user';
+import { authorize, findOne, shortUser } from '@sila/api/user';
+import * as R from 'remeda';
 
 export const authOptions: AuthOptions = {
 	// Configure one or more authentication providers
@@ -31,7 +32,10 @@ export const authOptions: AuthOptions = {
 			},
 			async authorize(_, req) {
 				console.log('body', req.body);
-				return await authorize(req.body);
+				const authResponse = authorize(req.body);
+
+				console.log('authResponse', await authResponse);
+				return await authResponse;
 			},
 		}),
 		// GoogleProvider({
@@ -50,6 +54,9 @@ export const authOptions: AuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, trigger, session }) {
+			console.log('jwt triggered', trigger);
+			console.log('token', token);
+			console.log('session', session);
 			if (trigger === 'update') {
 				if (!token?.email) return token;
 				const totpSecret = await checkTotpCode(
@@ -62,7 +69,17 @@ export const authOptions: AuthOptions = {
 		},
 
 		async session({ session, token }) {
+			console.log('session triggered');
+			console.log('session', session);
+			console.log('token', token);
 			session.user.totp = token?.totp as string;
+			const res = R.pick(shortUser(await findOne(session.user.email)), [
+				'name',
+				'email',
+				'totpEnabled',
+				'emailVerified',
+			]);
+			session.user = { ...session.user, ...res };
 			return session;
 		},
 	},
