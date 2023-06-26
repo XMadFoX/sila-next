@@ -41,7 +41,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 	({ rightItem, errors, labelVisible, ...props }, ref) => {
 		const { fieldState, field } = useController({ name: props.name! });
 		const variant = calcilateVariant({
-			invalid: fieldState.invalid,
+			invalid: fieldState.isTouched && fieldState?.error ? true : false,
 			filled: field?.value?.length > 0,
 		});
 
@@ -57,9 +57,9 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					<input
 						ref={ref}
 						className={cn(
-							'py-2 px-4 w-full rounded-lg ring transition-all duration-300 outline-none focus:ring-transparent invalid:outline-error invalid:border-error invalid:border ring-dark-grey',
+							'py-2 px-4 w-full rounded-lg ring transition-all duration-300 outline-none focus:ring-transparent ring-dark-grey',
 							field.value?.length > 0 && 'ring-transparent',
-							fieldState.invalid && 'border-error border'
+							fieldState.isTouched && fieldState?.error && 'border-error border'
 						)}
 						{...props}
 					/>
