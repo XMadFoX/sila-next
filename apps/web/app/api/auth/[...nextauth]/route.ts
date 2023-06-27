@@ -4,7 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
 import { SQLiteDrizzleAdapter } from '@sila/api/sqlite.adapter';
-import { authorize, findOne, shortUser } from '@sila/api/user';
+import { authorize } from '@sila/api/auth';
+import { shortUser, findOne } from '@sila/api/user';
 import * as R from 'remeda';
 
 export const authOptions: AuthOptions = {
