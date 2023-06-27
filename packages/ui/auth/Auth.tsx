@@ -49,7 +49,7 @@ export function Auth() {
 	useEffect(() => {
 		if (loggedIn && session?.data?.user?.totpEnabled)
 			setTimeout(() => router.replace('/auth/totp/verify'), 500);
-		else if (loggedIn) router.back();
+		else if (loggedIn && window.history.length > 1) router.back();
 	}, [loggedIn, session]);
 
 	return (

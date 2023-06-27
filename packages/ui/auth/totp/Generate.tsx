@@ -67,9 +67,11 @@ export function GenerateTOTP() {
 			></canvas>
 
 			{!isError ? (
-				<Button className="mx-auto">Далее</Button>
+				<Button className="mx-auto" href="/auth/totp/link" replace>
+					Далее
+				</Button>
 			) : (
-				<Button className="mx-auto" href="/auth/totp/disable">
+				<Button className="mx-auto" href="/auth/totp/disable" replace>
 					Отключить
 				</Button>
 			)}
