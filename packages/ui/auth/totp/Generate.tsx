@@ -9,7 +9,7 @@ import { cn } from '../../lib';
 import { Button } from '../../general';
 
 export function GenerateTOTP() {
-	const { mutate, data, isError } = trpc.auth.generateTotp.useMutation();
+	const { mutate, data, isError } = trpc.totp.generateTotp.useMutation();
 	const canvasRef = React.useRef(null);
 	const [loaded, setLoaded] = useState(false);
 

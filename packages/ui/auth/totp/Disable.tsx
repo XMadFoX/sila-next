@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 
 export function DisableTOTP() {
 	const { mutate, error, isSuccess, isLoading } =
-		trpc.auth.unlinkTotp.useMutation();
+		trpc.totp.unlinkTotp.useMutation();
 	const [notLinked, setNotLinked] = useState(false);
 	const router = useRouter();
 
