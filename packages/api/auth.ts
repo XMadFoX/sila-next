@@ -4,6 +4,7 @@ import { db, verificationTokens, users } from './schema';
 import { ShortUser, findOne, shortUser, createUser } from './user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
+import { hash as hashPassword, verify } from './hash';
 
 const createUserSchema = z.object({
 	name: z.string().min(3).max(32).optional(),
@@ -30,7 +31,7 @@ export async function authorize(
 				// check is password set
 				user.password &&
 				// and matches
-				(await verifyPassword(credentials.password, user.password))
+				(await verify(credentials.password, user.password))
 			)
 				return shortUser(user);
 			throw new Error('Invalid credentials');
@@ -121,20 +122,4 @@ export async function verifyEmail(token: string) {
 		.where(eq(users.id, verificationToken.userId))
 		.run();
 	return true;
-}
-
-async function hashPassword(password: string) {
-	const salt = crypto.randomBytes(16).toString('hex');
-	const hash = crypto
-		.pbkdf2Sync(password, salt, 1000, 64, 'sha512')
-		.toString('hex');
-	return { salt, hash };
-}
-
-async function verifyPassword(password: string, saltHash: string) {
-	const [salt, hash] = saltHash.split(':');
-	const hashVerify = crypto
-		.pbkdf2Sync(password, salt, 1000, 64, 'sha512')
-		.toString('hex');
-	return hash === hashVerify;
 }

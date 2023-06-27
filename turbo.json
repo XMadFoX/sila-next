@@ -24,6 +24,7 @@
 		"SMTP_PASS",
 		"GOOGLE_ID",
 		"GOOGLE_SECRET",
+		"ESECRET",
 		"NODE_ENV"
 	]
 }
