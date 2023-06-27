@@ -5,6 +5,7 @@ import { db, users } from './schema';
 import crypto from 'crypto';
 
 import { createTRPCRouter, protectedProcedure } from './trpc-server';
+import { decrypt, encrypt } from './encryption';
 
 export const totpRoutes = createTRPCRouter({
 	generateTotp: protectedProcedure.mutation(async (req) => {
@@ -19,7 +20,7 @@ export const totpRoutes = createTRPCRouter({
 		await db
 			.update(users)
 			.set({
-				totpSecret: secret,
+				totpSecret: encrypt(secret),
 			})
 			.where(eq(users.id, req.ctx.session.user.id))
 			.run();
@@ -52,10 +53,8 @@ export const totpRoutes = createTRPCRouter({
 		.mutation(async (req) => {
 			if (!req.ctx.session.user.totpSecret)
 				throw new Error('No secret generated yet');
-			const isValid = authenticator.check(
-				req.input,
-				req.ctx.session.user.totpSecret
-			);
+			const decodedSecret = decrypt(req.ctx.session.user.totpSecret);
+			const isValid = authenticator.check(req.input, decodedSecret);
 			if (!isValid) throw new Error('Invalid code');
 		}),
 	unlinkTotp: protectedProcedure
@@ -65,10 +64,8 @@ export const totpRoutes = createTRPCRouter({
 				throw new Error('TOTP not enabled');
 			if (!req.ctx.session.user.totpSecret)
 				throw new Error('No secret generated yet');
-			const isValid = authenticator.check(
-				req.input,
-				req.ctx.session.user.totpSecret
-			);
+			const decodedSecret = decrypt(req.ctx.session.user.totpSecret);
+			const isValid = authenticator.check(req.input, decodedSecret);
 			if (!isValid) throw new Error('Invalid code');
 			await db
 				.update(users)
@@ -94,7 +91,8 @@ export async function checkTotpCode(code: string, userEmail: string) {
 		.where(eq(users.email, userEmail))
 		.get();
 	if (!totpSecret) throw new Error('No secret generated yet');
-	const isValid = authenticator.check(code, totpSecret);
+	const decodedSecret = decrypt(totpSecret);
+	const isValid = authenticator.check(code, decodedSecret);
 	if (!isValid) throw new Error('Invalid code');
 	if (!totpEnabled)
 		db.update(users)
