@@ -75,6 +75,7 @@ export const authRoutes = createTRPCRouter({
 				.set({
 					totpEnabled: null,
 					totp: null,
+					totpSecret: null,
 				})
 				.where(eq(users.id, req.ctx.session.user.id))
 				.run();
