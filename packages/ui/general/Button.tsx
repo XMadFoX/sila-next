@@ -20,7 +20,7 @@ type SharedProps = {
 };
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
-type LinkProps = Partial<Pick<EnvLinkProps, 'href'>>;
+type LinkProps = Partial<Pick<EnvLinkProps, 'href' | 'replace'>>;
 type ButtonOrLink = ButtonProps & LinkProps;
 type ButtonOrLinkProps = ButtonOrLink & SharedProps;
 
@@ -73,7 +73,8 @@ export function Button(props: ButtonOrLinkProps) {
 		return Wrap(
 			<Link
 				className={clsx(
-					'rounded-full font-medium',
+					'font-medium inline-block',
+					rounding[rounded],
 					themed,
 					intent !== 'img' && sizeClass,
 					className

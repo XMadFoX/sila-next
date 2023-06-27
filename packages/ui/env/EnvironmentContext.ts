@@ -5,6 +5,7 @@ import { createContext } from 'react';
 export interface LinkProps
 	extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 	href: string;
+	replace?: boolean;
 }
 
 export interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
