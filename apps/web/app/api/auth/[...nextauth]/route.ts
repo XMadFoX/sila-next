@@ -32,10 +32,7 @@ export const authOptions: AuthOptions = {
 				},
 			},
 			async authorize(_, req) {
-				console.log('body', req.body);
 				const authResponse = authorize(req.body);
-
-				console.log('authResponse', await authResponse);
 				return await authResponse;
 			},
 		}),
@@ -55,9 +52,6 @@ export const authOptions: AuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, trigger, session }) {
-			console.log('jwt triggered', trigger);
-			console.log('token', token);
-			console.log('session', session);
 			if (trigger === 'update') {
 				if (!token?.email) return token;
 				const totpSecret = await checkTotpCode(
@@ -70,9 +64,6 @@ export const authOptions: AuthOptions = {
 		},
 
 		async session({ session, token }) {
-			console.log('session triggered');
-			console.log('session', session);
-			console.log('token', token);
 			session.user.totp = token?.totp as string;
 			const res = R.pick(shortUser(await findOne(session.user.email)), [
 				'name',

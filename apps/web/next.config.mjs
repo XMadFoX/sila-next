@@ -1,4 +1,7 @@
-module.exports = {
+import './env.mjs';
+
+/** @type {import("next").NextConfig} */
+const config = {
 	reactStrictMode: true,
 	// allow images from picsum
 	images: {
@@ -13,3 +16,5 @@ module.exports = {
 	},
 	transpilePackages: ['ui'],
 };
+
+export default config;
