@@ -1,3 +1,5 @@
+// @ts-check
+
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
@@ -10,6 +12,7 @@ export const env = createEnv({
 		DB_AUTH_TOKEN: z.string().min(1),
 		NODE_ENV: z.string().min(1).optional(),
 		NEXTAUTH_SECRET: z.string().min(1),
+		NEXTAUTH_URL: z.string().url(),
 		SMTP_URL: z.string().url(),
 		SMTP_FROM: z.string().email().optional(),
 		ESECRET: z.string().min(1),

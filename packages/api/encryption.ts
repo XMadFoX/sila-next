@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+import { env } from './env.mjs';
 
 const algorithm = 'aes-256-ctr';
-const secretKey = process.env.ESECRET as string;
+const secretKey = env.ESECRET;
 
 const salt = crypto.randomBytes(16); // Generate a random salt
 

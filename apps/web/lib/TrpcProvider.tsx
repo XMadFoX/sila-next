@@ -5,6 +5,7 @@ import { httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import { trpc } from './trpc';
 import superjson from 'superjson';
+import { env } from '@sila/api/env.mjs';
 
 export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
 	const [queryClient] = useState(() => new QueryClient());
@@ -13,7 +14,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
 			transformer: superjson,
 			links: [
 				httpBatchLink({
-					url: process.env.NEXT_PUBLIC_TRPC_ENDPOINT as string,
+					url: env.NEXT_PUBLIC_TRPC_ENDPOINT,
 				}),
 			],
 		})

@@ -1,12 +1,13 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+import { env } from './env.mjs';
+dotenv.config({ path: '.process.env.local' });
 
-console.log('DB_URL', process.env.DB_URL);
+console.log('DB_URL', env.DB_URL.slice(0, 15) + '...');
 const connection = createClient({
-	url: process.env.DB_URL as string,
-	authToken: process.env.DB_AUTH_TOKEN as string,
+	url: env.DB_URL,
+	authToken: env.DB_AUTH_TOKEN,
 });
 export const db = drizzle(connection);
 

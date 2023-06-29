@@ -5,6 +5,7 @@ import { ShortUser, findOne, shortUser, createUser } from './user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
+import { env } from './env.mjs';
 
 const createUserSchema = z.object({
 	name: z.string().min(3).max(32).optional(),
@@ -51,8 +52,8 @@ async function register(credentials: CreateUserInput): Promise<ShortUser> {
 	const verificationToken = crypto.randomBytes(16).toString('hex');
 	// create nodemailer transporter
 	const nodemailer = NodeMailer.createTransport({
-		url: process.env.SMTP_URL,
-		from: process.env.SMTP_FROM,
+		url: env.SMTP_URL,
+		from: env.SMTP_FROM,
 	});
 
 	const userId = crypto.randomUUID();
@@ -77,10 +78,10 @@ async function register(credentials: CreateUserInput): Promise<ShortUser> {
 	});
 
 	nodemailer.sendMail({
-		from: process.env.SMTP_FROM,
+		from: env.SMTP_FROM,
 		to: credentials.email,
 		subject: 'Verify your email',
-		html: `Click <a href="${process.env.NEXTAUTH_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
+		html: `Click <a href="${env.NEXTAUTH_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
 	});
 
 	return {
