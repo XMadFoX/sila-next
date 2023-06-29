@@ -10,6 +10,8 @@ import clsx from 'clsx';
 import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import safeBack from '../utils/safeBack';
+import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 export function Auth() {
 	const [value, setValue] = React.useState('default');
@@ -50,7 +52,29 @@ export function Auth() {
 	useEffect(() => {
 		if (loggedIn && session?.data?.user?.totpEnabled)
 			setTimeout(() => router.replace('/auth/totp/verify'), 500);
-		else if (loggedIn) safeBack(window, router);
+		else if (loggedIn) {
+			safeBack(window, router);
+			toast.success('Успешный вход');
+			toast.info(
+				<div className="inline">
+					Для повышения безопасности аккаунта рекомендуем{' '}
+					<Link
+						href="/auth/totp/generate"
+						className="inline-block underline text-blue"
+						onClick={() => toast.dismiss('suggestEnableTotp')}
+						replace
+					>
+						включить двухфакторную аутентификацию
+					</Link>
+				</div>,
+				{
+					autoClose: false,
+					closeOnClick: false,
+					icon: false,
+					toastId: 'suggestEnableTotp',
+				}
+			);
+		}
 	}, [loggedIn, session]);
 
 	return (

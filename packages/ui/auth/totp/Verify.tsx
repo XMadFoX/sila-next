@@ -10,6 +10,7 @@ import { CodeInput } from './CodeInput';
 import { Button } from '../../general';
 import { useRouter } from 'next/navigation';
 import safeBack from '../../utils/safeBack';
+import { toast } from 'react-toastify';
 
 export function VerifyTOTP() {
 	const session = useSession();
@@ -27,6 +28,7 @@ export function VerifyTOTP() {
 		if (session?.data?.user?.totp) {
 			console.log('totp present, going back');
 			safeBack(window, router);
+			toast.success('Успешный вход');
 		} else setError('code', { message: 'Неверный код' });
 	}, [session]);
 

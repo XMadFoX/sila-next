@@ -14,6 +14,13 @@ import { z } from 'zod';
 import { zodI18nMap } from 'zod-i18n-map';
 import translation from 'zod-i18n-map/locales/ru/zod.json';
 
+import dynamic from 'next/dynamic';
+const ToastContainer = dynamic(
+	() => import('react-toastify').then((m) => m.ToastContainer),
+	{ ssr: false }
+);
+import 'react-toastify/dist/ReactToastify.min.css';
+
 i18next.init({
 	lng: 'ru',
 	resources: {
@@ -41,6 +48,7 @@ export default function EnvWrapper({
 				<ErrorBoundary fallback={<div>Oops. Failed to load header</div>}>
 					<Header signIn={signIn} />
 				</ErrorBoundary>
+				<ToastContainer />
 				{children}
 			</EnvironmentContext.Provider>
 		</SessionProvider>

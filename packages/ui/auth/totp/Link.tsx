@@ -10,6 +10,7 @@ import { CodeInput } from './CodeInput';
 import { schema } from './schema';
 import { useRouter } from 'next/navigation';
 import safeBack from '../../utils/safeBack';
+import { toast } from 'react-toastify';
 
 export function LinkTOTP() {
 	const session = useSession();
@@ -34,6 +35,7 @@ export function LinkTOTP() {
 		if (session?.data?.user?.totpEnabled) setAlreadyEnabled(true);
 		if (session?.data?.user?.totp) {
 			safeBack(window, router);
+			toast.success('Поключено');
 		} else {
 			setError('code', { message: 'Неправильный код' });
 		}
