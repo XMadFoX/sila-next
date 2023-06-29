@@ -9,6 +9,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
 import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import safeBack from '../utils/safeBack';
 
 export function Auth() {
 	const [value, setValue] = React.useState('default');
@@ -49,7 +50,7 @@ export function Auth() {
 	useEffect(() => {
 		if (loggedIn && session?.data?.user?.totpEnabled)
 			setTimeout(() => router.replace('/auth/totp/verify'), 500);
-		else if (loggedIn && window.history.length > 1) router.back();
+		else if (loggedIn) safeBack(window, router);
 	}, [loggedIn, session]);
 
 	return (

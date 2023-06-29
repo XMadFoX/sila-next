@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { CodeInput } from './CodeInput';
 import { schema } from './schema';
 import { useRouter } from 'next/navigation';
+import safeBack from '../../utils/safeBack';
 
 export function LinkTOTP() {
 	const session = useSession();
@@ -32,7 +33,7 @@ export function LinkTOTP() {
 		console.log('session updated', session.data);
 		if (session?.data?.user?.totpEnabled) setAlreadyEnabled(true);
 		if (session?.data?.user?.totp) {
-			router.back();
+			safeBack(window, router);
 		} else {
 			setError('code', { message: 'Неправильный код' });
 		}

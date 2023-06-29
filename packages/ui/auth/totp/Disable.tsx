@@ -10,6 +10,7 @@ import { CodeInput } from './CodeInput';
 import { schema } from './schema';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import safeBack from '../../utils/safeBack';
 
 export function DisableTOTP() {
 	const { mutate, error, isSuccess, isLoading } =
@@ -39,7 +40,7 @@ export function DisableTOTP() {
 		if (!session?.data?.user?.totpEnabled) {
 			setNotLinked(true);
 		}
-		if (isSuccess) router.back();
+		if (isSuccess) safeBack(window, router);
 	}, [session]);
 
 	useEffect(() => {
