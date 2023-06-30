@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import safeBack from '../../utils/safeBack';
 import { toast } from 'react-toastify';
 
-export function VerifyTOTP() {
+export function VerifyTOTP({ closeModal }: { closeModal?: () => void }) {
 	const session = useSession();
 	const methods = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -28,6 +28,7 @@ export function VerifyTOTP() {
 		if (session?.data?.user?.totp) {
 			console.log('totp present, going back');
 			safeBack(window, router);
+			closeModal && closeModal();
 			toast.success('Успешный вход');
 		} else setError('code', { message: 'Неверный код' });
 	}, [session]);

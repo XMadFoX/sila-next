@@ -13,7 +13,7 @@ import safeBack from '../utils/safeBack';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 
-export function Auth() {
+export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [value, setValue] = React.useState('default');
 	const isRegister = value === 'register';
 	const schema = z.object({
@@ -50,9 +50,10 @@ export function Auth() {
 	const session = useSession();
 
 	useEffect(() => {
-		if (loggedIn && session?.data?.user?.totpEnabled)
-			setTimeout(() => router.replace('/auth/totp/verify'), 500);
-		else if (loggedIn) {
+		if (loggedIn && session?.data?.user?.totpEnabled) {
+			closeModal && closeModal();
+			setTimeout(() => router.replace('/auth/totp/verify'), 50);
+		} else if (loggedIn) {
 			safeBack(window, router);
 			toast.success('Успешный вход');
 			toast.info(
@@ -79,6 +80,15 @@ export function Auth() {
 
 	return (
 		<div>
+			<button
+				className="bg-green"
+				onClick={() => {
+					closeModal && closeModal();
+					router.replace('/auth/totp/verify');
+				}}
+			>
+				close
+			</button>
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4 p-4"
@@ -93,7 +103,6 @@ export function Auth() {
 						});
 						console.log('res', res);
 						res && handleResponse(res);
-						// TODO: check is TOTP enabled on account, if not, send snackbar with link opening modal to enable
 					})}
 				>
 					<RadioGroup.Root

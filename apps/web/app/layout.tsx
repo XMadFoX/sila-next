@@ -5,7 +5,6 @@ import { TrpcProvider } from '../lib/TrpcProvider';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]/route';
 import EnvWrapper from '../lib/EnvWrapper';
-import Link from 'next/link';
 
 const inter = Inter({
 	subsets: ['latin'],
@@ -23,7 +22,7 @@ export default async function RootLayout({
 	const session = await getServerSession(authOptions);
 	return (
 		<html lang="en" className={inter.className}>
-			<body className="flex flex-col items-center min-h-screen">
+			<body className="flex flex-col items-center min-h-screen dark:bg-[#1e1e1e] dark:text-[#fff]">
 				<TrpcProvider>
 					<EnvWrapper session={session}>
 						{authModal}
