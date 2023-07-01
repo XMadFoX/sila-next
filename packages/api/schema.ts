@@ -1,8 +1,8 @@
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client';
 import dotenv from 'dotenv';
-import { env } from './env.mjs';
-dotenv.config({ path: '.process.env.local' });
+import { envCore as env } from './env.mjs';
+dotenv.config({ path: '.env.local' });
 
 console.log('DB_URL', env.DB_URL.slice(0, 15) + '...');
 const connection = createClient({
