@@ -1,17 +1,18 @@
-import { InferModel } from 'drizzle-orm';
+import { InferModel, relations } from 'drizzle-orm';
 import {
 	sqliteTable,
 	text,
 	integer,
 	uniqueIndex,
 	blob,
+	primaryKey,
 } from 'drizzle-orm/sqlite-core';
 
 export const events = sqliteTable(
-	'users',
+	'events',
 	{
-		id: text('id').primaryKey().notNull(),
-		baseId: text('base_id').primaryKey().notNull(),
+		id: integer('id'),
+		baseId: integer('base_id').notNull(),
 		timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 		// TODO: schedule?
 		duration: integer('duration'),
@@ -19,21 +20,30 @@ export const events = sqliteTable(
 		isFree: integer('is_free', { mode: 'boolean' }),
 		// TODO: address, map data
 		// TODO: contacts
-		coverImage: text('cover_image', { length: 255 }),
-		description: text('description', { length: 255 }),
+		coverImage: text('cover_image', { length: 255 }).notNull(),
+		description: text('description', { length: 255 }).notNull(),
 		registrationUrl: text('registration_url', { length: 255 }),
-		eventTypeId: integer('event_type_id').references(() => eventTypes.id),
-		organization: integer('organization'),
+		eventTypeId: integer('event_type_id'), //.references(() => eventTypes.id),
 	},
 	(table) => ({
-		id: uniqueIndex('id').on(table.id),
-		eventTypeId: uniqueIndex('event_type_id').on(table.eventTypeId),
+		pk: primaryKey(table.id, table.baseId),
 	})
 );
 
-export const EventText = sqliteTable('article_texts', {
+export const eventRealtions = relations(events, ({ one }) => ({
+	base: one(events, {
+		fields: [events.baseId],
+		references: [events.id],
+	}),
+	text: one(eventText, {
+		fields: [events.id],
+		references: [eventText.articleId],
+	}),
+}));
+
+export const eventText = sqliteTable('article_texts', {
 	id: integer('id').primaryKey().notNull(),
-	articleId: integer('article_id').references(() => events.id),
+	articleId: integer('article_id'),
 	text: blob('text', { mode: 'json' }).notNull(),
 });
 
