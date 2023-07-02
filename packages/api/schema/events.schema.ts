@@ -7,13 +7,16 @@ import {
 	blob,
 	primaryKey,
 } from 'drizzle-orm/sqlite-core';
+import { baseContent } from './contentBase.schema';
 
 export const events = sqliteTable(
 	'events',
 	{
 		id: integer('id'),
-		baseId: integer('base_id').notNull(),
-		timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
+		baseId: integer('base_id')
+			.notNull()
+			.references(() => baseContent.id),
+		date: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 		// TODO: schedule?
 		duration: integer('duration'),
 		isOnline: integer('is_online', { mode: 'boolean' }),
@@ -30,11 +33,17 @@ export const events = sqliteTable(
 	})
 );
 
+export type Event = InferModel<typeof events>;
+
 export const eventRealtions = relations(events, ({ one }) => ({
-	base: one(events, {
-		fields: [events.baseId],
-		references: [events.id],
-	}),
+	// base: one(events, {
+	// 	fields: [events.baseId],
+	// 	references: [baseContent.id],
+	// }),
+	// base: one(events, {
+	// 	fields: [events.baseId],
+	// 	references: [baseContent.id],
+	// }),
 	text: one(eventText, {
 		fields: [events.id],
 		references: [eventText.articleId],
@@ -46,8 +55,6 @@ export const eventText = sqliteTable('article_texts', {
 	articleId: integer('article_id'),
 	text: blob('text', { mode: 'json' }).notNull(),
 });
-
-export type Event = InferModel<typeof events>;
 
 export const eventTypes = sqliteTable(
 	'event_types',
