@@ -7,7 +7,8 @@ import { useController } from 'react-hook-form';
 import { GradientWrapper } from '../general';
 import { cn } from '../lib/utils';
 
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputFieldProps
+	extends React.InputHTMLAttributes<HTMLInputElement> {
 	rightItem?: React.ReactNode;
 	labelVisible?: boolean;
 	errors?: {
@@ -57,7 +58,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					<input
 						ref={ref}
 						className={cn(
-							'py-2 px-4 w-full rounded-lg ring transition-all duration-300 outline-none focus:ring-transparent ring-dark-grey',
+							'py-2 px-4 w-full rounded-lg ring transition-all dark:bg-black duration-300 outline-none focus:ring-transparent ring-dark-grey',
 							field.value?.length > 0 && 'ring-transparent',
 							fieldState.isTouched && fieldState?.error && 'border-error border'
 						)}
