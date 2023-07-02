@@ -76,4 +76,17 @@ export const eventRoutes = createTRPCRouter({
 				})
 				.run();
 		}),
+	find: publicProcedure.query(async () => getEvents()),
 });
+
+export const getEvents = async () => {
+	const res = await db
+		.select()
+		.from(events)
+		.leftJoin(baseContent, eq(events.baseId, baseContent.id))
+		.leftJoin(users, eq(baseContent.authorId, users.id))
+		// organization
+		.all();
+	// if published as organization, return only org, not author
+	return res;
+};

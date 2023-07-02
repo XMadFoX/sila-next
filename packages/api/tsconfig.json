@@ -4,14 +4,6 @@
 		"allowJs": true
 	},
 	"extends": "tsconfig/base.json",
-	"include": [
-		"**/*.ts",
-		"./schema/**/*.ts",
-		"env.mjs"
-	],
-	"exclude": [
-		"dist",
-		"build",
-		"node_modules"
-	]
+	"include": ["**/*.ts", "./schema/**/*.ts", "env.mjs"],
+	"exclude": ["dist", "build", "node_modules"]
 }
