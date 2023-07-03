@@ -7,6 +7,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { InputField, InputFieldProps } from '../input';
 import { z } from 'zod';
 import { Button } from '../general';
+import { Calendar } from '../input/Calendar';
+import { ErrorMessage } from '@hookform/error-message';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -18,7 +20,8 @@ const newEventSchema = z.object({
 	isFree: z.boolean().optional(),
 	registrationUrl: z.string().min(3).max(512).url().optional(),
 	eventTypeId: z.number().int().optional(),
-	timestamp: z.date(),
+	date: z.date().min(new Date()),
+	time: z.string(),
 	// oraganizationId: z.number().int().optional(),
 });
 
@@ -27,6 +30,7 @@ export function NewEvent() {
 		resolver: zodResolver(newEventSchema),
 	});
 	const { handleSubmit } = methods;
+	const [date, setDate] = React.useState<Date | undefined>(undefined);
 
 	return (
 		<div>
@@ -46,16 +50,24 @@ export function NewEvent() {
 					/>
 					<EventInputField
 						aria-label="Начало"
-						type="datetime-local"
-						{...methods.register('timestamp')}
+						type="time"
+						{...methods.register('time')}
 					/>
+					<Calendar
+						mode="single"
+						selected={date}
+						onSelect={setDate}
+						{...methods.register('date', { valueAsDate: true })}
+					/>
+					<ErrorMessage errors={methods.formState.errors} name="date" />
+					<ErrorMessage errors={methods.formState.errors} name="time" />
 					<EventInputField
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
 					/>
 					<EventInputField
 						aria-label="Тип"
-						{...methods.register('eventTypeId')}
+						{...methods.register('eventTypeId', { valueAsNumber: true })}
 					/>
 					<EventInputField
 						aria-label="Онлайн"
@@ -65,7 +77,12 @@ export function NewEvent() {
 					<EventInputField
 						aria-label="Бесплатно"
 						type="checkbox"
-						{...methods.register('isFree')}
+						{...methods.register('isFree', {
+							setValueAs: (v) => {
+								console.log(v);
+								return v;
+							},
+						})}
 					/>
 					<EventInputField
 						aria-label="Ссылка на регистраю"
