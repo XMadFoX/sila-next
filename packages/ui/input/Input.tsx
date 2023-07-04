@@ -49,7 +49,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 		return (
 			<div className="flex flex-col">
 				<label
-					className={labelVisible ? 'mb-2' : 'invisible w-0 h-0'}
+					className={labelVisible ? 'mb-1' : 'invisible w-0 h-0'}
 					aria-label={props.name}
 				>
 					{labelVisible ? props['aria-label'] : props.placeholder}
@@ -70,7 +70,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					errors={errors}
 					name={props.name!}
 					render={(err) => (
-						<label aria-label="name" className="text-error">
+						<label htmlFor={props.name} className="text-error">
 							{err.message}
 						</label>
 					)}

@@ -9,23 +9,23 @@ import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
 import { eq } from 'drizzle-orm';
 
+export const newEventSchema = z.object({
+	title: z.string().min(3).max(64),
+	description: z.string().min(3).max(255),
+	// later image id on CF images
+	coverImage: z.string().min(3).max(255).url(),
+	duration: z.number().int().min(0).optional(),
+	isOnline: z.boolean().optional(),
+	isFree: z.boolean().optional(),
+	registrationUrl: z.string().min(3).max(512).url().optional(),
+	eventTypeId: z.number().int().optional(),
+	timestamp: z.date(),
+	// oraganizationId: z.number().int().optional(),
+});
+
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
-		.input(
-			z.object({
-				title: z.string().min(3).max(64),
-				description: z.string().min(3).max(255),
-				// later image id on CF images
-				coverImage: z.string().min(3).max(255).url(),
-				duration: z.number().int().min(0).optional(),
-				isOnline: z.boolean().optional(),
-				isFree: z.boolean().optional(),
-				registrationUrl: z.string().min(3).max(512).url().optional(),
-				eventTypeId: z.number().int().optional(),
-				timestamp: z.date(),
-				// oraganizationId: z.number().int().optional(),
-			})
-		)
+		.input(newEventSchema)
 		.mutation(async ({ input, ctx }) => {
 			console.log('before base content');
 			const res = await db

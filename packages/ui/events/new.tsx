@@ -9,6 +9,11 @@ import { z } from 'zod';
 import { Button } from '../general';
 import { Calendar } from '../input/Calendar';
 import { ErrorMessage } from '@hookform/error-message';
+import { Popover, PopoverContent, PopoverTrigger } from '../general/Popover';
+import { cn } from '../lib/utils';
+import { CalendarIcon } from 'lucide-react';
+import { addMinutes, format } from 'date-fns';
+import { FormControl, FormField, FormItem } from '../input/form';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -21,7 +26,12 @@ const newEventSchema = z.object({
 	registrationUrl: z.string().min(3).max(512).url().optional(),
 	eventTypeId: z.number().int().optional(),
 	date: z.date().min(new Date()),
-	time: z.string(),
+	time: z
+		.string()
+		.min(5, { message: 'Обязательное поле' })
+		.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+			message: 'Неправильный формат',
+		}),
 	// oraganizationId: z.number().int().optional(),
 });
 
@@ -30,7 +40,6 @@ export function NewEvent() {
 		resolver: zodResolver(newEventSchema),
 	});
 	const { handleSubmit } = methods;
-	const [date, setDate] = React.useState<Date | undefined>(undefined);
 
 	return (
 		<div>
@@ -38,7 +47,19 @@ export function NewEvent() {
 				<form
 					onSubmit={handleSubmit(async (d) => {
 						console.log(d);
+
+						const [hours, minutes] = d.time.split(':');
+						const combinedDateTime = addMinutes(
+							new Date(d.date.toUTCString()),
+							parseInt(hours) * 60 + parseInt(minutes)
+						);
+						// convert to UTC
+						console.log(combinedDateTime.getTime());
+
+						// send
+						const payload = { ...d, date: combinedDateTime.getTime() };
 					})}
+					className="flex flex-col gap-2"
 				>
 					<EventInputField
 						aria-label="Заголовок"
@@ -48,19 +69,60 @@ export function NewEvent() {
 						aria-label="Описание"
 						{...methods.register('description')}
 					/>
+
+					<FormField
+						control={methods.control}
+						name="date"
+						render={({ field }) => (
+							<FormItem className="flex flex-col">
+								<Popover>
+									<label className="mb-0" htmlFor="date">
+										Дата проведения
+									</label>
+									<PopoverTrigger asChild>
+										<FormControl>
+											<Button
+												intent={'clear'}
+												size={null}
+												className={cn(
+													'w-full px-3 text-left font-normal flex items-center border border-dark-grey rounded-lg py-2',
+													!field.value && 'text-muted-foreground'
+												)}
+											>
+												{field.value ? (
+													format(field.value, 'PPP')
+												) : (
+													<span>Выберите дату</span>
+												)}
+												<CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
+											</Button>
+										</FormControl>
+									</PopoverTrigger>
+									<PopoverContent className="p-0 w-auto" align="start">
+										<Calendar
+											mode="single"
+											selected={field.value}
+											onSelect={field.onChange}
+											disabled={(date) => date < new Date()}
+											initialFocus
+										/>
+									</PopoverContent>
+								</Popover>
+								<ErrorMessage
+									errors={methods.formState.errors}
+									name="date"
+									render={(err) => (
+										<label className="text-error">{err.message}</label>
+									)}
+								/>
+							</FormItem>
+						)}
+					/>
 					<EventInputField
-						aria-label="Начало"
+						aria-label="Время начала"
 						type="time"
 						{...methods.register('time')}
 					/>
-					<Calendar
-						mode="single"
-						selected={date}
-						onSelect={setDate}
-						{...methods.register('date', { valueAsDate: true })}
-					/>
-					<ErrorMessage errors={methods.formState.errors} name="date" />
-					<ErrorMessage errors={methods.formState.errors} name="time" />
 					<EventInputField
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
@@ -69,21 +131,23 @@ export function NewEvent() {
 						aria-label="Тип"
 						{...methods.register('eventTypeId', { valueAsNumber: true })}
 					/>
-					<EventInputField
-						aria-label="Онлайн"
-						type="checkbox"
-						{...methods.register('isOnline')}
-					/>
-					<EventInputField
-						aria-label="Бесплатно"
-						type="checkbox"
-						{...methods.register('isFree', {
-							setValueAs: (v) => {
-								console.log(v);
-								return v;
-							},
-						})}
-					/>
+					<div className="flex gap-4">
+						<EventInputField
+							aria-label="Онлайн"
+							type="checkbox"
+							{...methods.register('isOnline')}
+						/>
+						<EventInputField
+							aria-label="Бесплатно"
+							type="checkbox"
+							{...methods.register('isFree', {
+								setValueAs: (v) => {
+									console.log(v);
+									return v;
+								},
+							})}
+						/>
+					</div>
 					<EventInputField
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}

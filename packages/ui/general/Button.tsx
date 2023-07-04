@@ -24,89 +24,93 @@ type LinkProps = Partial<Pick<EnvLinkProps, 'href' | 'replace'>>;
 type ButtonOrLink = ButtonProps & LinkProps;
 type ButtonOrLinkProps = ButtonOrLink & SharedProps;
 
-export function Button(props: ButtonOrLinkProps) {
-	const { Link } = React.useContext(EnvironmentContext);
+export const Button = React.forwardRef<HTMLButtonElement, ButtonOrLinkProps>(
+	(props, ref) => {
+		const { Link } = React.useContext(EnvironmentContext);
 
-	const {
-		gradientDirection = 'r',
-		size = 'md',
-		bg = 'grey',
-		intent = 'primary',
-		children,
-		className,
-		rounded = 'full',
-		...args
-	} = props;
-	let themed = '';
+		const {
+			gradientDirection = 'r',
+			size = 'md',
+			bg = 'grey',
+			intent = 'primary',
+			children,
+			className,
+			rounded = 'full',
+			...args
+		} = props;
+		let themed = '';
 
-	switch (intent) {
-		case 'primary':
-			themed = `from-primary-a via-primary-b to-primary-c text-white ${
-				gradientClassNames[props.gradientDirection || 'r']
-			}`;
-			break;
-		case 'clear':
-			themed = 'bg-white text-black';
-			break;
-	}
+		switch (intent) {
+			case 'primary':
+				themed = `from-primary-a via-primary-b to-primary-c text-white ${
+					gradientClassNames[props.gradientDirection || 'r']
+				}`;
+				break;
+			case 'clear':
+				themed = 'bg-white text-black';
+				break;
+		}
 
-	let sizeClass = '';
+		let sizeClass = '';
 
-	switch (props.size) {
-		case null:
-			break;
-		case 'sm':
-			sizeClass = 'text-sm py-2 px-4';
-			break;
-		case 'md':
-			sizeClass = 'text-base py-4 px-8';
-			break;
-		case 'lg':
-			sizeClass = 'text-lg py-6 px-12';
-			break;
-		default:
-			sizeClass = 'text-base py-4 px-8';
-	}
+		switch (props.size) {
+			case null:
+				break;
+			case 'sm':
+				sizeClass = 'text-sm py-2 px-4';
+				break;
+			case 'md':
+				sizeClass = 'text-base py-4 px-8';
+				break;
+			case 'lg':
+				sizeClass = 'text-lg py-6 px-12';
+				break;
+			default:
+				sizeClass = 'text-base py-4 px-8';
+		}
 
-	// hacky, couldn't make ts happy with dynamic tag
-	if (args.href) {
+		// hacky, couldn't make ts happy with dynamic tag
+		if (args.href) {
+			return Wrap(
+				<Link
+					className={clsx(
+						'font-medium inline-block',
+						rounding[rounded],
+						themed,
+						intent !== 'img' && sizeClass,
+						className
+					)}
+					{...(args as unknown as EnvLinkProps)}
+				>
+					{props.children}
+				</Link>,
+				intent === 'outlined',
+				bg,
+				gradientDirection
+			);
+		}
+
 		return Wrap(
-			<Link
+			<button
 				className={clsx(
-					'font-medium inline-block',
+					'font-medium',
 					rounding[rounded],
 					themed,
 					intent !== 'img' && sizeClass,
 					className
 				)}
-				{...(args as unknown as EnvLinkProps)}
+				{...args}
+				ref={ref}
 			>
 				{props.children}
-			</Link>,
+			</button>,
 			intent === 'outlined',
 			bg,
 			gradientDirection
 		);
 	}
-
-	return Wrap(
-		<button
-			className={clsx(
-				'font-medium',
-				rounding[rounded],
-				themed,
-				intent !== 'img' && sizeClass,
-				className
-			)}
-			{...args}
-		>
-			{props.children}
-		</button>,
-		intent === 'outlined',
-		bg,
-		gradientDirection
-	);
-}
+);
+Button.displayName = 'Button';
 
 export function Wrap(
 	children: React.ReactElement,

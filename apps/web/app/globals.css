@@ -19,6 +19,7 @@
 		var(--primary-via) 30%,
 		var(--primary-end) 100%
 	);
+	--radius: 10px;
 }
 
 @layer utilities {
