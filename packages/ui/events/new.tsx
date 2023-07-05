@@ -14,6 +14,7 @@ import { cn } from '../lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { addMinutes, format } from 'date-fns';
 import { FormControl, FormField, FormItem } from '../input/form';
+import { Checkbox } from '../form/checkbox';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -131,15 +132,12 @@ export function NewEvent() {
 						aria-label="Тип"
 						{...methods.register('eventTypeId', { valueAsNumber: true })}
 					/>
-					<div className="flex gap-4">
-						<EventInputField
-							aria-label="Онлайн"
-							type="checkbox"
-							{...methods.register('isOnline')}
-						/>
-						<EventInputField
-							aria-label="Бесплатно"
-							type="checkbox"
+					<div className="flex gap-2">
+						<Checkbox id="isOnline" {...methods.register('isOnline')} />
+						<label htmlFor="isOnline" className="mr-2">
+							Онлайн
+						</label>
+						<Checkbox
 							{...methods.register('isFree', {
 								setValueAs: (v) => {
 									console.log(v);
@@ -147,6 +145,7 @@ export function NewEvent() {
 								},
 							})}
 						/>
+						<label htmlFor="isFree">Бесплатно</label>
 					</div>
 					<EventInputField
 						aria-label="Ссылка на регистраю"
