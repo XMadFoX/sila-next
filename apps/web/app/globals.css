@@ -19,7 +19,14 @@
 		var(--primary-via) 30%,
 		var(--primary-end) 100%
 	);
+	--gradient-45: linear-gradient(
+		135deg,
+		var(--primary-start) -30%,
+		var(--primary-via) 30%,
+		var(--primary-end) 100%
+	);
 	--radius: 10px;
+	--ring: #2e89dc;
 }
 
 @layer utilities {

@@ -30,7 +30,7 @@ module.exports = {
 			'primary-c': 'var(--primary-end)',
 			border: 'hsl(var(--border))',
 			input: 'hsl(var(--input))',
-			ring: 'hsl(var(--ring))',
+			ring: 'var(--ring)',
 			background: 'hsl(var(--background))',
 			foreground: 'hsl(var(--foreground))',
 			primary: {
@@ -83,6 +83,7 @@ module.exports = {
 		extend: {
 			backgroundImage: {
 				primary: 'var(--gradient)',
+				'primary-45': 'var(--gradient-45)',
 			},
 			flex: {
 				'card-full': '0 0 100%',
