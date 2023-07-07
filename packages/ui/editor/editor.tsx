@@ -1,26 +1,22 @@
 import React from 'react';
+import styles from './editor.module.scss';
 import EditorJS from '@editorjs/editorjs';
-import List from '@editorjs/list';
-import Header from '@editorjs/header';
-import Underline from '@editorjs/underline';
+import DragDrop from 'editorjs-drag-drop';
+
+import { userPlugins } from './config';
 
 export function EditorContainer() {
 	const holderId = React.useId();
 	const editor = new EditorJS({
 		holder: holderId,
-		tools: {
-			header: {
-				class: Header,
-				defaultLevel: 2,
-				levels: [2, 3, 4],
-			},
-			List,
-			Underline,
+		onReady: () => {
+			new DragDrop(editor);
 		},
+		tools: userPlugins,
 	});
 	return (
-		<div>
-			editor<div id={holderId}></div>
+		<div className="w-full">
+			<div className={styles.editor} id={holderId}></div>
 		</div>
 	);
 }
