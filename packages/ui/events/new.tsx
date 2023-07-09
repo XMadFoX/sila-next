@@ -14,7 +14,8 @@ import { cn } from '../lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { addMinutes, format } from 'date-fns';
 import { FormControl, FormField, FormItem } from '../input/form';
-import { Checkbox } from '../form/checkbox';
+import { Checkbox } from '../input/checkbox';
+import { Combobox } from '../input/Combobox';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -25,6 +26,10 @@ const newEventSchema = z.object({
 	isOnline: z.boolean().optional(),
 	isFree: z.boolean().optional(),
 	registrationUrl: z.string().min(3).max(512).url().optional(),
+	country: z.string().min(3).max(255).optional(),
+	city: z.string().min(3).max(255).optional(),
+	address: z.string().min(3).max(255).optional(),
+	maps_link: z.string().min(3).max(255).url().optional(),
 	eventTypeId: z.number().int().optional(),
 	date: z.date().min(new Date()),
 	time: z
@@ -118,6 +123,37 @@ export function NewEvent() {
 								/>
 							</FormItem>
 						)}
+					/>
+					<Combobox
+						label="Страна"
+						{...methods.register('country')}
+						placeholder="Выберите страну"
+						searchText="Начните вводить называние страны"
+						noResultsText="Нет результатов"
+						formDescription=""
+						options={[
+							{ label: 'Cat', value: 'cat' },
+							{ label: 'Dog', value: 'dog' },
+						]}
+						form={methods}
+					/>
+					<Combobox
+						label="Город"
+						{...methods.register('city')}
+						placeholder="Выберите город"
+						searchText="Начните вводить называние города"
+						noResultsText="Нет результатов"
+						formDescription=""
+						options={[
+							{ label: 'Cat', value: 'cat' },
+							{ label: 'Dog', value: 'dog' },
+						]}
+						form={methods}
+					/>
+					<InputField aria-label="Адрес" {...methods.register('address')} />
+					<InputField
+						aria-label="Ссылка на Гугл карты"
+						{...methods.register('maps_link')}
 					/>
 					<EventInputField
 						aria-label="Время начала"
