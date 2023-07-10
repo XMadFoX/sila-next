@@ -22,6 +22,7 @@
 		"GOOGLE_ID",
 		"GOOGLE_SECRET",
 		"ESECRET",
-		"NODE_ENV"
+		"NODE_ENV",
+		"VERCEL_URL"
 	]
 }

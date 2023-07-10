@@ -12,7 +12,7 @@ const serverVariables = {
 	DB_AUTH_TOKEN: z.string().min(1),
 	NODE_ENV: z.string().min(1).optional(),
 	NEXTAUTH_SECRET: z.string().min(1),
-	NEXTAUTH_URL: z.string().url(),
+	NEXTAUTH_URL: z.string().url().optional(),
 	SMTP_URL: z.string().url(),
 	SMTP_FROM: z.string().email().optional(),
 	ESECRET: z.string().min(1),
@@ -20,12 +20,16 @@ const serverVariables = {
 
 export const env = createEnv({
 	server: serverVariables,
+	shared: {
+		VERCEL_URL: z.string().url().optional(),
+	},
 	client: {
 		NEXT_PUBLIC_TRPC_ENDPOINT: z.string().url(),
 	},
 	// For Next.js >= 13.4.4, you only need to destructure client variables:
 	experimental__runtimeEnv: {
 		NEXT_PUBLIC_TRPC_ENDPOINT: process.env.NEXT_PUBLIC_TRPC_ENDPOINT,
+		VERCEL_URL: process.env.VERCEL_URL,
 	},
 });
 
