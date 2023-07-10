@@ -20,6 +20,9 @@ import {
 } from './form';
 import { Popover, PopoverContent, PopoverTrigger } from '../general/Popover';
 
+const id = (splitChar: string | undefined, value: string) =>
+	splitChar ? value.split(splitChar)[0] : value;
+
 export function Combobox({
 	label,
 	name,
@@ -29,6 +32,7 @@ export function Combobox({
 	formDescription,
 	options,
 	form,
+	splitChar,
 }: {
 	label: string;
 	name: string;
@@ -38,6 +42,7 @@ export function Combobox({
 	formDescription?: string;
 	options: { label: string; value: any }[];
 	form: any;
+	splitChar?: string;
 }) {
 	return (
 		<FormField
@@ -59,15 +64,23 @@ export function Combobox({
 									)}
 								>
 									{field.value
-										? options.find((option) => option.value === field.value)
-												?.label
+										? options.find(
+												(option) => id(splitChar, option.value) === field.value
+										  )?.label
 										: placeholder}
 									<ChevronsUpDown className="ml-2 w-4 h-4 opacity-50 shrink-0" />
 								</Button>
 							</FormControl>
 						</PopoverTrigger>
 						<PopoverContent className="p-0 w-full bg-white">
-							<Command>
+							<Command
+								filter={(value, search) => {
+									if (value.includes(search.toLowerCase())) {
+										return 1;
+									}
+									return 0;
+								}}
+							>
 								<CommandInput placeholder={searchText} />
 								<CommandEmpty>{noResultsText}</CommandEmpty>
 								<CommandGroup>
@@ -75,14 +88,18 @@ export function Combobox({
 										<CommandItem
 											value={option.value}
 											key={option.value}
+											className="focus-within:text-error"
 											onSelect={(value) => {
-												form.setValue(name, value);
+												form.setValue(
+													name,
+													splitChar ? value.split(splitChar)[0] : value
+												);
 											}}
 										>
 											<Check
 												className={cn(
-													'mr-2 h-4 w-4',
-													option.value === field.value
+													'mr-2 h-4 w-4 transition-opacity duration-300',
+													id(splitChar, option.value) === field.value
 														? 'opacity-100'
 														: 'opacity-0'
 												)}
