@@ -16,6 +16,8 @@ import { addMinutes, format } from 'date-fns';
 import { FormControl, FormField, FormItem } from '../input/form';
 import { Checkbox } from '../input/checkbox';
 import { Combobox } from '../input/Combobox';
+import countries from '@sila/api/countries.json';
+import cities from '@sila/api/clientCities25.json';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -131,10 +133,13 @@ export function NewEvent() {
 						searchText="Начните вводить называние страны"
 						noResultsText="Нет результатов"
 						formDescription=""
-						options={[
-							{ label: 'Cat', value: 'cat' },
-							{ label: 'Dog', value: 'dog' },
-						]}
+						options={countries.map((c) => ({
+							label: c.ru,
+							value: Object.values(c)
+								.map((c) => c.toLowerCase())
+								.join(':'),
+						}))}
+						splitChar=":"
 						form={methods}
 					/>
 					<Combobox
@@ -144,10 +149,12 @@ export function NewEvent() {
 						searchText="Начните вводить называние города"
 						noResultsText="Нет результатов"
 						formDescription=""
-						options={[
-							{ label: 'Cat', value: 'cat' },
-							{ label: 'Dog', value: 'dog' },
-						]}
+						options={cities
+							.filter((c) => c.a2.toLowerCase() === methods.watch('country'))
+							.map((city) => ({
+								label: city.ru,
+								value: `${city.en.toLowerCase()}:${city.ru.toLowerCase()}`,
+							}))}
 						form={methods}
 					/>
 					<InputField aria-label="Адрес" {...methods.register('address')} />
@@ -174,6 +181,7 @@ export function NewEvent() {
 							Онлайн
 						</label>
 						<Checkbox
+							id="isFree"
 							{...methods.register('isFree', {
 								setValueAs: (v) => {
 									console.log(v);
