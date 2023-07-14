@@ -9,6 +9,7 @@ import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import Warning from '@editorjs/warning';
 import NestedList from '@editorjs/nested-list';
+import TelegramPost from 'editorjs-telegram-post';
 
 export const userPlugins = {
 	header: {
@@ -25,4 +26,5 @@ export const userPlugins = {
 	table: Table,
 	warning: Warning,
 	nestedList: NestedList,
+	telegramPost: TelegramPost,
 };
