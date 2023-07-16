@@ -19,6 +19,7 @@ import {
 	FormMessage,
 } from './form';
 import { Popover, PopoverContent, PopoverTrigger } from '../general/Popover';
+import { ScrollArea } from '../general/ScrollArea';
 
 const id = (splitChar: string | undefined, value: string) =>
 	splitChar ? value.split(splitChar)[0] : value;
@@ -72,7 +73,7 @@ export function Combobox({
 								</Button>
 							</FormControl>
 						</PopoverTrigger>
-						<PopoverContent className="p-0 w-full bg-white">
+						<PopoverContent className="overflow-y-scroll p-0 w-full bg-white">
 							<Command
 								filter={(value, search) => {
 									if (value.includes(search.toLowerCase())) {
@@ -80,33 +81,36 @@ export function Combobox({
 									}
 									return 0;
 								}}
+								className="overflow-y-scroll"
 							>
 								<CommandInput placeholder={searchText} />
 								<CommandEmpty>{noResultsText}</CommandEmpty>
 								<CommandGroup>
-									{options.map((option) => (
-										<CommandItem
-											value={option.value}
-											key={option.value}
-											className="focus-within:text-error"
-											onSelect={(value) => {
-												form.setValue(
-													name,
-													splitChar ? value.split(splitChar)[0] : value
-												);
-											}}
-										>
-											<Check
-												className={cn(
-													'mr-2 h-4 w-4 transition-opacity duration-300',
-													id(splitChar, option.value) === field.value
-														? 'opacity-100'
-														: 'opacity-0'
-												)}
-											/>
-											{option.label}
-										</CommandItem>
-									))}
+									<ScrollArea className="h-64">
+										{options.map((option) => (
+											<CommandItem
+												value={option.value}
+												key={option.value}
+												className="focus-within:text-error"
+												onSelect={(value) => {
+													form.setValue(
+														name,
+														splitChar ? value.split(splitChar)[0] : value
+													);
+												}}
+											>
+												<Check
+													className={cn(
+														'mr-2 h-4 w-4 transition-opacity duration-300',
+														id(splitChar, option.value) === field.value
+															? 'opacity-100'
+															: 'opacity-0'
+													)}
+												/>
+												{option.label}
+											</CommandItem>
+										))}
+									</ScrollArea>
 								</CommandGroup>
 							</Command>
 						</PopoverContent>
