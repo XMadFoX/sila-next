@@ -2,8 +2,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 // import { newEventSchema } from '@sila/api'; // causes better-sql fs not found lol
-import React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import {
+	FormProvider,
+	useForm,
+	useFormContext,
+	useWatch,
+} from 'react-hook-form';
 import { InputField, InputFieldProps } from '../input';
 import { z } from 'zod';
 import { Button } from '../general';
@@ -18,6 +23,9 @@ import { Checkbox } from '../input/checkbox';
 import { Combobox } from '../input/Combobox';
 import countries from '@sila/api/countries.json';
 import cities from '@sila/api/clientCities25.json';
+
+import { EditorContainer } from '../editor/editor';
+import clsx from 'clsx';
 
 const newEventSchema = z.object({
 	title: z.string().min(3).max(64),
@@ -50,23 +58,31 @@ export function NewEvent() {
 	const { handleSubmit } = methods;
 
 	return (
-		<div>
+		<div className="w-full max-w-3xl">
 			<FormProvider {...methods}>
 				<form
-					onSubmit={handleSubmit(async (d) => {
-						console.log(d);
+					onInvalid={(e) => {
+						console.log(e);
+					}}
+					onSubmit={handleSubmit(
+						async (d) => {
+							console.log(d);
 
-						const [hours, minutes] = d.time.split(':');
-						const combinedDateTime = addMinutes(
-							new Date(d.date.toUTCString()),
-							parseInt(hours) * 60 + parseInt(minutes)
-						);
-						// convert to UTC
-						console.log(combinedDateTime.getTime());
+							const [hours, minutes] = d.time.split(':');
+							const combinedDateTime = addMinutes(
+								new Date(d.date.toUTCString()),
+								parseInt(hours) * 60 + parseInt(minutes)
+							);
+							// convert to UTC
+							console.log(combinedDateTime.getTime());
 
-						// send
-						const payload = { ...d, date: combinedDateTime.getTime() };
-					})}
+							// send
+							const payload = { ...d, date: combinedDateTime.getTime() };
+						},
+						async (invalid) => {
+							console.log(invalid);
+						}
+					)}
 					className="flex flex-col gap-2"
 				>
 					<EventInputField
@@ -77,7 +93,6 @@ export function NewEvent() {
 						aria-label="Описание"
 						{...methods.register('description')}
 					/>
-
 					<FormField
 						control={methods.control}
 						name="date"
@@ -126,42 +141,8 @@ export function NewEvent() {
 							</FormItem>
 						)}
 					/>
-					<Combobox
-						label="Страна"
-						{...methods.register('country')}
-						placeholder="Выберите страну"
-						searchText="Начните вводить называние страны"
-						noResultsText="Нет результатов"
-						formDescription=""
-						options={countries.map((c) => ({
-							label: c.ru,
-							value: Object.values(c)
-								.map((c) => c.toLowerCase())
-								.join(':'),
-						}))}
-						splitChar=":"
-						form={methods}
-					/>
-					<Combobox
-						label="Город"
-						{...methods.register('city')}
-						placeholder="Выберите город"
-						searchText="Начните вводить называние города"
-						noResultsText="Нет результатов"
-						formDescription=""
-						options={cities
-							.filter((c) => c.a2.toLowerCase() === methods.watch('country'))
-							.map((city) => ({
-								label: city.ru,
-								value: `${city.en.toLowerCase()}:${city.ru.toLowerCase()}`,
-							}))}
-						form={methods}
-					/>
-					<InputField aria-label="Адрес" {...methods.register('address')} />
-					<InputField
-						aria-label="Ссылка на Гугл карты"
-						{...methods.register('maps_link')}
-					/>
+					<Address />
+					<EditorContainer />
 					<EventInputField
 						aria-label="Время начала"
 						type="time"
@@ -175,22 +156,6 @@ export function NewEvent() {
 						aria-label="Тип"
 						{...methods.register('eventTypeId', { valueAsNumber: true })}
 					/>
-					<div className="flex gap-2">
-						<Checkbox id="isOnline" {...methods.register('isOnline')} />
-						<label htmlFor="isOnline" className="mr-2">
-							Онлайн
-						</label>
-						<Checkbox
-							id="isFree"
-							{...methods.register('isFree', {
-								setValueAs: (v) => {
-									console.log(v);
-									return v;
-								},
-							})}
-						/>
-						<label htmlFor="isFree">Бесплатно</label>
-					</div>
 					<EventInputField
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}
@@ -208,3 +173,69 @@ const EventInputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 	}
 );
 EventInputField.displayName = 'EventInputField';
+
+const Address = () => {
+	const methods = useFormContext();
+	const isOnline = useWatch({ name: 'isOnline' });
+	return (
+		<>
+			<div className="flex gap-2">
+				<Checkbox id="isOnline" {...methods.register('isOnline')} />
+				<label htmlFor="isOnline" className="mr-2">
+					Онлайн
+				</label>
+				<Checkbox id="isFree" {...methods.register('isFree')} />
+				<label htmlFor="isFree">Бесплатно</label>
+			</div>
+			<div
+				className={clsx(
+					!isOnline ? 'max-h-screen' : 'max-h-0 opacity-0',
+					'transition-all duration-500',
+					'flex flex-col gap-1'
+				)}
+			>
+				<Combobox
+					label="Страна"
+					{...methods.register('country')}
+					placeholder="Выберите страну"
+					searchText="Начните вводить называние страны"
+					noResultsText="Нет результатов"
+					formDescription=""
+					options={countries.map((c) => ({
+						label: c.ru,
+						value: Object.values(c)
+							.map((c) => c.toLowerCase())
+							.join(':'),
+					}))}
+					splitChar=":"
+					form={methods}
+				/>
+				<Combobox
+					label="Город"
+					{...methods.register('city')}
+					placeholder="Выберите город"
+					searchText="Начните вводить называние города"
+					noResultsText="Нет результатов"
+					formDescription=""
+					options={cities
+						.filter((c) => c.a2.toLowerCase() === methods.watch('country'))
+						.map((city) => ({
+							label: city.ru,
+							value: `${city.en.toLowerCase()}:${city.ru.toLowerCase()}`,
+						}))}
+					form={methods}
+				/>
+				<InputField
+					aria-label="Адрес"
+					labelVisible
+					{...methods.register('address')}
+				/>
+				<InputField
+					aria-label="Ссылка на Гугл карты"
+					labelVisible
+					{...methods.register('maps_link')}
+				/>
+			</div>
+		</>
+	);
+};
