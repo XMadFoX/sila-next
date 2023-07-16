@@ -82,7 +82,8 @@ async function register(credentials: CreateUserInput): Promise<ShortUser> {
 		to: credentials.email,
 		subject: 'Verify your email',
 		html: `Click <a href="${
-			env.NEXTAUTH_URL || env.VERCEL_URL
+			env.NEXTAUTH_URL
+			// || env.VERCEL_URL
 		}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
 	});
 
