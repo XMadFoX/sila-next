@@ -23,7 +23,6 @@ import { Checkbox } from '../input/checkbox';
 import { Combobox } from '../input/Combobox';
 import countries from '@sila/api/countries.json';
 import cities from '@sila/api/clientCities25.json';
-
 import { EditorContainer } from '../editor/editor';
 import clsx from 'clsx';
 
@@ -32,14 +31,12 @@ const newEventSchema = z.object({
 	description: z.string().min(3).max(255),
 	// later image id on CF images
 	coverImage: z.string().min(3).max(255).url(),
-	duration: z.number().int().min(0).optional(),
-	isOnline: z.boolean().optional(),
+	// duration: z.number().int().min(0).optional(),
 	isFree: z.boolean().optional(),
-	registrationUrl: z.string().min(3).max(512).url().optional(),
-	country: z.string().min(3).max(255).optional(),
-	city: z.string().min(3).max(255).optional(),
-	address: z.string().min(3).max(255).optional(),
-	maps_link: z.string().min(3).max(255).url().optional(),
+	registrationUrl: z.union([
+		z.string().max(512).url().optional(),
+		z.literal(''),
+	]),
 	eventTypeId: z.number().int().optional(),
 	date: z.date().min(new Date()),
 	time: z
@@ -51,9 +48,24 @@ const newEventSchema = z.object({
 	// oraganizationId: z.number().int().optional(),
 });
 
+const onlineCond = {
+	isOnline: z.literal(true),
+};
+const offlineCond = {
+	isOnline: z.literal(false),
+	country: z.string().length(2).max(255),
+	city: z.string().min(3).max(255),
+	address: z.string().min(3).max(255),
+	maps_link: z.string().min(3).max(255).url(),
+};
+const schema = z.discriminatedUnion('isOnline', [
+	newEventSchema.extend({ ...onlineCond }),
+	newEventSchema.extend({ ...offlineCond }),
+]);
+
 export function NewEvent() {
-	const methods = useForm<z.infer<typeof newEventSchema>>({
-		resolver: zodResolver(newEventSchema),
+	const methods = useForm<z.infer<typeof schema>>({
+		resolver: zodResolver(schema),
 	});
 	const { handleSubmit } = methods;
 
