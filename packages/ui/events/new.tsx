@@ -26,12 +26,14 @@ import cities from '@sila/api/clientCities25.json';
 import { EditorContainer } from '../editor/editor';
 import clsx from 'clsx';
 import { newEventSchema } from '@sila/api/eventsSchema';
+import { trpc } from '../lib';
 
 export function NewEvent() {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
 		resolver: zodResolver(newEventSchema),
 	});
 	const { handleSubmit } = methods;
+	const { mutate } = trpc.events.create.useMutation();
 
 	return (
 		<div className="w-full max-w-3xl">
@@ -53,7 +55,9 @@ export function NewEvent() {
 							console.log(combinedDateTime.getTime());
 
 							// send
-							const payload = { ...d, date: combinedDateTime.getTime() };
+							const payload = { ...d, timestamp: combinedDateTime };
+
+							mutate(payload);
 						},
 						async (invalid) => {
 							console.log(invalid);

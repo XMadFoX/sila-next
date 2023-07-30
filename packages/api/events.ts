@@ -8,11 +8,11 @@ import { baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
 import { eq } from 'drizzle-orm';
-import { newEventSchema } from './eventsSchema';
+import { newEventSchemaApi } from './eventsSchema';
 
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
-		.input(newEventSchema)
+		.input(newEventSchemaApi)
 		.mutation(async ({ input, ctx }) => {
 			console.log('before base content');
 			const res = await db
@@ -39,7 +39,7 @@ export const eventRoutes = createTRPCRouter({
 					registrationUrl: input.registrationUrl,
 					coverImage: input.coverImage,
 					eventTypeId: input.eventTypeId,
-					date: input.timestamp,
+					date: input.date,
 				})
 				.returning()
 				.get({ id: events.id });

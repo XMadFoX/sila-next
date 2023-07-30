@@ -5,7 +5,7 @@ const baseSchema = z.object({
 	description: z.string().min(3).max(255),
 	// later image id on CF images
 	coverImage: z.string().min(3).max(255).url(),
-	// duration: z.number().int().min(0).optional(),
+	duration: z.number().int().min(0).optional(),
 	isFree: z.boolean().optional(),
 	registrationUrl: z.union([
 		z.string().max(512).url().optional(),
@@ -35,4 +35,12 @@ const offlineCond = {
 export const newEventSchema = z.discriminatedUnion('isOnline', [
 	baseSchema.extend({ ...onlineCond }),
 	baseSchema.extend({ ...offlineCond }),
+]);
+
+const apiSchema = baseSchema.extend({
+	timestamp: z.date().min(new Date()),
+});
+export const newEventSchemaApi = z.discriminatedUnion('isOnline', [
+	apiSchema.extend({ ...onlineCond }),
+	apiSchema.extend({ ...offlineCond }),
 ]);
