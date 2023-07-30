@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './editor.module.scss';
 import EditorJS from '@editorjs/editorjs';
-import DragDrop from 'editorjs-drag-drop';
-
 import { userPlugins } from './config';
+import DragDrop from 'editorjs-drag-drop';
 
 export function EditorContainer() {
 	const holderId = React.useId();
