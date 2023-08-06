@@ -1,4 +1,4 @@
-import { InferModel } from 'drizzle-orm';
+import { InferModel, sql } from 'drizzle-orm';
 import { AdapterAccount } from '@auth/core/adapters';
 import {
 	sqliteTable,
@@ -16,7 +16,9 @@ export const users = sqliteTable(
 		emailVerified: integer('email_verified', { mode: 'timestamp_ms' }),
 		name: text('name', { length: 32 }).notNull(),
 		password: text('password', { length: 255 }),
-		createdAt: integer('created_at', { mode: 'timestamp_ms' }),
+		createdAt: integer('created_at', { mode: 'timestamp_ms' }).default(
+			sql`CURRENT_TIMESTAMP`
+		),
 		image: text('avatar', { length: 255 }),
 		totpSecret: text('totp_secret', { length: 255 }),
 		totpEnabled: integer('totp_enabled', { mode: 'timestamp_ms' }),

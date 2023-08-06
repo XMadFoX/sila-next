@@ -11,5 +11,18 @@ const connection = createClient({
 });
 export const db = drizzle(connection);
 
+import * as events from './schema/events.schema';
+import * as baseContent from './schema/contentBase.schema';
+import * as users from './schema/user.schema';
+export const db = drizzle(connection, {
+	schema: {
+		...events,
+		...baseContent,
+		...users,
+	},
+});
+
 // reexport all schemas
 export * from './schema/user.schema';
+export * from './schema/events.schema';
+export * from './schema/contentBase.schema';

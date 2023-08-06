@@ -41,7 +41,7 @@ export const eventRoutes = createTRPCRouter({
 					eventTypeId: input.eventTypeId,
 					date: input.date,
 				})
-				.returning()
+				.returning({ id: events.id })
 				.get({ id: events.id });
 			await db
 				.insert(eventText)
