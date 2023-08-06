@@ -54,6 +54,7 @@ export function NewEvent() {
 		if (insertedId) router.push(`/events/${insertedId}`);
 	}, [insertedId, router]);
 
+	const editorRef = React.useRef<typeof EditorContainer | null>(null);
 	return (
 		<div className="w-full max-w-3xl">
 			<FormProvider {...methods}>
@@ -64,6 +65,7 @@ export function NewEvent() {
 					onSubmit={handleSubmit(
 						async (d) => {
 							console.log(d);
+							const articleData = await editorRef?.current?.save();
 							localStorage.setItem('newEvent', JSON.stringify(d));
 
 							const [hours, minutes] = d.time.split(':');
@@ -75,7 +77,11 @@ export function NewEvent() {
 							console.log(combinedDateTime.getTime());
 
 							// send
-							const payload = { ...d, timestamp: combinedDateTime };
+							const payload = {
+								...d,
+								articleData,
+								timestamp: combinedDateTime,
+							};
 
 							mutate(payload);
 						},
@@ -142,7 +148,7 @@ export function NewEvent() {
 						)}
 					/>
 					<Address />
-					<EditorContainer />
+					<EditorContainer ref={editorRef} />
 					<EventInputField
 						aria-label="Время начала"
 						type="time"

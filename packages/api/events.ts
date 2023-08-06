@@ -49,19 +49,7 @@ export const eventRoutes = createTRPCRouter({
 			await db
 				.insert(eventText)
 				.values({
-					text: {
-						blocks: [
-							{
-								key: '2j3o7',
-								text: 'This is a test event',
-								type: 'unstyled',
-								depth: 0,
-								inlineStyleRanges: [],
-								entityRanges: [],
-								data: {},
-							},
-						],
-					},
+					text: input.articleData,
 					articleId: eventId,
 				})
 				.run();

@@ -39,6 +39,7 @@ export const newEventSchema = z.discriminatedUnion('isOnline', [
 
 const apiSchema = baseSchema.extend({
 	timestamp: z.date().min(new Date()),
+	articleData: z.any(),
 });
 export const newEventSchemaApi = z.discriminatedUnion('isOnline', [
 	apiSchema.extend({ ...onlineCond }),

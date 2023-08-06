@@ -1,12 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import styles from './editor.module.scss';
 import EditorJS from '@editorjs/editorjs';
 import { userPlugins } from './config';
 import DragDrop from 'editorjs-drag-drop';
 
-export function EditorContainer() {
+export const EditorContainer = forwardRef((props, ref) => {
 	const holderId = React.useId();
 	const [editor, setEditor] = useState<EditorJS | null>(null);
+	const save = () => {
+		editor
+			?.save()
+			.then((outputData) => {
+				console.log('Article data11: ', outputData);
+			})
+			.catch((error) => {
+				console.log('Saving failed: ', error);
+			});
+	};
+
+	useImperativeHandle(ref, () => {
+		return editor;
+	});
 
 	useEffect(() => {
 		setEditor((prevEditor) => {
@@ -55,6 +74,11 @@ export function EditorContainer() {
 	return (
 		<div className="w-full">
 			<div className={styles.editor} id={holderId} />
+			<button onClick={save} type="button">
+				Save
+			</button>
 		</div>
 	);
-}
+});
+
+EditorContainer.displayName = 'EditorContainer';
