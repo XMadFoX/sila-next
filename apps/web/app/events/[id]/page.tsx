@@ -6,6 +6,7 @@ import { EventHeader } from 'ui/events';
 import { trpc } from 'ui';
 import { notFound } from 'next/navigation';
 import { TRPCError } from '@trpc/server';
+import Blocks from 'editorjs-blocks-react-renderer';
 
 function isData(data: any): data is TRPCError {
 	return data! instanceof TRPCError;
@@ -35,6 +36,9 @@ export default function EventPage() {
 			/>
 			{/* org contact */}
 			{/* article */}
+			<div className="my-10 prose">
+				<Blocks data={data.text.text as any} />
+			</div>
 			{/* org contacts */}
 			{/* events by this publisher */}
 		</section>

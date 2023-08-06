@@ -55,6 +55,7 @@ export function NewEvent() {
 	}, [insertedId, router]);
 
 	const editorRef = React.useRef<typeof EditorContainer | null>(null);
+
 	return (
 		<div className="w-full max-w-3xl">
 			<FormProvider {...methods}>
@@ -65,7 +66,7 @@ export function NewEvent() {
 					onSubmit={handleSubmit(
 						async (d) => {
 							console.log(d);
-							const articleData = await editorRef?.current?.save();
+							const articleData = await (editorRef?.current as any).save();
 							localStorage.setItem('newEvent', JSON.stringify(d));
 
 							const [hours, minutes] = d.time.split(':');
