@@ -40,7 +40,8 @@ export function NewEvent() {
 		},
 	});
 	const { handleSubmit } = methods;
-	const { mutate } = trpc.events.create.useMutation();
+	const { mutate, isLoading, isSuccess, error } =
+		trpc.events.create.useMutation();
 
 	return (
 		<div className="w-full max-w-3xl">
@@ -148,7 +149,13 @@ export function NewEvent() {
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}
 					/>
-					<Button type="submit">Отправить</Button>
+					<Button
+						className="disabled:opacity-50"
+						type="submit"
+						disabled={isLoading || isSuccess}
+					>
+						Отправить
+					</Button>
 				</form>
 			</FormProvider>
 		</div>
