@@ -27,6 +27,7 @@ import { EditorContainer } from '../editor/editor';
 import clsx from 'clsx';
 import { newEventSchema } from '@sila/api/eventsSchema';
 import { trpc } from '../lib';
+import { useRouter } from 'next/navigation';
 
 export function NewEvent() {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
@@ -40,8 +41,18 @@ export function NewEvent() {
 		},
 	});
 	const { handleSubmit } = methods;
-	const { mutate, isLoading, isSuccess, error } =
-		trpc.events.create.useMutation();
+	const {
+		mutate,
+		data: insertedId,
+		isLoading,
+		isSuccess,
+		error,
+	} = trpc.events.create.useMutation();
+
+	const router = useRouter();
+	useEffect(() => {
+		if (insertedId) router.push(`/events/${insertedId}`);
+	}, [insertedId, router]);
 
 	return (
 		<div className="w-full max-w-3xl">
