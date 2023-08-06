@@ -31,6 +31,13 @@ import { trpc } from '../lib';
 export function NewEvent() {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
 		resolver: zodResolver(newEventSchema),
+		defaultValues: async () => {
+			const raw = localStorage.getItem('newEvent');
+			if (!raw) return {};
+			const data = JSON.parse(raw);
+			delete data.date;
+			return data as any;
+		},
 	});
 	const { handleSubmit } = methods;
 	const { mutate } = trpc.events.create.useMutation();
@@ -45,6 +52,7 @@ export function NewEvent() {
 					onSubmit={handleSubmit(
 						async (d) => {
 							console.log(d);
+							localStorage.setItem('newEvent', JSON.stringify(d));
 
 							const [hours, minutes] = d.time.split(':');
 							const combinedDateTime = addMinutes(
