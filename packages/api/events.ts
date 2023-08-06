@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
 import { eq } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
+import { TRPCError } from '@trpc/server';
 
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
@@ -62,8 +63,12 @@ export const eventRoutes = createTRPCRouter({
 					articleId: eventId,
 				})
 				.run();
+			return eventId;
 		}),
 	find: publicProcedure.query(async () => getEvents()),
+	getOne: publicProcedure
+		.input(z.number().positive())
+		.query(async ({ input: id }) => getEvent(id)),
 });
 
 export const getEvents = async () => {
@@ -75,5 +80,15 @@ export const getEvents = async () => {
 		// organization
 		.all();
 	// if published as organization, return only org, not author
+	return res;
+};
+
+export const getEvent = async (id: number) => {
+	const res = await db.query.events.findFirst({
+		where: eq(events.id, id),
+		with: { text: true, base: true },
+	});
+	// if published as organization, return only org, not author
+	if (!res) return new TRPCError({ code: 'NOT_FOUND' });
 	return res;
 };

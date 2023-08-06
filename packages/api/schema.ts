@@ -9,7 +9,6 @@ const connection = createClient({
 	url: env.DB_URL,
 	authToken: env.DB_AUTH_TOKEN,
 });
-export const db = drizzle(connection);
 
 import * as events from './schema/events.schema';
 import * as baseContent from './schema/contentBase.schema';
