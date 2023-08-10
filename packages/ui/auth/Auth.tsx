@@ -80,15 +80,6 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 
 	return (
 		<div>
-			<button
-				className="bg-green"
-				onClick={() => {
-					closeModal && closeModal();
-					router.replace('/auth/totp/verify');
-				}}
-			>
-				close
-			</button>
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4 p-4"
