@@ -5,7 +5,7 @@ import { EnvironmentContext } from '../env';
 
 interface CardDetailsProps {
 	title: string;
-	location: { city: string; address?: string };
+	location: { city: string; address: string } | null;
 	date: Date;
 	description: string;
 	org: {
@@ -29,9 +29,15 @@ export function CardDetails(props: CardDetailsProps) {
 		<figcaption className="flex flex-col mt-4">
 			<h2 className="text-xl font-medium text-black">{props.title}</h2>
 			<address className="mt-4 text-base not-italic text-dark-grey">
-				{props.location.city}
-				<br />
-				<span className="text-sm">{props.location.address}</span>
+				{props?.location ? (
+					<>
+						{props.location.city}
+						<br />
+						<span className="text-sm">{props.location.address}</span>
+					</>
+				) : (
+					'Онлайн'
+				)}
 			</address>
 			<time className="mt-4 text-base font-medium text-black">
 				{props.date.toLocaleTimeString(undefined, {
