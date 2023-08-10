@@ -21,7 +21,7 @@ export const Default: Story = {
 	args: {
 		date: new Date('2023-01-01'),
 		description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-		location: { city: 'Online' },
+		location: { city: 'Moscow', address: "Ulitsa Bol'shaya Lubyanka, 1к1" },
 		title: 'Lorem ipsum dolor sit amet',
 		org: {
 			name: 'Lorem ipsum',
