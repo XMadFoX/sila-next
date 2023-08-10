@@ -7,7 +7,7 @@ import { db, users } from './schema';
 import { baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 
@@ -63,8 +63,8 @@ export const getEvents = async () => {
 	const res = await db
 		.select()
 		.from(events)
-		.leftJoin(baseContent, eq(events.baseId, baseContent.id))
-		.leftJoin(users, eq(baseContent.authorId, users.id))
+		.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+		.innerJoin(users, eq(baseContent.authorId, users.id))
 		// organization
 		.all();
 	// if published as organization, return only org, not author
