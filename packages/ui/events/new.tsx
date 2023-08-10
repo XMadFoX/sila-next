@@ -234,8 +234,10 @@ const Address = () => {
 						.filter((c) => c.a2.toLowerCase() === methods.watch('country'))
 						.map((city) => ({
 							label: city.ru,
-							value: `${city.en.toLowerCase()}:${city.ru.toLowerCase()}`,
+							value: `${city.ru}:${city.en.toLowerCase()}`,
 						}))}
+					splitChar=":"
+					useLabelAsValue
 					form={methods}
 				/>
 				<InputField
