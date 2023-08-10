@@ -17,9 +17,10 @@ export default function EventPage() {
 	if (!params.id || typeof params.id !== 'string')
 		throw new Error('No event ID provided');
 	const id = parseInt(params.id);
-	const { data, error } = trpc.events.getOne.useQuery(id);
+	const { data, error, isLoading } = trpc.events.getOne.useQuery(id);
 	if (error?.data?.code && error.data.code === 'NOT_FOUND') notFound();
 	if (error) return <div>Unknown error: {JSON.stringify(error)}</div>;
+	if (isLoading) return <div>Загрузка...</div>;
 	// make sure data isn't instance off TRPCError
 	if (!!isData(data) || !data) return 'unknown error';
 
