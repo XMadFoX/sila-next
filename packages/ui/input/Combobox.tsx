@@ -34,6 +34,7 @@ export function Combobox({
 	options,
 	form,
 	splitChar,
+	useLabelAsValue = false,
 }: {
 	label: string;
 	name: string;
@@ -44,6 +45,7 @@ export function Combobox({
 	options: { label: string; value: any }[];
 	form: any;
 	splitChar?: string;
+	useLabelAsValue?: boolean;
 }) {
 	return (
 		<FormField
@@ -95,7 +97,11 @@ export function Combobox({
 												onSelect={(value) => {
 													form.setValue(
 														name,
-														splitChar ? value.split(splitChar)[0] : value
+														useLabelAsValue
+															? option.label
+															: splitChar
+															? value.split(splitChar)[0]
+															: value
 													);
 												}}
 											>
