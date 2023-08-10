@@ -3,6 +3,19 @@ import CardList from 'components/landing/CardsContainer';
 import React from 'react';
 import { Card, Heading, Slide, Slider } from 'ui';
 
+const getBadges = ({
+	isFree,
+	isOnline,
+}: {
+	isFree: boolean;
+	isOnline: boolean;
+}) => {
+	const badges: string[] = [];
+	if (isFree) badges.push('Free');
+	if (isOnline) badges.push('Online');
+	return badges;
+};
+
 export default async function Events() {
 	const data = await getEvents();
 
@@ -61,16 +74,15 @@ export default async function Events() {
 			</section>
 			<CardList>
 				{data?.map((i) => {
-					const badges: string[] = [];
-					if (i.events?.isFree) badges.push('Free');
-					if (i.events?.isOnline) badges.push('Online');
-
 					return (
 						<Card key={i.events.id} id={i.events.id}>
 							<Card.Preview
 								image={i.events.coverImage}
 								alt=""
-								badges={badges}
+								badges={getBadges({
+									isFree: i.events.isFree ?? false,
+									isOnline: i.events.isOnline ?? false,
+								})}
 							/>
 							<Card.Details
 								date={i.events.date}
