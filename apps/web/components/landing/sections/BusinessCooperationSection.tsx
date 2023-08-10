@@ -36,7 +36,7 @@ export default function BusinessCooperationSection() {
 					<Slider className="mx-auto mt-8">
 						{Array.from({ length: 9 }, (_, i) => (
 							<Slide key={i}>
-								<Card big gradientClass="min-w-max w-full">
+								<Card id={1} big gradientClass="min-w-max w-full">
 									<Card.Preview
 										className="max-w-min"
 										big
@@ -56,7 +56,7 @@ export default function BusinessCooperationSection() {
 				<CardList>
 					{Array.from({ length: 6 }, (_, i) => (
 						<li className="mx-auto min-w-fit" key={i}>
-							<Card key={i} gradientClass="h-full">
+							<Card id={1} key={i} gradientClass="h-full">
 								<Card.Preview {...cardMock.preview} />
 								<Card.Details {...cardMock.details} />
 							</Card>

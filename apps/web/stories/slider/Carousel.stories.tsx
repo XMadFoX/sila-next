@@ -25,7 +25,11 @@ export const Default: Story = {
 			<>
 				{Array.from({ length: 7 }, (_, i) => (
 					<Slide key={i}>
-						<Card gradientClass="min-w-max" {...(DefaultCard.args as any)} />
+						<Card
+							id={1}
+							gradientClass="min-w-max"
+							{...(DefaultCard.args as any)}
+						/>
 					</Slide>
 				))}
 			</>

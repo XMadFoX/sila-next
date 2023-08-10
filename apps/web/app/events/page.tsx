@@ -26,7 +26,12 @@ export default async function Events() {
 					<Slider className="mx-auto mt-8">
 						{data?.map((i, idx) => (
 							<Slide key={i.events.id}>
-								<Card big key={i.events.id} gradientClass="w-full min-w-max">
+								<Card
+									big
+									key={i.events.id}
+									id={i.events.id}
+									gradientClass="w-full min-w-max"
+								>
 									<Card.Preview
 										image={i.events.coverImage}
 										alt=""
@@ -61,7 +66,7 @@ export default async function Events() {
 					if (i.events?.isOnline) badges.push('Online');
 
 					return (
-						<Card key={i.events.id}>
+						<Card key={i.events.id} id={i.events.id}>
 							<Card.Preview
 								image={i.events.coverImage}
 								alt=""
