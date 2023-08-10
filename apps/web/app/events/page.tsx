@@ -38,7 +38,14 @@ export default async function Events() {
 										date={i.events.date}
 										title={i.base_content.title}
 										org={{ link: '', name: i.users.name }}
-										location={{ city: 'Aboba' }}
+										location={
+											i.events.city && i.events.address
+												? {
+														city: i.events.city,
+														address: i.events.address,
+												  }
+												: null
+										}
 										description={i.events.description}
 									/>
 								</Card>
@@ -64,7 +71,14 @@ export default async function Events() {
 								date={i.events.date}
 								title={i.base_content.title}
 								org={{ link: '', name: i.users.name }}
-								location={{ city: 'Aboba' }}
+								location={
+									i.events.city && i.events.address
+										? {
+												city: i.events.city,
+												address: i.events.address,
+										  }
+										: null
+								}
 								description={i.events.description}
 							/>
 						</Card>
