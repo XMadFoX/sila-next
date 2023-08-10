@@ -4,8 +4,6 @@ import {
 	text,
 	integer,
 	uniqueIndex,
-	blob,
-	primaryKey,
 } from 'drizzle-orm/sqlite-core';
 import { baseContent } from './contentBase.schema';
 import { customJson } from './jsonType';
@@ -24,6 +22,7 @@ export const events = sqliteTable('events', {
 	description: text('description', { length: 255 }).notNull(),
 	registrationUrl: text('registration_url', { length: 255 }),
 	eventTypeId: integer('event_type_id'), //.references(() => eventTypes.id),
+	isImportant: integer('is_important', { mode: 'boolean' }),
 });
 
 export type Event = InferModel<typeof events>;
@@ -37,6 +36,10 @@ export const eventRealtions = relations(events, ({ one }) => ({
 	// 	fields: [events.baseId],
 	// 	references: [baseContent.id],
 	// }),
+	types: one(eventTypes, {
+		fields: [events.eventTypeId],
+		references: [eventTypes.id],
+	}),
 	text: one(eventText, {
 		fields: [events.id],
 		references: [eventText.articleId],
