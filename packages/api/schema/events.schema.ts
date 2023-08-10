@@ -17,6 +17,10 @@ export const events = sqliteTable('events', {
 	isOnline: integer('is_online', { mode: 'boolean' }),
 	isFree: integer('is_free', { mode: 'boolean' }),
 	// TODO: address, map data
+	country: text('country', { length: 2 }),
+	city: text('city', { length: 64 }),
+	address: text('address', { length: 128 }),
+	mapData: text('map_data', { length: 64 }),
 	// TODO: contacts
 	coverImage: text('cover_image', { length: 255 }).notNull(),
 	description: text('description', { length: 255 }).notNull(),

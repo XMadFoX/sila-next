@@ -27,7 +27,7 @@ const onlineCond = {
 };
 const offlineCond = {
 	isOnline: z.literal(false),
-	country: z.string().length(2).max(255),
+	country: z.string().length(2),
 	city: z.string().min(3).max(255),
 	address: z.string().min(3).max(255),
 	maps_link: z.string().min(3).max(255).url(),

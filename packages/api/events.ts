@@ -41,6 +41,12 @@ export const eventRoutes = createTRPCRouter({
 					coverImage: input.coverImage,
 					eventTypeId: input.eventTypeId,
 					date: input.date,
+					...(!input.isOnline && {
+						country: input.country,
+						city: input.city,
+						address: input.address,
+						mapData: input.maps_link,
+					}),
 				})
 				.returning({ id: events.id })
 				.get({ id: events.id });
