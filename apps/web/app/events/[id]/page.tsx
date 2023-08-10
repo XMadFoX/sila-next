@@ -32,7 +32,11 @@ export default function EventPage() {
 			<EventHeader
 				timestamp={data.date}
 				isFree={!!data.isFree}
-				address={''}
+				location={
+					data.city && data.address
+						? { city: data.city, address: data.address }
+						: null
+				}
 				duration={data?.duration}
 			/>
 			{/* org contact */}

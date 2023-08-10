@@ -5,7 +5,10 @@ import { cn } from '../lib/utils';
 interface EventHeaderProps {
 	timestamp: Date;
 	duration: number | null;
-	address?: string;
+	location: {
+		city: string;
+		address: string;
+	} | null;
 	isFree?: boolean;
 }
 
@@ -42,7 +45,19 @@ export function EventHeader(props: EventHeaderProps) {
 				{/* TODO: duration */}
 			</Cell>
 			<Cell className="items-start text-start">
-				{props.address ?? <p>Онлайн</p>}
+				{props.location ? (
+					<address className="not-italic">
+						<span className="text-sm opacity-50">{props.location.city}</span>
+						<br />
+						<span className="text-sm">{props.location.address}</span>
+						<br />
+						<button className="text-sm opacity-50">
+							Карта и схема проезда
+						</button>
+					</address>
+				) : (
+					<Tag>Онлайн</Tag>
+				)}
 			</Cell>
 			{props.isFree && (
 				<Cell className="px-8">
