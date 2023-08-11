@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Card, GradientWrapper, Heading, Slider, Slide } from 'ui';
 import { cardMock } from '../../mock';
 import CardList from '../CardsContainer';
+import { CardDetails } from 'ui/card/CardDetails';
+import { CardPreview } from 'ui/card/CardPreview';
 
 export default function EventsSection() {
 	return (
@@ -21,12 +23,12 @@ export default function EventsSection() {
 						{Array.from({ length: 9 }, (_, i) => (
 							<Slide key={i}>
 								<Card id={1} big gradientClass="min-w-max w-full">
-									<Card.Preview
+									<CardPreview
 										big
 										className="max-w-min"
 										{...cardMock.preview}
 									/>
-									<Card.Details {...cardMock.details} />
+									<CardDetails {...cardMock.details} />
 								</Card>
 							</Slide>
 						))}
@@ -41,8 +43,8 @@ export default function EventsSection() {
 					{Array.from({ length: 6 }, (_, i) => (
 						<li className="mx-auto min-w-fit" key={i}>
 							<Card id={1} key={i} gradientClass="h-full">
-								<Card.Preview {...cardMock.preview} />
-								<Card.Details {...cardMock.details} />
+								<CardPreview {...cardMock.preview} />
+								<CardDetails {...cardMock.details} />
 							</Card>
 						</li>
 					))}

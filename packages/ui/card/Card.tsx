@@ -1,3 +1,5 @@
+'use client';
+
 import { GradientWrapper } from '../general';
 import { CardPreview } from './CardPreview';
 import { CardDetails } from './CardDetails';

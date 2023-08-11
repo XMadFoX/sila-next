@@ -40,7 +40,7 @@ export function CardDetails(props: CardDetailsProps) {
 				)}
 			</address>
 			<time className="mt-4 text-base font-medium text-black">
-				{props.date.toLocaleTimeString(undefined, {
+				{props.date.toLocaleTimeString('ru-RU', {
 					hour: '2-digit',
 					minute: '2-digit',
 					day: '2-digit',

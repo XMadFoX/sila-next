@@ -4,6 +4,8 @@ import React from 'react';
 import { Card, Heading } from 'ui';
 import CardList from '../CardsContainer';
 import { cardMock } from '../../mock';
+import { CardPreview } from 'ui/card/CardPreview';
+import { CardDetails } from 'ui/card/CardDetails';
 
 export default function BlogSection() {
 	return (
@@ -30,8 +32,8 @@ export default function BlogSection() {
 				{Array.from({ length: 3 }, (_, i) => (
 					<li className="mx-auto min-w-fit" key={i}>
 						<Card id={1} key={i} gradientClass="h-full">
-							<Card.Preview {...cardMock.preview} />
-							<Card.Details {...cardMock.details} />
+							<CardPreview {...cardMock.preview} />
+							<CardDetails {...cardMock.details} />
 						</Card>
 					</li>
 				))}

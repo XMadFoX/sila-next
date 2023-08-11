@@ -2,6 +2,8 @@ import React from 'react';
 import { GradientWrapper, Heading, Slider, Card, Button, Slide } from 'ui';
 import CardList from '../CardsContainer';
 import { cardMock } from '../../mock';
+import { CardDetails } from 'ui/card/CardDetails';
+import { CardPreview } from 'ui/card/CardPreview';
 
 export default function BusinessCooperationSection() {
 	return (
@@ -37,12 +39,12 @@ export default function BusinessCooperationSection() {
 						{Array.from({ length: 9 }, (_, i) => (
 							<Slide key={i}>
 								<Card id={1} big gradientClass="min-w-max w-full">
-									<Card.Preview
+									<CardPreview
 										className="max-w-min"
 										big
 										{...cardMock.preview}
 									/>
-									<Card.Details {...cardMock.details} />
+									<CardDetails {...cardMock.details} />
 								</Card>
 							</Slide>
 						))}
@@ -57,8 +59,8 @@ export default function BusinessCooperationSection() {
 					{Array.from({ length: 6 }, (_, i) => (
 						<li className="mx-auto min-w-fit" key={i}>
 							<Card id={1} key={i} gradientClass="h-full">
-								<Card.Preview {...cardMock.preview} />
-								<Card.Details {...cardMock.details} />
+								<CardPreview {...cardMock.preview} />
+								<CardDetails {...cardMock.details} />
 							</Card>
 						</li>
 					))}
