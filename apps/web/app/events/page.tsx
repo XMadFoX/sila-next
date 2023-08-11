@@ -1,14 +1,14 @@
 'use client';
 
 import CardList from 'components/landing/CardsContainer';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardSkeleton, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
 import { useStore } from '@nanostores/react';
 import { $selectedDate, today } from './date.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, subSeconds } from 'date-fns';
-import clsx from 'clsx';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const getBadges = ({
 	isFree,
@@ -34,6 +34,23 @@ export default function Events() {
 		isImportant: true,
 		start: today,
 	});
+
+	const router = useRouter();
+	const params = useSearchParams();
+	useEffect(() => {
+		router.replace(
+			`/events?start=${selectedDate.getTime()}&end=${addDays(
+				selectedDate,
+				1
+			).getTime()}`
+		);
+	}, [router, selectedDate]);
+
+	useEffect(() => {
+		const raw = [params.get('start'), params.get('end')];
+		const parsed = raw.map((i) => (i ? new Date(parseInt(i)) : undefined));
+		if (parsed[0]) $selectedDate.set(parsed[0]);
+	}, []);
 
 	return (
 		<main className="mt-16 text-black max-w-[1400px]">
