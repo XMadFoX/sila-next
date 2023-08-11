@@ -2,6 +2,7 @@ import { getEvents } from '@sila/api';
 import CardList from 'components/landing/CardsContainer';
 import React from 'react';
 import { Card, Heading, Slide, Slider } from 'ui';
+import DatesBar from './DatesBar';
 
 const getBadges = ({
 	isFree,
@@ -82,6 +83,7 @@ export default async function Events() {
 						сегодня
 					</span>
 				</Heading>
+				<DatesBar />
 				<CardList>
 					{data?.map((i) => {
 						return (
