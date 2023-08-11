@@ -16,8 +16,8 @@ const getBadges = ({
 	isOnline: boolean;
 }) => {
 	const badges: string[] = [];
-	if (isFree) badges.push('Free');
-	if (isOnline) badges.push('Online');
+	if (isFree) badges.push('Бесплатно');
+	if (isOnline) badges.push('Онлайн');
 	return badges;
 };
 
