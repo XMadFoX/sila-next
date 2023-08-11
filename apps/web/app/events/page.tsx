@@ -86,7 +86,12 @@ export default function Events() {
 				<Heading>
 					События{' '}
 					<span className="text-transparent bg-clip-text bg-[length:200%] bg-[100%] hover:bg-center transition-[background] duration-500 bg-primary">
-						сегодня
+						{new Date().setHours(0, 0, 0, 0) === selectedDate.getTime()
+							? 'сегодня'
+							: new Intl.DateTimeFormat('ru-RU', {
+									day: 'numeric',
+									month: 'long',
+							  }).format(selectedDate)}
 					</span>
 				</Heading>
 				<DatesBar />
