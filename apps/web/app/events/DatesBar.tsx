@@ -49,7 +49,7 @@ export default function DatesBar() {
 								'text-xl font-medium relative',
 								'flex flex-col p-2 justify-center items-center w-8 h-12 from-10% to-90% bg-center rounded-lg hover:text-white hover:bg-gradient-to-br from-primary-a to-primary-c',
 								selectedDate.getTime() === date &&
-									'text-white bg-gradient-to-br bg-primary'
+									'text-white bg-gradient-to- bg-primary-45'
 							)}
 							intent="clear"
 						>

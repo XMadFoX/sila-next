@@ -74,7 +74,7 @@ export default function Events() {
 										<Card.Details
 											date={i.events.date}
 											title={i.base_content.title}
-											org={{ link: '', name: i.users.name }}
+											org={{ link: '/events/by/1', name: i.users.name }}
 											location={
 												i.events.city && i.events.address
 													? {

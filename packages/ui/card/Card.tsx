@@ -13,7 +13,29 @@ export interface CardProps {
 
 export function Card({ children, big, id, gradientClass }: CardProps) {
 	return (
-		<Link href={`/events/${id}`} draggable={false}>
+		<Link
+			href={`/events/${id}`}
+			draggable={false}
+			onClick={(e: React.MouseEvent<HTMLElement>) => {
+				const allowedTags = [
+					'img',
+					'a',
+					'h2',
+					'p',
+					'address',
+					'time',
+					'span',
+					'figure',
+				];
+				const target = e.target as HTMLElement;
+				if (
+					!allowedTags.includes(target.tagName.toLowerCase()) ||
+					target.getAttribute('data-clickable') === 'true'
+				) {
+					e.preventDefault();
+				}
+			}}
+		>
 			<GradientWrapper
 				className={clsx(
 					gradientClass,

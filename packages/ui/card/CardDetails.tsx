@@ -56,6 +56,7 @@ export function CardDetails(props: CardDetailsProps) {
 			<Link
 				className="mt-5 text-sm underline text-dark-grey"
 				href={props.org.link}
+				data-clickable
 			>
 				Организатор: {props.org.name}
 			</Link>
