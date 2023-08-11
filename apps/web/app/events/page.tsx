@@ -18,6 +18,7 @@ const getBadges = ({
 
 export default async function Events() {
 	const data = await getEvents();
+	const important = await getEvents(true);
 
 	return (
 		<section className="mt-16 text-black max-w-[1400px]">
@@ -33,45 +34,47 @@ export default async function Events() {
 					мероприятии или проекте.
 				</p>
 			</div>
-			<section>
-				<Heading>Важные события</Heading>
-				<div className="flex mx-auto max-w-fit">
-					<Slider className="mx-auto mt-8">
-						{data?.map((i, idx) => (
-							<Slide key={i.events.id}>
-								<Card
-									big
-									key={i.events.id}
-									id={i.events.id}
-									gradientClass="w-full min-w-max"
-								>
-									<Card.Preview
-										image={i.events.coverImage}
-										alt=""
-										className="max-w-min"
+			{important.length > 0 && (
+				<section>
+					<Heading>Важные события</Heading>
+					<div className="flex mx-auto max-w-fit">
+						<Slider className="mx-auto mt-8">
+							{important?.map((i, idx) => (
+								<Slide key={i.events.id}>
+									<Card
 										big
-										badges={['Free', 'Online']}
-									/>
-									<Card.Details
-										date={i.events.date}
-										title={i.base_content.title}
-										org={{ link: '', name: i.users.name }}
-										location={
-											i.events.city && i.events.address
-												? {
-														city: i.events.city,
-														address: i.events.address,
-												  }
-												: null
-										}
-										description={i.events.description}
-									/>
-								</Card>
-							</Slide>
-						))}
-					</Slider>
-				</div>
-			</section>
+										key={i.events.id}
+										id={i.events.id}
+										gradientClass="w-full min-w-max"
+									>
+										<Card.Preview
+											image={i.events.coverImage}
+											alt=""
+											className="max-w-min"
+											big
+											badges={['Free', 'Online']}
+										/>
+										<Card.Details
+											date={i.events.date}
+											title={i.base_content.title}
+											org={{ link: '', name: i.users.name }}
+											location={
+												i.events.city && i.events.address
+													? {
+															city: i.events.city,
+															address: i.events.address,
+													  }
+													: null
+											}
+											description={i.events.description}
+										/>
+									</Card>
+								</Slide>
+							))}
+						</Slider>
+					</div>
+				</section>
+			)}
 			<CardList>
 				{data?.map((i) => {
 					return (

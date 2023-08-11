@@ -65,10 +65,11 @@ export const eventRoutes = createTRPCRouter({
 		.query(async ({ input: id }) => getEvent(id)),
 });
 
-export const getEvents = async () => {
+export const getEvents = async (isImportant?: boolean) => {
 	const res = await db
 		.select()
 		.from(events)
+		.where(isImportant ? eq(events.isImportant, isImportant) : sql`true`)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))
 		.innerJoin(users, eq(baseContent.authorId, users.id))
 		// organization
