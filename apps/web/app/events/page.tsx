@@ -4,6 +4,8 @@ import CardList from 'components/landing/CardsContainer';
 import React from 'react';
 import { Card, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
+import { useStore } from '@nanostores/react';
+import { $selectedDate } from './date.atom';
 import { trpc } from 'lib/trpc';
 
 const getBadges = ({
@@ -20,6 +22,8 @@ const getBadges = ({
 };
 
 export default function Events() {
+	const selectedDate = useStore($selectedDate);
+
 	const { data } = trpc.events.find.useQuery();
 	const { data: important } = trpc.events.find.useQuery({ isImportant: true });
 
