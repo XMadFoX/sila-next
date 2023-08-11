@@ -22,7 +22,7 @@ export default async function RootLayout({
 	const session = await getServerSession(authOptions);
 	return (
 		<html lang="en" className={inter.className}>
-			<body className="flex flex-col items-center min-h-screen dark:bg-[#1e1e1e] dark:text-[#fff]">
+			<body className="flex flex-col items-center min-h-screen">
 				<TrpcProvider>
 					<EnvWrapper session={session}>
 						{authModal}
