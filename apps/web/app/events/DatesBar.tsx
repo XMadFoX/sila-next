@@ -3,8 +3,9 @@
 import { cn } from 'ui/lib/utils';
 import React from 'react';
 import { Button } from 'ui';
-import { $selectedDate } from './date.atom';
+import { $filter } from './filter.atom';
 import { useStore } from '@nanostores/react';
+import { addDays, subSeconds } from 'date-fns';
 
 function getNextDays(numDays: number): number[] {
 	const today = new Date();
@@ -27,7 +28,7 @@ export default function DatesBar() {
 	const dayDigitFormat = new Intl.DateTimeFormat('ru-RU', { day: '2-digit' });
 	const dayFormat = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' });
 
-	const selectedDate = useStore($selectedDate);
+	const filter = useStore($filter);
 
 	return (
 		<div className="mt-8">
@@ -35,7 +36,13 @@ export default function DatesBar() {
 				{dates.map((date, idx) => (
 					<li key={`${idx}:${date}`}>
 						<Button
-							onClick={() => $selectedDate.set(new Date(date))}
+							onClick={() => {
+								$filter.set({
+									...$filter.get(),
+									start: new Date(date),
+									end: subSeconds(addDays(new Date(date), 1), 1),
+								});
+							}}
 							size={null}
 							aria-label={`Выбрать дату ${date} ${new Intl.DateTimeFormat(
 								'ru-RU',
@@ -44,8 +51,7 @@ export default function DatesBar() {
 							className={cn(
 								'text-xl font-medium relative',
 								'flex flex-col p-2 justify-center items-center w-8 h-12 from-10% to-90% bg-center rounded-lg hover:text-white hover:bg-gradient-to-br from-primary-a to-primary-c',
-								selectedDate.getTime() === date &&
-									'text-white bg-gradient-to- bg-primary-45'
+								filter.start.getTime() === date && 'text-white bg-primary-45'
 							)}
 							intent="clear"
 						>

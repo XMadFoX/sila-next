@@ -6,4 +6,4 @@ today.setHours(0, 0, 0, 0);
 const tomorrow = addDays(today, 1);
 export { today, tomorrow };
 
-export const $selectedDate = atom<Date>(today);
+export const $filter = atom({ start: today, end: tomorrow });
