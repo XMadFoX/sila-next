@@ -66,7 +66,10 @@ export default function Events() {
 											alt=""
 											className="max-w-min"
 											big
-											badges={['Free', 'Online']}
+											badges={getBadges({
+												isFree: i.events.isFree ?? false,
+												isOnline: i.events.isOnline ?? false,
+											})}
 										/>
 										<Card.Details
 											date={i.events.date}
