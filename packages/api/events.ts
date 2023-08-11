@@ -7,7 +7,7 @@ import { db, users } from './schema';
 import { baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 
@@ -64,20 +64,32 @@ export const eventRoutes = createTRPCRouter({
 			z
 				.object({
 					isImportant: z.boolean().optional(),
+					start: z.date().optional(),
+					end: z.date().optional(),
 				})
 				.optional()
 		)
-		.query(async ({ input: d }) => getEvents(d?.isImportant)),
+		.query(async ({ input: d }) => getEvents(d)),
 	getOne: publicProcedure
 		.input(z.number().positive())
 		.query(async ({ input: id }) => getEvent(id)),
 });
 
-export const getEvents = async (isImportant?: boolean) => {
+export const getEvents = async ({
+	isImportant,
+	start,
+	end,
+}: { isImportant?: boolean; start?: Date; end?: Date } = {}) => {
 	const res = await db
 		.select()
 		.from(events)
-		.where(isImportant ? eq(events.isImportant, isImportant) : sql`true`)
+		.where(
+			and(
+				isImportant ? eq(events.isImportant, isImportant) : sql`true`,
+				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
+				end ? sql`timestamp <= ${end.getTime()}` : sql`true`
+			)
+		)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))
 		.innerJoin(users, eq(baseContent.authorId, users.id))
 		// organization
