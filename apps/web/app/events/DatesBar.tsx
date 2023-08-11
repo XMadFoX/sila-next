@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Button } from 'ui';
 
@@ -19,6 +20,8 @@ function getNextDays(numDays: number): number[] {
 
 export default function DatesBar() {
 	const dates = getNextDays(60);
+	const dayDigitFormat = new Intl.DateTimeFormat('ru-RU', { day: '2-digit' });
+	const dayFormat = new Intl.DateTimeFormat('ru-RU', { weekday: 'short' });
 
 	return (
 		<div className="mt-8">
@@ -27,10 +30,18 @@ export default function DatesBar() {
 					<li key={`${idx}:${date}`}>
 						<Button
 							size={null}
-							className="flex justify-center items-center w-8 h-12 rounded-lg hover:text-white hover:bg-primary"
+							aria-label={`Выбрать дату ${date} ${new Intl.DateTimeFormat(
+								'ru-RU',
+								{ month: 'long' }
+							).format(new Date())}`}
+							className={clsx(
+								'text-xl font-medium',
+								'flex flex-col p-2 justify-center items-center w-8 h-12 from-10% to-90% bg-center rounded-lg hover:text-white hover:bg-gradient-to-br from-primary-a to-primary-c'
+							)}
 							intent="clear"
 						>
-							{date}
+							<p>{dayDigitFormat.format(new Date(date))}</p>
+							<span className="block text-sm">{dayFormat.format(date)}</span>
 						</Button>
 					</li>
 				))}
