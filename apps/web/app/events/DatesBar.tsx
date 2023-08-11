@@ -1,22 +1,24 @@
 import React from 'react';
 import { Button } from 'ui';
 
-function getNextDays(): number[] {
+function getNextDays(numDays: number): number[] {
 	const today = new Date();
-	const next30Days: number[] = [];
+	today.setHours(0, 0, 0, 0); // Set time to 00:00, used for start time filter
 
-	for (let i = 0; i < 60; i++) {
-		const currentDate = new Date();
+	const nextDaysStartTimestamps: number[] = [];
+
+	for (let i = 0; i < numDays; i++) {
+		const currentDate = new Date(today);
 		currentDate.setDate(today.getDate() + i);
 
-		next30Days.push(currentDate.getDate());
+		nextDaysStartTimestamps.push(currentDate.getTime());
 	}
 
-	return next30Days;
+	return nextDaysStartTimestamps;
 }
 
 export default function DatesBar() {
-	const dates = getNextDays();
+	const dates = getNextDays(60);
 
 	return (
 		<div className="mt-8">
