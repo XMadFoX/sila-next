@@ -1,8 +1,10 @@
-import { getEvents } from '@sila/api';
+'use client';
+
 import CardList from 'components/landing/CardsContainer';
 import React from 'react';
 import { Card, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
+import { trpc } from 'lib/trpc';
 
 const getBadges = ({
 	isFree,
@@ -17,9 +19,9 @@ const getBadges = ({
 	return badges;
 };
 
-export default async function Events() {
-	const data = await getEvents();
-	const important = await getEvents(true);
+export default function Events() {
+	const { data } = trpc.events.find.useQuery();
+	const { data: important } = trpc.events.find.useQuery({ isImportant: true });
 
 	return (
 		<main className="mt-16 text-black max-w-[1400px]">
@@ -35,7 +37,7 @@ export default async function Events() {
 					мероприятии или проекте.
 				</p>
 			</div>
-			{important.length > 0 && (
+			{important && important?.length > 0 && (
 				<section>
 					<Heading>Важные события</Heading>
 					<div className="flex mx-auto max-w-fit">

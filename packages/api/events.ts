@@ -59,7 +59,15 @@ export const eventRoutes = createTRPCRouter({
 				.run();
 			return eventId;
 		}),
-	find: publicProcedure.query(async () => getEvents()),
+	find: publicProcedure
+		.input(
+			z
+				.object({
+					isImportant: z.boolean().optional(),
+				})
+				.optional()
+		)
+		.query(async ({ input: d }) => getEvents(d?.isImportant)),
 	getOne: publicProcedure
 		.input(z.number().positive())
 		.query(async ({ input: id }) => getEvent(id)),
