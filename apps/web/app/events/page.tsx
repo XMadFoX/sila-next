@@ -21,7 +21,7 @@ export default async function Events() {
 	const important = await getEvents(true);
 
 	return (
-		<section className="mt-16 text-black max-w-[1400px]">
+		<main className="mt-16 text-black max-w-[1400px]">
 			<div className="flex">
 				<h1 className="w-1/2 text-2xl font-medium">
 					Раздел направлен
@@ -75,36 +75,44 @@ export default async function Events() {
 					</div>
 				</section>
 			)}
-			<CardList>
-				{data?.map((i) => {
-					return (
-						<Card key={i.events.id} id={i.events.id}>
-							<Card.Preview
-								image={i.events.coverImage}
-								alt=""
-								badges={getBadges({
-									isFree: i.events.isFree ?? false,
-									isOnline: i.events.isOnline ?? false,
-								})}
-							/>
-							<Card.Details
-								date={i.events.date}
-								title={i.base_content.title}
-								org={{ link: '', name: i.users.name }}
-								location={
-									i.events.city && i.events.address
-										? {
-												city: i.events.city,
-												address: i.events.address,
-										  }
-										: null
-								}
-								description={i.events.description}
-							/>
-						</Card>
-					);
-				})}
-			</CardList>
-		</section>
+			<section>
+				<Heading>
+					События{' '}
+					<span className="text-transparent bg-clip-text bg-[length:200%] bg-[100%] hover:bg-center transition-[background] duration-500 bg-primary">
+						сегодня
+					</span>
+				</Heading>
+				<CardList>
+					{data?.map((i) => {
+						return (
+							<Card key={i.events.id} id={i.events.id}>
+								<Card.Preview
+									image={i.events.coverImage}
+									alt=""
+									badges={getBadges({
+										isFree: i.events.isFree ?? false,
+										isOnline: i.events.isOnline ?? false,
+									})}
+								/>
+								<Card.Details
+									date={i.events.date}
+									title={i.base_content.title}
+									org={{ link: '', name: i.users.name }}
+									location={
+										i.events.city && i.events.address
+											? {
+													city: i.events.city,
+													address: i.events.address,
+											  }
+											: null
+									}
+									description={i.events.description}
+								/>
+							</Card>
+						);
+					})}
+				</CardList>
+			</section>
+		</main>
 	);
 }
