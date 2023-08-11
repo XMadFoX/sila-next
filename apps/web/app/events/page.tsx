@@ -5,9 +5,9 @@ import React from 'react';
 import { Card, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
 import { useStore } from '@nanostores/react';
-import { $selectedDate, today, tomorrow } from './date.atom';
+import { $selectedDate, today } from './date.atom';
 import { trpc } from 'lib/trpc';
-import { addDays } from 'date-fns';
+import { addDays, subSeconds } from 'date-fns';
 
 const getBadges = ({
 	isFree,
@@ -27,7 +27,7 @@ export default function Events() {
 
 	const { data } = trpc.events.find.useQuery({
 		start: new Date(selectedDate),
-		end: addDays(selectedDate, 1),
+		end: subSeconds(addDays(selectedDate, 1), 1),
 	});
 	const { data: important } = trpc.events.find.useQuery({
 		isImportant: true,

@@ -35,11 +35,7 @@ export default function DatesBar() {
 				{dates.map((date, idx) => (
 					<li key={`${idx}:${date}`}>
 						<Button
-							onClick={() => {
-								console.log(new Date(date));
-								console.log(selectedDate);
-								$selectedDate.set(new Date(date));
-							}}
+							onClick={() => $selectedDate.set(new Date(date))}
 							size={null}
 							aria-label={`Выбрать дату ${date} ${new Intl.DateTimeFormat(
 								'ru-RU',
