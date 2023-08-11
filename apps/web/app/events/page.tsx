@@ -2,12 +2,13 @@
 
 import CardList from 'components/landing/CardsContainer';
 import React from 'react';
-import { Card, Heading, Slide, Slider } from 'ui';
+import { Card, CardSkeleton, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
 import { useStore } from '@nanostores/react';
 import { $selectedDate, today } from './date.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, subSeconds } from 'date-fns';
+import clsx from 'clsx';
 
 const getBadges = ({
 	isFree,
@@ -29,7 +30,7 @@ export default function Events() {
 		start: new Date(selectedDate),
 		end: subSeconds(addDays(selectedDate, 1), 1),
 	});
-	const { data: important } = trpc.events.find.useQuery({
+	const { data: important, isLoading } = trpc.events.find.useQuery({
 		isImportant: true,
 		start: today,
 	});
@@ -106,6 +107,10 @@ export default function Events() {
 				</Heading>
 				<DatesBar />
 				<CardList>
+					{isLoading &&
+						Array(6)
+							.fill(null)
+							.map((_, idx) => <CardSkeleton key={idx} />)}
 					{data?.map((i) => {
 						return (
 							<Card key={i.events.id} id={i.events.id}>
