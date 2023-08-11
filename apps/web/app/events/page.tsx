@@ -7,7 +7,7 @@ import DatesBar from './DatesBar';
 import { useStore } from '@nanostores/react';
 import { $filter, today } from './filter.atom';
 import { trpc } from 'lib/trpc';
-import { addDays, subSeconds } from 'date-fns';
+import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const getBadges = ({
@@ -22,6 +22,11 @@ const getBadges = ({
 	if (isOnline) badges.push('Онлайн');
 	return badges;
 };
+
+const dateMonth = new Intl.DateTimeFormat('ru-RU', {
+	day: 'numeric',
+	month: 'long',
+});
 
 export default function Events() {
 	const filter = useStore($filter);
@@ -120,10 +125,9 @@ export default function Events() {
 					<span className="text-transparent bg-clip-text bg-[length:200%] bg-[100%] hover:bg-center transition-[background] duration-500 bg-primary">
 						{new Date().setHours(0, 0, 0, 0) === filter.start.getTime()
 							? 'сегодня'
-							: new Intl.DateTimeFormat('ru-RU', {
-									day: 'numeric',
-									month: 'long',
-							  }).format(filter.start)}
+							: dateMonth.format(filter.start)}
+						{differenceInHours(filter.end, filter.start) >= 24 &&
+							` - ${dateMonth.format(filter.end)}`}
 					</span>
 				</Heading>
 				<DatesBar />
