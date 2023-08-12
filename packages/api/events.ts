@@ -59,6 +59,53 @@ export const eventRoutes = createTRPCRouter({
 				.run();
 			return eventId;
 		}),
+	edit: protectedProcedure
+		.input(
+			z.object({
+				id: z.number().positive(),
+				data: newEventSchemaApi,
+			})
+		)
+		.mutation(async ({ input }) => {
+			const { id, data } = input;
+			// TODO: check permissions
+			const res = await db
+				.update(events)
+				.set({
+					description: data.description,
+					// duration: data.duration,
+					isFree: data.isFree,
+					isOnline: data.isOnline,
+					registrationUrl: data.registrationUrl,
+					coverImage: data.coverImage,
+					eventTypeId: data.eventTypeId,
+					date: data.date,
+					...(!data.isOnline && {
+						country: data.country,
+						city: data.city,
+						address: data.address,
+						mapData: data.maps_link,
+					}),
+				})
+				.where(eq(events.id, id))
+				.returning({ id: events.id, bId: events.baseId })
+				.get();
+			await db
+				.update(eventText)
+				.set({
+					text: data.articleData,
+				})
+				.where(eq(eventText.articleId, id))
+				.run();
+			await db
+				.update(baseContent)
+				.set({
+					title: data.title,
+				})
+				.where(eq(baseContent.id, res.bId))
+				.run();
+			return res;
+		}),
 	find: publicProcedure
 		.input(
 			z
@@ -104,6 +151,6 @@ export const getEvent = async (id: number) => {
 		with: { text: true, base: true },
 	});
 	// if published as organization, return only org, not author
-	if (!res) return new TRPCError({ code: 'NOT_FOUND' });
+	if (!res) throw new TRPCError({ code: 'NOT_FOUND' });
 	return res;
 };
