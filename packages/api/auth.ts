@@ -6,44 +6,30 @@ import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
 import { env } from './env.mjs';
+import { loginSchema, registerSchema } from 'authRoutes';
+import { TRPCError } from 'trpc';
 
-const createUserSchema = z.object({
-	name: z.string().min(3).max(32).optional(),
-	email: z.string().email().min(3).max(128),
-	password: z.string().min(8).max(255),
-	register: z.string(),
-});
-
-type CreateUserInput = z.infer<typeof createUserSchema>;
-
-function parseAuthorizeInput(user: Record<string, any> | undefined) {
-	return createUserSchema.parse(user);
-}
-
-export async function authorize(
-	input: Record<string, any> | undefined
+export async function login(
+	credentials: z.infer<typeof loginSchema>
 ): Promise<ShortUser> {
-	const credentials = parseAuthorizeInput(input);
-	if (credentials.register === 'false') {
-		const user = await findOne(credentials.email);
-		if (user) {
-			// try to log in
-			if (
-				// check is password set
-				user.password &&
-				// and matches
-				(await verify(credentials.password, user.password))
-			)
-				return shortUser(user);
-			throw new Error('Invalid credentials');
-		}
-	} else {
-		return await register(credentials);
+	const user = await findOne(credentials.email);
+	if (user) {
+		// try to log in
+		if (
+			// check is password set
+			user.password &&
+			// and matches
+			(await verify(credentials.password, user.password))
+		)
+			return shortUser(user);
+		throw new TRPCError(400, { message: 'Invalid credentials' });
 	}
-	throw new Error('Invalid credentials');
+	throw new TRPCError(400, { message: 'Invalid credentials' });
 }
 
-async function register(credentials: CreateUserInput): Promise<ShortUser> {
+export async function register(
+	credentials: z.infer<typeof registerSchema>
+): Promise<ShortUser> {
 	// TODO: resend verification email if expired
 	if (!credentials?.name) throw new Error('Name is required');
 	// hash password
