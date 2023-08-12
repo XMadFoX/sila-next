@@ -66,9 +66,22 @@ export const eventRoutes = createTRPCRouter({
 				data: newEventSchemaApi,
 			})
 		)
-		.mutation(async ({ input }) => {
+		.mutation(async ({ input, ctx }) => {
 			const { id, data } = input;
-			// TODO: check permissions
+
+			// TODO: allow editing by mods
+			// TODO: allow editing by org members
+			const base = await db
+				.select({ id: baseContent.id, authorId: baseContent.authorId })
+				.from(events)
+				.where(eq(events.id, id))
+				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+				.get({ id: baseContent.id, authorId: baseContent.authorId });
+			console.log(base);
+			if (!base || base.authorId !== ctx.session.user.id) {
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			}
+
 			const res = await db
 				.update(events)
 				.set({
