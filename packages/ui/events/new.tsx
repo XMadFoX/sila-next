@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { newEventSchema } from '@sila/api'; // causes better-sql fs not found lol
 import React, { useEffect, useState } from 'react';
 import {
 	FormProvider,
@@ -29,10 +28,18 @@ import { newEventSchema } from '@sila/api/eventsSchema';
 import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 
-export function NewEvent() {
+export function NewEvent(
+	upd:
+		| {
+			id: number;
+			values: z.infer<typeof newEventSchema>;
+		}
+		| undefined
+) {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
 		resolver: zodResolver(newEventSchema),
 		defaultValues: async () => {
+			if (upd?.values) return upd.values;
 			const raw = localStorage.getItem('newEvent');
 			if (!raw) return {};
 			const data = JSON.parse(raw);
@@ -48,6 +55,8 @@ export function NewEvent() {
 		isSuccess,
 		error,
 	} = trpc.events.create.useMutation();
+
+	const { mutate: saveChanges } = trpc.events.edit.useMutation();
 
 	const router = useRouter();
 	useEffect(() => {
@@ -84,7 +93,11 @@ export function NewEvent() {
 								timestamp: combinedDateTime,
 							};
 
-							mutate(payload);
+							if (upd?.id) {
+								saveChanges({ id: upd.id, data: payload });
+							} else {
+								mutate(payload);
+							}
 						},
 						async (invalid) => {
 							console.log(invalid);
@@ -172,7 +185,7 @@ export function NewEvent() {
 						type="submit"
 						disabled={isLoading || isSuccess}
 					>
-						Отправить
+						{upd ? 'Сохранить изменения' : 'Отправить'}
 					</Button>
 				</form>
 			</FormProvider>
