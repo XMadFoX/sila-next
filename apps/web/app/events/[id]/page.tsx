@@ -15,7 +15,6 @@ function isData(data: any): data is TRPCError {
 }
 
 export default function EventPage() {
-	const user = useSession();
 	const params = useParams();
 	if (!params.id || typeof params.id !== 'string')
 		throw new Error('No event ID provided');
@@ -42,7 +41,7 @@ export default function EventPage() {
 				}
 				duration={data?.duration}
 			/>
-			{data.ableToEdit && (
+			{data?.ableToEdit && (
 				<Link className="underline text-dark-grey" href={`/events/${id}/edit`}>
 					Редактировать
 				</Link>

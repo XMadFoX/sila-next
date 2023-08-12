@@ -60,12 +60,13 @@ export const authOptions: AuthOptions = {
 				).catch(() => {});
 				token.totp = totpSecret || null;
 			}
-			return token;
+			return { ...token, id: token.sub };
 		},
 
 		async session({ session, token }) {
 			session.user.totp = token?.totp as string;
 			const res = R.pick(shortUser(await findOne(session.user.email)), [
+				'id',
 				'name',
 				'email',
 				'totpEnabled',
