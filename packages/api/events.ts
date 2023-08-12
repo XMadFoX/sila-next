@@ -159,14 +159,15 @@ export const getEvents = async ({
 	return res;
 };
 
-export const getEvent = async (id: number, user: Session | null) => {
+export const getEvent = async (id: number, session: Session | null) => {
 	const res = await db.query.events.findFirst({
 		where: eq(events.id, id),
 		with: { text: true, base: true },
 	});
 	// if published as organization, return only org, not author
 	if (!res) throw new TRPCError({ code: 'NOT_FOUND' });
-	if (res.base.authorId === res.base.authorId)
+	console.log(session);
+	if (res.base.authorId === session?.user?.id)
 		return { ...res, ableToEdit: true };
-	return res;
+	return { ...res, ableToEdit: false };
 };

@@ -13,6 +13,7 @@ export default function Edit() {
 	if (isLoading) return <div>Загрузка...</div>;
 	if (isError) return <div>Ошибка: {error.message}</div>;
 	if (!data) return 'no data';
+	if (data?.ableToEdit === false) return 'У вас нет прав на редактирование';
 	const { text, base, mapData, ...rest } = data;
 	const values = {
 		text: text.text,
