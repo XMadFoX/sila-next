@@ -4,14 +4,14 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Button, InputField } from '..';
+import { Button, InputField, trpc } from '..';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
-import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import safeBack from '../utils/safeBack';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import useSession from '../useSession';
 
 export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [value, setValue] = React.useState('default');
@@ -35,17 +35,21 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const router = useRouter();
 
+	const utils = trpc.useContext();
+	const { mutate: login, isLoading: isLoginLoading } =
+		trpc.auth.login.useMutation({
+			onSuccess: () => {
+				utils.auth.session.invalidate();
+				if (isRegister) router.replace('/auth/success?type=register_email');
+				else setLoggedIn(true);
+			},
+			onError: (err) => {
+				setError('password', {});
+				setError('email', {});
+				setError('root', { message: err.message, type: 'credentials' });
+			},
+		});
 	const [loggedIn, setLoggedIn] = React.useState(false);
-	const handleResponse = (res: SignInResponse) => {
-		if (res.error) {
-			setError('password', {});
-			setError('email', {});
-			setError('root', { message: res.error, type: 'credentials' });
-			return;
-		}
-		if (isRegister) router.replace('/auth/success?type=register_email');
-		else setLoggedIn(true);
-	};
 
 	const session = useSession();
 
@@ -83,17 +87,12 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4 p-4"
-					onSubmit={handleSubmit(async (d: z.infer<typeof schema>) => {
+					onSubmit={handleSubmit((d: z.infer<typeof schema>) => {
 						console.log(d);
-						const res = await signIn('credentials', {
-							redirect: false,
+						login({
 							email: d.email,
-							...(isRegister && { name: d.name }),
 							password: d.password,
-							register: isRegister,
 						});
-						console.log('res', res);
-						res && handleResponse(res);
 					})}
 				>
 					<RadioGroup.Root
