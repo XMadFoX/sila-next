@@ -7,7 +7,11 @@ import { useParams } from 'next/navigation';
 
 export default function Edit() {
 	const { id } = useParams();
-	const { data } = trpc.events.getOne.useQuery(parseInt(id));
+	const { data, isLoading, isError, error } = trpc.events.getOne.useQuery(
+		parseInt(id)
+	);
+	if (isLoading) return <div>Загрузка...</div>;
+	if (isError) return <div>Ошибка: {error.message}</div>;
 	if (!data) return 'no data';
 	const { text, base, mapData, ...rest } = data;
 	const values = {
