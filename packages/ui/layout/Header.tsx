@@ -4,12 +4,14 @@ import { useContext } from 'react';
 import { Button } from '../general';
 import { navLinks } from './navLinks';
 import { EnvironmentContext } from '../env/';
-import { useSession, signOut } from 'next-auth/react';
+import useSession from '../useSession';
+import useLogout from '../useLogout';
 
-export function Header({ signIn }: { signIn: () => void }) {
+export function Header() {
 	const { Image, Link, usePathname } = useContext(EnvironmentContext);
 	const pathname = usePathname();
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
+	const logout = useLogout();
 
 	return (
 		<header className="flex flex-col pt-4 mx-auto w-full max-w-[1400px]">
@@ -24,12 +26,12 @@ export function Header({ signIn }: { signIn: () => void }) {
             disabled
             className="rounded-full"
           /> */}
-					{status === 'authenticated' ? (
+					{session ? (
 						<div className="flex gap-2 items-center ml-auto">
 							<p>{session?.user?.name}</p>
 							<div className="w-11 h-11 rounded-full bg-dark-grey"></div>
 							<Button
-								onClick={() => signOut()}
+								onClick={() => logout()}
 								className="px-8 h-11 text-sm uppercase"
 								size={null}
 							>
@@ -47,6 +49,7 @@ export function Header({ signIn }: { signIn: () => void }) {
 					)}
 				</ul>
 			</nav>
+			{JSON.stringify(session)}
 			<nav className="mx-auto mt-7">
 				<ul className="flex flex-wrap gap-8 text-sm font-medium text-black uppercase">
 					{navLinks.map((link) => (
