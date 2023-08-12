@@ -13,6 +13,7 @@ const baseSchema = z.object({
 	]),
 	eventTypeId: z.number().int().optional(),
 	date: z.date().min(new Date()),
+	text: z.any(),
 	time: z
 		.string()
 		.min(5, { message: 'Обязательное поле' })

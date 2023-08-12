@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
 	FormProvider,
 	useForm,
@@ -31,9 +31,9 @@ import { useRouter } from 'next/navigation';
 export function NewEvent(
 	upd:
 		| {
-			id: number;
-			values: z.infer<typeof newEventSchema>;
-		}
+				id: number;
+				values: z.infer<typeof newEventSchema>;
+		  }
 		| undefined
 ) {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
@@ -63,7 +63,7 @@ export function NewEvent(
 		if (insertedId) router.push(`/events/${insertedId}`);
 	}, [insertedId, router]);
 
-	const editorRef = React.useRef<typeof EditorContainer | null>(null);
+	const editorRef = React.useRef<typeof EditorJS | null>(null);
 
 	return (
 		<div className="w-full max-w-3xl">
@@ -162,7 +162,7 @@ export function NewEvent(
 						)}
 					/>
 					<Address />
-					<EditorContainer ref={editorRef} />
+					<EditorContainer ref={editorRef} data={upd?.values?.text} />
 					<EventInputField
 						aria-label="Время начала"
 						type="time"
@@ -185,7 +185,7 @@ export function NewEvent(
 						type="submit"
 						disabled={isLoading || isSuccess}
 					>
-						{upd ? 'Сохранить изменения' : 'Отправить'}
+						{upd?.id ? 'Сохранить изменения' : 'Отправить'}
 					</Button>
 				</form>
 			</FormProvider>
