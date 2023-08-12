@@ -6,10 +6,11 @@ import {
 import { db, users } from './schema';
 import { baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
-import { eventText, events } from './schema/events.schema';
+import { Event, eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
+import { Session } from 'next-auth';
 
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
@@ -132,7 +133,7 @@ export const eventRoutes = createTRPCRouter({
 		.query(async ({ input: d }) => getEvents(d)),
 	getOne: publicProcedure
 		.input(z.number().positive())
-		.query(async ({ input: id }) => getEvent(id)),
+		.query(async ({ input: id, ctx }) => getEvent(id, ctx.session)),
 });
 
 export const getEvents = async ({
@@ -158,12 +159,14 @@ export const getEvents = async ({
 	return res;
 };
 
-export const getEvent = async (id: number) => {
+export const getEvent = async (id: number, user: Session | null) => {
 	const res = await db.query.events.findFirst({
 		where: eq(events.id, id),
 		with: { text: true, base: true },
 	});
 	// if published as organization, return only org, not author
 	if (!res) throw new TRPCError({ code: 'NOT_FOUND' });
+	if (res.base.authorId === res.base.authorId)
+		return { ...res, ableToEdit: true };
 	return res;
 };
