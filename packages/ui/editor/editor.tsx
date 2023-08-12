@@ -9,7 +9,11 @@ import EditorJS from '@editorjs/editorjs';
 import { userPlugins } from './config';
 import DragDrop from 'editorjs-drag-drop';
 
-export const EditorContainer = forwardRef((props, ref) => {
+interface EditorProps {
+	data?: any;
+}
+
+export const EditorContainer = forwardRef((props: EditorProps, ref) => {
 	const holderId = React.useId();
 	const [editor, setEditor] = useState<EditorJS | null>(null);
 	const save = () => {
@@ -38,7 +42,7 @@ export const EditorContainer = forwardRef((props, ref) => {
 						extraDiv?.length === 2 && extraDiv[1].remove();
 						new DragDrop(editor);
 					},
-					data: {
+					data: props?.data ?? {
 						blocks: [
 							{
 								id: 'Gjq-FU6zUv',
