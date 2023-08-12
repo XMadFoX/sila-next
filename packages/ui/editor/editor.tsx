@@ -78,9 +78,6 @@ export const EditorContainer = forwardRef((props: EditorProps, ref) => {
 	return (
 		<div className="w-full">
 			<div className={styles.editor} id={holderId} />
-			<button onClick={save} type="button">
-				Save
-			</button>
 		</div>
 	);
 });

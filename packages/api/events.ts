@@ -35,7 +35,7 @@ export const eventRoutes = createTRPCRouter({
 				.values({
 					baseId: res.id,
 					description: input.description,
-					duration: input.duration,
+					// duration: input.duration,
 					isFree: input.isFree,
 					isOnline: input.isOnline,
 					registrationUrl: input.registrationUrl,

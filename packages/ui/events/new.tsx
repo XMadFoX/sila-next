@@ -27,6 +27,7 @@ import clsx from 'clsx';
 import { newEventSchema } from '@sila/api/eventsSchema';
 import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
+import EditorJS from '@editorjs/editorjs';
 
 export function NewEvent(
 	upd:
@@ -63,7 +64,7 @@ export function NewEvent(
 		if (insertedId) router.push(`/events/${insertedId}`);
 	}, [insertedId, router]);
 
-	const editorRef = React.useRef<typeof EditorJS | null>(null);
+	const editorRef = React.useRef<EditorJS | null>(null);
 
 	return (
 		<div className="w-full max-w-3xl">
