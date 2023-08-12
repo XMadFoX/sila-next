@@ -1,19 +1,18 @@
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
-import { getServerSession } from 'next-auth/next';
 import { TRPCError } from 'trpc';
-import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { findOne } from './user';
-import type { Session } from 'next-auth';
-import { User } from './schema';
+import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
+import { ShortUser, findOne } from './user';
+import { getIronSession } from 'iron-session';
+import { envCore } from './env.mjs';
 
-// overwrite session type for user to be User
-export interface SessionFullUser extends Session {
-	user: User;
-}
-
-export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
-	const session = await getServerSession();
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+	const session = await getIronSession<{
+		user: ShortUser;
+	}>(opts.req, opts.res, {
+		cookieName: 'auth',
+		password: envCore.ESECRET,
+	});
 
 	return { session };
 };
@@ -48,10 +47,7 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		}
 	}
 	return next({
-		ctx: {
-			// Infers the `session` as non-nullable
-			session: ctx.session as SessionFullUser,
-		},
+		ctx,
 	});
 });
 
