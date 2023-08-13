@@ -10,7 +10,7 @@ import {
 	publicProcedure,
 } from './trpc-server';
 import { decrypt, encrypt } from './encryption';
-import { findOne } from 'user';
+import { findOne } from './user';
 
 export const totpRoutes = createTRPCRouter({
 	generateTotp: protectedProcedure.mutation(async ({ ctx }) => {

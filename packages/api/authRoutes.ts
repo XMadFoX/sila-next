@@ -1,4 +1,4 @@
-import { login } from './auth';
+import { login, register } from './auth';
 import { createTRPCRouter, publicProcedure } from './trpc-server';
 import { z } from 'zod';
 
@@ -16,6 +16,14 @@ export const authRoutes = createTRPCRouter({
 		const session = ctx.session;
 		return session;
 	}),
+	register: publicProcedure
+		.input(registerSchema)
+		.mutation(async ({ input, ctx }) => {
+			const user = await register(input);
+			ctx.session.user = user;
+			await ctx.session.save();
+			return { totpRequired: user.totpEnabled };
+		}),
 	login: publicProcedure
 		.input(
 			z.object({
