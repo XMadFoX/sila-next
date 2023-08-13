@@ -6,7 +6,6 @@ import { EventHeader } from 'ui/events';
 import { notFound } from 'next/navigation';
 import { TRPCError } from '@trpc/server';
 import Blocks from 'editorjs-blocks-react-renderer';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { trpc } from 'lib/trpc';
 
@@ -16,7 +15,7 @@ function isData(data: any): data is TRPCError {
 
 export default function EventPage() {
 	const params = useParams();
-	if (!params.id || typeof params.id !== 'string')
+	if (!params?.id || typeof params.id !== 'string')
 		throw new Error('No event ID provided');
 	const id = parseInt(params.id);
 	const { data, error, isLoading } = trpc.events.getOne.useQuery(id);

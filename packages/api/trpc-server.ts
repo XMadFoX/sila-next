@@ -3,14 +3,15 @@ import superjson from 'superjson';
 import { TRPCError } from 'trpc';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { ShortUser, findOne } from './user';
-import { getIronSession } from 'iron-session';
+import { IronSession, getIronSession } from 'iron-session';
 import { envCore } from './env.mjs';
 import { User } from './schema';
 
+type UserSession = { user: ShortUser };
+export type Session = IronSession<UserSession>;
+
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-	const session = await getIronSession<{
-		user: ShortUser;
-	}>(opts.req, opts.res, {
+	const session = await getIronSession<UserSession>(opts.req, opts.res, {
 		cookieName: 'auth',
 		password: envCore.ESECRET,
 	});

@@ -1,4 +1,5 @@
 import {
+	Session,
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
@@ -10,7 +11,7 @@ import { Event, eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
-import { Session } from 'next-auth';
+import { ShortUser } from './user';
 
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
@@ -159,7 +160,7 @@ export const getEvents = async ({
 	return res;
 };
 
-export const getEvent = async (id: number, session: Session | null) => {
+export const getEvent = async (id: number, session: Session) => {
 	const res = await db.query.events.findFirst({
 		where: eq(events.id, id),
 		with: { text: true, base: true },
