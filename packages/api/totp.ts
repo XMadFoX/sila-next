@@ -37,7 +37,6 @@ export const totpRoutes = createTRPCRouter({
 			if (ctx.user.totpEnabled) throw new Error('TOTP already enabled');
 			if (!ctx.user.totpSecret) throw new Error('No secret generated yet');
 			const decodedSecret = decrypt(ctx.user.totpSecret);
-			console.log(decodedSecret);
 			const isValid = authenticator.check(input, decodedSecret);
 			if (!isValid) throw new Error('Invalid code');
 			const random = crypto.randomBytes(10).toString('hex');

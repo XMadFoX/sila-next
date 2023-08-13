@@ -57,6 +57,7 @@ export async function register(
 				email: credentials.email,
 				name: credentials.name!,
 				password: `${salt}:${hash}`,
+				emailVerified: env.NODE_ENV !== 'produciton' ? new Date() : null,
 			},
 			trx
 		);
