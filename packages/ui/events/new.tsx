@@ -29,14 +29,14 @@ import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 import EditorJS from '@editorjs/editorjs';
 
-export function NewEvent(
-	upd:
-		| {
-				id: number;
-				values: z.infer<typeof newEventSchema>;
-		  }
-		| undefined
-) {
+export function NewEvent({
+	upd,
+}: {
+	upd?: {
+		id: number;
+		values: z.infer<typeof newEventSchema>;
+	};
+}) {
 	const methods = useForm<z.infer<typeof newEventSchema>>({
 		resolver: zodResolver(newEventSchema),
 		defaultValues: async () => {

@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
 import { env } from './env.mjs';
-import { loginSchema, registerSchema } from 'authRoutes';
+import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
 export async function login(
@@ -67,10 +67,7 @@ export async function register(
 		from: env.SMTP_FROM,
 		to: credentials.email,
 		subject: 'Verify your email',
-		html: `Click <a href="${
-			env.NEXTAUTH_URL
-			// || env.VERCEL_URL
-		}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
+		html: `Click <a href="${env.VERCEL_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
 	});
 
 	return {

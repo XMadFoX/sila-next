@@ -6,7 +6,8 @@ import { NewEvent } from 'ui/events';
 import { useParams } from 'next/navigation';
 
 export default function Edit() {
-	const { id } = useParams();
+	const params = useParams();
+	const id = params?.id as string;
 	const { data, isLoading, isError, error } = trpc.events.getOne.useQuery(
 		parseInt(id)
 	);
@@ -22,5 +23,5 @@ export default function Edit() {
 		...rest,
 		time: '',
 	};
-	return <NewEvent id={parseInt(id)} values={values as any} />;
+	return <NewEvent upd={{ id: parseInt(id), values: values as any }} />;
 }

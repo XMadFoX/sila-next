@@ -52,7 +52,7 @@ export default function Events() {
 	}, [router, filter]);
 
 	useEffect(() => {
-		const raw = [params.get('start'), params.get('end')];
+		const raw = [params?.get('start'), params?.get('end')];
 		const parsed = raw.map((i) => (i ? new Date(parseInt(i)) : undefined));
 		$filter.set({
 			...filter,
