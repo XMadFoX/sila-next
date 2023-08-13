@@ -5,6 +5,7 @@ import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { ShortUser, findOne } from './user';
 import { getIronSession } from 'iron-session';
 import { envCore } from './env.mjs';
+import { User } from './schema';
 
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 	const session = await getIronSession<{
@@ -14,7 +15,10 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 		password: envCore.ESECRET,
 	});
 
-	return { session };
+	return { session, user: undefined } as {
+		session: typeof session;
+		user: User | undefined;
+	};
 };
 
 export const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -28,7 +32,6 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		});
 	}
 	const user = await findOne(ctx.session.user.email);
-	ctx.session.user = user;
 	if (!user?.emailVerified) {
 		throw new TRPCError(403, {
 			message: 'UNVERIFIED',
@@ -46,8 +49,12 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 			});
 		}
 	}
+
 	return next({
-		ctx,
+		ctx: {
+			session: ctx.session,
+			user,
+		},
 	});
 });
 
@@ -57,3 +64,4 @@ export const router = t.router;
 
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthed);
+// export const protectedNoTOTPProcedure = t.procedure.use(a => isAuthed(...a));

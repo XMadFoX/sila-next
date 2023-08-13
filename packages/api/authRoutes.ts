@@ -27,7 +27,7 @@ export const authRoutes = createTRPCRouter({
 			const user = await login(input);
 			ctx.session.user = user;
 			await ctx.session.save();
-			return true;
+			return { totpRequired: user.totpEnabled };
 		}),
 	logout: publicProcedure.mutation(async ({ ctx }) => {
 		// ctx.session.user = undefined;
