@@ -38,10 +38,35 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const utils = trpc.useContext();
 	const { mutate: login, isLoading: isLoginLoading } =
 		trpc.auth.login.useMutation({
-			onSuccess: () => {
+			onSuccess: (data) => {
 				utils.auth.session.invalidate();
-				if (isRegister) router.replace('/auth/success?type=register_email');
-				else setLoggedIn(true);
+				if (data.totpRequired) {
+					closeModal && closeModal();
+					setTimeout(() => router.replace('/auth/totp/verify'), 50);
+				} else {
+					safeBack(window, router);
+					toast.success('Успешный вход');
+					toast.info(
+						<div className="inline">
+							Для повышения безопасности аккаунта рекомендуем{' '}
+							<Link
+								href="/auth/totp/generate"
+								className="inline-block underline text-blue"
+								onClick={() => toast.dismiss('suggestEnableTotp')}
+								replace
+							>
+								включить двухфакторную аутентификацию
+							</Link>
+							.
+						</div>,
+						{
+							toastId: 'suggestEnableTotp',
+							autoClose: false,
+							closeOnClick: false,
+							icon: false,
+						}
+					);
+				}
 			},
 			onError: (err) => {
 				setError('password', {});
@@ -80,7 +105,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 				}
 			);
 		}
-	}, [loggedIn, session]);
+	}, [loggedIn, session.data]);
 
 	return (
 		<div>
