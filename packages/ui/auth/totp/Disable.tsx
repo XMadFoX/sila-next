@@ -8,9 +8,9 @@ import { Button } from '../../general';
 import { trpc } from '../../lib/trpc';
 import { CodeInput } from './CodeInput';
 import { schema } from './schema';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import safeBack from '../../utils/safeBack';
+import useSession from '../../useSession';
 
 export function DisableTOTP() {
 	const { mutate, error, isSuccess, isLoading } =
@@ -34,18 +34,15 @@ export function DisableTOTP() {
 		setError('code', { message: error?.message });
 	}, [error]);
 
-	const session = useSession();
+	const { data: session } = useSession();
 
 	useEffect(() => {
-		if (!session?.data?.user?.totpEnabled) {
+		if (session?.user && !session?.user?.totpEnabled) {
+			console.log('not linked');
 			setNotLinked(true);
-		}
+		} else setNotLinked(false);
 		if (isSuccess) safeBack(window, router);
 	}, [session]);
-
-	useEffect(() => {
-		session.update({ totpToken: null });
-	}, [isSuccess]);
 
 	if (notLinked)
 		return (
