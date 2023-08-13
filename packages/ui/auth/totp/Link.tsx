@@ -14,8 +14,17 @@ import useSession from '../../useSession';
 import { trpc } from '../../lib';
 
 export function LinkTOTP() {
-	const { data: session } = useSession();
-	const { mutate } = trpc.totp.linkTotp.useMutation();
+	const { data: session, invalidate } = useSession();
+	const { mutate } = trpc.totp.linkTotp.useMutation({
+		onSuccess: () => {
+			safeBack(window, router);
+			toast.success('Поключено');
+			invalidate();
+		},
+		onError: (err) => {
+			setError('code', { message: err.message });
+		},
+	});
 	const router = useRouter();
 
 	const methods = useForm<z.infer<typeof schema>>({
@@ -34,12 +43,6 @@ export function LinkTOTP() {
 
 	useEffect(() => {
 		if (session?.user?.totpEnabled) setAlreadyEnabled(true);
-		if (session?.user?.totp) {
-			safeBack(window, router);
-			toast.success('Поключено');
-		} else {
-			setError('code', { message: 'Неправильный код' });
-		}
 	}, [session]);
 
 	return (

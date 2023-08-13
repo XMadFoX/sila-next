@@ -13,8 +13,9 @@ import safeBack from '../../utils/safeBack';
 import useSession from '../../useSession';
 
 export function DisableTOTP() {
+	const { data: session, invalidate } = useSession();
 	const { mutate, error, isSuccess, isLoading } =
-		trpc.totp.unlinkTotp.useMutation();
+		trpc.totp.unlinkTotp.useMutation({ onSuccess: () => invalidate() });
 	const [notLinked, setNotLinked] = useState(false);
 	const router = useRouter();
 
@@ -33,8 +34,6 @@ export function DisableTOTP() {
 	useEffect(() => {
 		setError('code', { message: error?.message });
 	}, [error]);
-
-	const { data: session } = useSession();
 
 	useEffect(() => {
 		if (session?.user && !session?.user?.totpEnabled) {
