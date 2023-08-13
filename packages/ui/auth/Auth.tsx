@@ -13,13 +13,17 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import useSession from '../useSession';
 
+function isString(d: unknown): d is string {
+	return typeof d === 'string';
+}
+
 export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [value, setValue] = React.useState('default');
 	const isRegister = value === 'register';
 	const schema = z.object({
 		email: z.string().email(),
 		password: z.string().min(10),
-		...(isRegister && { name: z.string().min(2) }),
+		...(isRegister && { name: z.string().min(2).max(32) }),
 	});
 	const methods = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -27,7 +31,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 		reValidateMode: 'onChange',
 	});
 	const {
-		register,
+		register: registerField,
 		handleSubmit,
 		setError,
 		formState: { errors },
@@ -36,6 +40,17 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const router = useRouter();
 
 	const utils = trpc.useContext();
+	const { mutate: register, isLoading: isRegisterLoading } =
+		trpc.auth.register.useMutation({
+			onSuccess: (data) => {
+				router.replace('/auth/success?type=register_email');
+			},
+			onError: (err) => {
+				setError('password', {});
+				setError('email', {});
+				setError('root', { message: err.message, type: 'credentials' });
+			},
+		});
 	const { mutate: login, isLoading: isLoginLoading } =
 		trpc.auth.login.useMutation({
 			onSuccess: (data) => {
@@ -57,7 +72,6 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 							>
 								включить двухфакторную аутентификацию
 							</Link>
-							.
 						</div>,
 						{
 							toastId: 'suggestEnableTotp',
@@ -113,11 +127,19 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 				<form
 					className="flex flex-col gap-4 p-4"
 					onSubmit={handleSubmit((d: z.infer<typeof schema>) => {
-						console.log(d);
-						login({
-							email: d.email,
-							password: d.password,
-						});
+						if (isRegister) {
+							if (isString(d.name)) {
+								register({
+									email: d.email,
+									password: d.password,
+									name: d.name,
+								});
+							}
+						} else
+							login({
+								email: d.email,
+								password: d.password,
+							});
 					})}
 				>
 					<RadioGroup.Root
@@ -140,19 +162,19 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 					</RadioGroup.Root>
 					{isRegister && (
 						<InputField
-							{...register('name')}
+							{...registerField('name')}
 							placeholder="Имя или псевдоним"
 							errors={errors}
 						/>
 					)}
 					<InputField
-						{...register('email')}
+						{...registerField('email')}
 						placeholder="Почта"
 						type="email"
 						errors={errors}
 					/>
 					<InputField
-						{...register('password')}
+						{...registerField('password')}
 						placeholder="Пароль"
 						type={showPassword ? 'text' : 'password'}
 						errors={errors}
