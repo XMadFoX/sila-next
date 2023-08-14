@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { Plus } from 'lucide-react';
+import { Minus } from 'lucide-react';
 
 import { cn } from '../../lib/utils';
 
@@ -38,36 +38,9 @@ const AccordionTrigger = React.forwardRef<
 		>
 			{children}
 			{/* TODO: добавить минус */}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				className="h-4 w-4 shrink-0 transition-transform duration-200"
-			>
-				<path
-					d="M12.1091 1.99999L12.0919 21.799M2.20099 11.8909L22 11.9081"
-					stroke="url(#paint0_linear_879_6408)"
-					stroke-width="2.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-				<defs>
-					<linearGradient
-						id="paint0_linear_879_6408"
-						x1="5.61886"
-						y1="20.5085"
-						x2="18.815"
-						y2="7.35898"
-						gradientUnits="userSpaceOnUse"
-					>
-						<stop stop-color="#2E89DC" />
-						<stop offset="0.427565" stop-color="#4361EE" />
-						<stop offset="0.967556" stop-color="#FB6F92" />
-					</linearGradient>
-				</defs>
-			</svg>
+
+			<Minus className="h-5 w-5 shrink-0 transition-transform duration-200 rotate-90" />
+			<Minus className="h-5 w-5 absolute right-5 xl:right-[calc(25%+3rem)]" />
 		</AccordionPrimitive.Trigger>
 	</AccordionPrimitive.Header>
 ));

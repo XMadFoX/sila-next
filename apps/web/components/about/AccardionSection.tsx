@@ -6,8 +6,10 @@ import {
 } from 'ui/@/components/ui/accordion';
 export default function AccardionSection() {
 	return (
-		<section className="mt-10 xl:w-9/12">
-			<h2 className="text-xl font-medium">Часто задаваемые вопросы</h2>
+		<section className="mt-10 xl:mt-24 xl:w-9/12">
+			<h2 className="text-xl font-medium xl:text-3xl">
+				Часто задаваемые вопросы
+			</h2>
 			<Accordion type="single" collapsible className="w-full">
 				<AccordionItem value="item-1">
 					<AccordionTrigger>
@@ -104,7 +106,7 @@ export default function AccardionSection() {
 					</AccordionContent>
 				</AccordionItem>
 			</Accordion>
-			<h2 className="text-xl font-medium mt-10">
+			<h2 className="text-xl font-medium mt-10 xl:text-3xl">
 				Правила для участников проекта
 			</h2>
 			<Accordion type="single" collapsible className="w-full">
@@ -148,6 +150,19 @@ export default function AccardionSection() {
 							дискредитации армии, распространение фейков и оскорбление власти
 							могут  быть связаны для вас с определенными рисками и просим вас
 							воздерживаться от таких высказываний на нашем сайте.
+						</p>
+					</AccordionContent>
+				</AccordionItem>
+				<AccordionItem value="item-2">
+					<AccordionTrigger>
+						Правила информационной безопасности
+					</AccordionTrigger>
+					<AccordionContent>
+						<p className="mt-4">
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Non autem
+							deleniti consectetur, nisi earum consequatur tempore sint impedit
+							vero, vel, eum nam. Magnam facilis, velit aut consectetur maiores
+							optio voluptates.
 						</p>
 					</AccordionContent>
 				</AccordionItem>
