@@ -42,7 +42,7 @@ export const eventRoutes = createTRPCRouter({
 					registrationUrl: input.registrationUrl,
 					coverImage: input.coverImage,
 					eventTypeId: input.eventTypeId,
-					date: input.date,
+					date: input.timestamp,
 					...(!input.isOnline && {
 						country: input.country,
 						city: input.city,
@@ -94,7 +94,7 @@ export const eventRoutes = createTRPCRouter({
 					registrationUrl: data.registrationUrl,
 					coverImage: data.coverImage,
 					eventTypeId: data.eventTypeId,
-					date: data.date,
+					date: data.timestamp,
 					...(!data.isOnline && {
 						country: data.country,
 						city: data.city,
