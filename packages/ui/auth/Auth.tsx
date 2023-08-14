@@ -60,6 +60,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 					closeModal && closeModal();
 					setTimeout(() => router.replace('/auth/totp/verify'), 50);
 				} else {
+					closeModal && closeModal();
 					safeBack(window, router);
 					toast.success('Успешный вход');
 					toast.info(

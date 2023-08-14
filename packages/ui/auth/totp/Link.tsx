@@ -13,10 +13,11 @@ import { toast } from 'react-toastify';
 import useSession from '../../useSession';
 import { trpc } from '../../lib';
 
-export function LinkTOTP() {
+export function LinkTOTP({ closeModal }: { closeModal?: () => void }) {
 	const { data: session, invalidate } = useSession();
 	const { mutate } = trpc.totp.linkTotp.useMutation({
 		onSuccess: () => {
+			closeModal && closeModal();
 			safeBack(window, router);
 			toast.success('Поключено');
 			invalidate();

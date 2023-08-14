@@ -49,9 +49,6 @@ export function Header() {
 					)}
 				</ul>
 			</nav>
-			<span className="opacity-10 transition-opacity duration-300 hover:opacity-100">
-				{JSON.stringify(session)}
-			</span>
 			<nav className="mx-auto mt-7">
 				<ul className="flex flex-wrap gap-8 text-sm font-medium text-black uppercase">
 					{navLinks.map((link) => (

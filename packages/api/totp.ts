@@ -13,7 +13,7 @@ import { decrypt, encrypt } from './encryption';
 import { findOne } from './user';
 
 export const totpRoutes = createTRPCRouter({
-	generateTotp: protectedProcedure.mutation(async ({ ctx }) => {
+	generateTotp: protectedProcedure.query(async ({ ctx }) => {
 		if (ctx.user.totpEnabled && ctx.user.totpSecret)
 			throw new Error('TOTP already enabled');
 		const secret = authenticator.generateSecret();

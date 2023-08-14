@@ -9,7 +9,9 @@ import { cn } from '../../lib';
 import { Button } from '../../general';
 
 export function GenerateTOTP() {
-	const { mutate, data, isError } = trpc.totp.generateTotp.useMutation();
+	const { data, isError } = trpc.totp.generateTotp.useQuery(undefined, {
+		refetchOnWindowFocus: false,
+	});
 	const canvasRef = React.useRef(null);
 	const [loaded, setLoaded] = useState(false);
 
@@ -17,10 +19,6 @@ export function GenerateTOTP() {
 		if (!data) return;
 		QRCode.toCanvas(canvasRef.current, data).then(() => setLoaded(true));
 	}, [data]);
-
-	useEffect(() => {
-		mutate();
-	}, []);
 
 	return (
 		<div className="flex flex-col max-w-xl text-black">
