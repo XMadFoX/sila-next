@@ -50,26 +50,36 @@ export async function register(
 		expires: new Date(Date.now() + 1000 * 60 * 10),
 		identifier: crypto.randomUUID(),
 	};
-	await db.transaction(async (trx) => {
-		await createUser(
-			{
-				id: userId,
-				email: credentials.email,
-				name: credentials.name!,
-				password: `${salt}:${hash}`,
-				emailVerified: env.NODE_ENV !== 'produciton' ? new Date() : null,
-			},
-			trx
-		);
-		await trx.insert(verificationTokens).values(tokenValues).run();
-	});
+	await db
+		.transaction(async (trx) => {
+			await createUser(
+				{
+					id: userId,
+					email: credentials.email,
+					name: credentials.name!,
+					password: `${salt}:${hash}`,
+					emailVerified: env.NODE_ENV !== 'produciton' ? new Date() : null,
+				},
+				trx
+			);
+			await trx.insert(verificationTokens).values(tokenValues).run();
+		})
+		.catch((err: Error) => {
+			if (err.message.includes('UNIQUE constraint failed')) {
+				// TODO: handle it, send fake success, send email that already registred, suggest to login/reset password
+			} else throw err;
+		});
 
-	nodemailer.sendMail({
-		from: env.SMTP_FROM,
-		to: credentials.email,
-		subject: 'Verify your email',
-		html: `Click <a href="${env.VERCEL_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
-	});
+	nodemailer
+		.sendMail({
+			from: env.SMTP_FROM,
+			to: credentials.email,
+			subject: 'Verify your email',
+			html: `Click <a href="${env.VERCEL_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
+		})
+		.catch((err) => {
+			console.error("Can't send verification email", err);
+		});
 
 	return {
 		id: userId,
