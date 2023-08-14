@@ -39,11 +39,12 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const router = useRouter();
 
-	const utils = trpc.useContext();
+	const { data: session, invalidate } = useSession();
 	const { mutate: register, isLoading: isRegisterLoading } =
 		trpc.auth.register.useMutation({
 			onSuccess: (data) => {
 				router.replace('/auth/success?type=register_email');
+				invalidate();
 			},
 			onError: (err) => {
 				setError('password', {});
@@ -54,7 +55,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const { mutate: login, isLoading: isLoginLoading } =
 		trpc.auth.login.useMutation({
 			onSuccess: (data) => {
-				utils.auth.session.invalidate();
+				invalidate();
 				if (data.totpRequired) {
 					closeModal && closeModal();
 					setTimeout(() => router.replace('/auth/totp/verify'), 50);
@@ -90,10 +91,8 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 		});
 	const [loggedIn, setLoggedIn] = React.useState(false);
 
-	const session = useSession();
-
 	useEffect(() => {
-		if (loggedIn && session?.data?.user?.totpEnabled) {
+		if (loggedIn && session?.user?.totpEnabled) {
 			closeModal && closeModal();
 			setTimeout(() => router.replace('/auth/totp/verify'), 50);
 		} else if (loggedIn) {
@@ -119,7 +118,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 				}
 			);
 		}
-	}, [loggedIn, session.data]);
+	}, [loggedIn, session]);
 
 	return (
 		<div>
