@@ -58,13 +58,17 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					<input
 						ref={ref}
 						className={cn(
-							'py-2 px-4 w-full rounded-lg ring transition-all dark:bg-black duration-300 outline-none focus:ring-transparent ring-dark-grey',
+							'py-2 px-4 w-full rounded-lg ring transition-all dark:bg-black duration-300 appearance-none outline-none focus:ring-transparent ring-dark-grey',
 							field.value?.length > 0 && 'ring-transparent',
 							fieldState.isTouched && fieldState?.error && 'border-error border'
 						)}
 						{...props}
 					/>
-					{rightItem && <div className="absolute right-2">{rightItem}</div>}
+					{rightItem && (
+						<div className="flex absolute right-2 items-center">
+							{rightItem}
+						</div>
+					)}
 				</GradientWrapper>
 				<ErrorMessage
 					errors={errors}

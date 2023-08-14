@@ -12,6 +12,7 @@ import safeBack from '../utils/safeBack';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import useSession from '../useSession';
+import { Eye, EyeOff } from 'lucide-react';
 
 function isString(d: unknown): d is string {
 	return typeof d === 'string';
@@ -164,6 +165,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 						<InputField
 							{...registerField('name')}
 							placeholder="Имя или псевдоним"
+							autoComplete="name"
 							errors={errors}
 						/>
 					)}
@@ -171,19 +173,25 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 						{...registerField('email')}
 						placeholder="Почта"
 						type="email"
+						autoComplete="email"
 						errors={errors}
 					/>
 					<InputField
 						{...registerField('password')}
 						placeholder="Пароль"
 						type={showPassword ? 'text' : 'password'}
+						autoComplete="new-password"
 						errors={errors}
 						rightItem={
 							<button
 								type="button"
 								onClick={() => setShowPassword((prev) => !prev)}
 							>
-								👁
+								{showPassword ? (
+									<Eye className="w-5 h-5" />
+								) : (
+									<EyeOff className="w-5 h-5" />
+								)}
 							</button>
 						}
 					/>
@@ -216,7 +224,7 @@ function RadioItem({ id, value, label }: any) {
 			</RadioGroup.Item>
 			<label
 				className={clsx(
-					'peer-aria-checked:before:w-full before:h-0.5',
+					'peer-aria-checked:before:w-full before:h-0.5 cursor-pointer',
 					'relative before:absolute before:w-0 before:bg-primary before:-bottom-2',
 					'before:duration-300 before:transition-all'
 				)}
