@@ -47,7 +47,8 @@ export default function Events() {
 			`/events?start=${filter.start.getTime()}&end=${addDays(
 				filter.end,
 				1
-			).getTime()}`
+			).getTime()}`,
+			{ scroll: false }
 		);
 	}, [router, filter]);
 

@@ -1,4 +1,4 @@
-import { InferModel, sql } from 'drizzle-orm';
+import { InferModel, relations, sql } from 'drizzle-orm';
 import { AdapterAccount } from '@auth/core/adapters';
 import {
 	sqliteTable,
@@ -73,3 +73,38 @@ export const verificationTokens = sqliteTable(
 		compoundKey: primaryKey(vt.identifier, vt.token),
 	})
 );
+
+export const roles = sqliteTable('roles', {
+	id: integer('id').notNull().primaryKey(),
+	name: text('name', { length: 255 }).notNull(),
+});
+
+export const userRelations = relations(users, ({ many }) => ({
+	usersToRoles: many(usersToRoles),
+}));
+
+export const roleRelations = relations(roles, ({ many }) => ({
+	usersToRoles: many(usersToRoles),
+}));
+
+export const usersToRoles = sqliteTable(
+	'users_to_roles',
+	{
+		userId: text('userId', { length: 255 }).notNull(),
+		roleId: integer('roleId').notNull(),
+	},
+	(t) => ({
+		pk: primaryKey(t.userId, t.roleId),
+	})
+);
+
+export const userRoleRelations = relations(usersToRoles, ({ one }) => ({
+	role: one(roles, {
+		fields: [usersToRoles.roleId],
+		references: [roles.id],
+	}),
+	user: one(users, {
+		fields: [usersToRoles.userId],
+		references: [users.id],
+	}),
+}));
