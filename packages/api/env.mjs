@@ -27,8 +27,8 @@ export const env = createEnv({
 	// For Next.js >= 13.4.4, you only need to destructure client variables:
 	experimental__runtimeEnv: {
 		NEXT_PUBLIC_TRPC_PREFIX: process.env.NEXT_PUBLIC_TRPC_PREFIX ?? '/api/trpc',
-		VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL
-			? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+		VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL
+			? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
 			: 'http://localhost:3000',
 	},
 });
