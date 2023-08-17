@@ -11,7 +11,6 @@ import { Event, eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
-import { ShortUser } from './user';
 
 export const eventRoutes = createTRPCRouter({
 	create: protectedProcedure
@@ -162,7 +161,13 @@ export const getEvents = async ({
 	isImportant,
 	start,
 	end,
-}: { isImportant?: boolean; start?: Date; end?: Date } = {}) => {
+	status = 'published',
+}: {
+	isImportant?: boolean;
+	start?: Date;
+	end?: Date;
+	status?: Event['status'];
+} = {}) => {
 	const res = await db
 		.select()
 		.from(events)
@@ -170,7 +175,8 @@ export const getEvents = async ({
 			and(
 				isImportant ? eq(events.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
-				end ? sql`timestamp <= ${end.getTime()}` : sql`true`
+				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
+				eq(events.status, 'published')
 			)
 		)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))
@@ -184,12 +190,15 @@ export const getEvents = async ({
 export const getEvent = async (id: number, session: Session) => {
 	const res = await db.query.events.findFirst({
 		where: eq(events.id, id),
+		columns: {
+			baseId: false,
+			eventTypeId: false,
+		},
 		with: { text: true, base: true },
 	});
 	// if published as organization, return only org, not author
-	if (!res) throw new TRPCError({ code: 'NOT_FOUND' });
-	console.log(session);
-	if (res.base.authorId === session?.user?.id)
-		return { ...res, ableToEdit: true };
-	return { ...res, ableToEdit: false };
+	const isAuthor = res?.base.authorId === session?.user?.id;
+	if (!res || (!isAuthor && res.status !== 'published'))
+		throw new TRPCError({ code: 'NOT_FOUND' });
+	return { ...res, ableToEdit: isAuthor };
 };

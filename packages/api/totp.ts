@@ -60,6 +60,7 @@ export const totpRoutes = createTRPCRouter({
 		.input(z.string().length(6).regex(/^\d+$/))
 		.mutation(async ({ ctx, input }) => {
 			const user = await findOne(ctx.session.user.email);
+			if (!user) throw new Error();
 			if (!user.totpSecret)
 				throw new Error(ErrorMessages.auth.totp.notGeneratedYet);
 			const decodedSecret = decrypt(user.totpSecret);
