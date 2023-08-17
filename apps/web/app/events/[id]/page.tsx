@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import React, { Suspense } from 'react';
-import { EventHeader } from 'ui/events';
+import { EventHeader, PublishDialog } from 'ui/events';
 import { notFound } from 'next/navigation';
 import { TRPCError } from '@trpc/server';
 import Blocks from 'editorjs-blocks-react-renderer';
@@ -27,6 +27,14 @@ export default function EventPage() {
 
 	return (
 		<section>
+			{data.status === 'draft' && data.ableToEdit && (
+				<p className="p-4 mt-4 rounded-full border border-error">
+					Это черновик. Вы можете <PublishDialog /> или{' '}
+					<Link className="underline" href={`/events/${id}/edit`}>
+						отредактировать
+					</Link>
+				</p>
+			)}
 			<h1 className="my-10 text-3xl font-medium text-black">
 				{data.base.title}
 			</h1>
