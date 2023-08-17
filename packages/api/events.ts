@@ -135,6 +135,27 @@ export const eventRoutes = createTRPCRouter({
 	getOne: publicProcedure
 		.input(z.number().positive())
 		.query(async ({ input: id, ctx }) => getEvent(id, ctx.session)),
+	delete: protectedProcedure
+		.input(z.number().positive())
+		.mutation(async ({ input: id, ctx }) => {
+			const base = await db
+				.select({ id: baseContent.id, authorId: baseContent.authorId })
+				.from(events)
+				.where(eq(events.id, id))
+				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+				.get({ id: baseContent.id, authorId: baseContent.authorId });
+			console.log(base);
+			if (!base || base.authorId !== ctx.user.id) {
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			}
+
+			await db.transaction(async (db) => {
+				await db.delete(eventText).where(eq(eventText.articleId, id)).run();
+				await db.delete(events).where(eq(events.id, id)).run();
+				await db.delete(baseContent).where(eq(baseContent.id, base.id)).run();
+			});
+			return;
+		}),
 });
 
 export const getEvents = async ({
