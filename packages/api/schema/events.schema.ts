@@ -16,7 +16,6 @@ export const events = sqliteTable('events', {
 	duration: integer('duration'),
 	isOnline: integer('is_online', { mode: 'boolean' }),
 	isFree: integer('is_free', { mode: 'boolean' }),
-	// TODO: address, map data
 	country: text('country', { length: 2 }),
 	city: text('city', { length: 64 }),
 	address: text('address', { length: 128 }),
@@ -27,6 +26,12 @@ export const events = sqliteTable('events', {
 	registrationUrl: text('registration_url', { length: 255 }),
 	eventTypeId: integer('event_type_id'), //.references(() => eventTypes.id),
 	isImportant: integer('is_important', { mode: 'boolean' }),
+	status: text('status', {
+		length: 64,
+		enum: ['draft', 'published', 'changesRequested', 'ready'],
+	})
+		.default('draft')
+		.notNull(),
 });
 
 export type Event = InferModel<typeof events>;
