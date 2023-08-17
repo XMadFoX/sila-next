@@ -4,13 +4,12 @@ import { trpc } from 'lib/trpc';
 import React from 'react';
 import { NewEvent } from 'ui/events';
 import { useParams } from 'next/navigation';
+import { DangerZone } from 'ui/events';
 
 export default function Edit() {
 	const params = useParams();
-	const id = params?.id as string;
-	const { data, isLoading, isError, error } = trpc.events.getOne.useQuery(
-		parseInt(id)
-	);
+	const id = parseInt(params?.id as string);
+	const { data, isLoading, isError, error } = trpc.events.getOne.useQuery(id);
 	if (isLoading) return <div>Загрузка...</div>;
 	if (isError) return <div>Ошибка: {error.message}</div>;
 	if (!data) return 'no data';
@@ -23,5 +22,10 @@ export default function Edit() {
 		...rest,
 		time: '',
 	};
-	return <NewEvent upd={{ id: parseInt(id), values: values as any }} />;
+	return (
+		<>
+			<NewEvent upd={{ id, values: values as any }} />
+			<DangerZone id={id} />
+		</>
+	);
 }
