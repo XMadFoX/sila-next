@@ -4,7 +4,13 @@ import { trpc } from '../lib';
 import { Event } from '@sila/api/schema';
 
 export function PublishDialog({ id }: { id: number }) {
-	const { mutate } = trpc.events.updateStatus.useMutation({});
+	const utils = trpc.useContext();
+	const { mutate } = trpc.events.updateStatus.useMutation({
+		onSuccess: () => {
+			utils.events.getOne.invalidate(id);
+		},
+	});
+
 	return (
 		<AlertDialog
 			title="Опубликовать мероприятие?"

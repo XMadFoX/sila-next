@@ -29,7 +29,7 @@ export default function EventPage() {
 		<section>
 			{data.status === 'draft' && data.ableToEdit && (
 				<p className="p-4 mt-4 rounded-full border border-error">
-					Это черновик. Вы можете <PublishDialog /> или{' '}
+					Это черновик. Вы можете <PublishDialog id={id} /> или{' '}
 					<Link className="underline" href={`/events/${id}/edit`}>
 						отредактировать
 					</Link>

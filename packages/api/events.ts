@@ -134,6 +134,30 @@ export const eventRoutes = createTRPCRouter({
 	getOne: publicProcedure
 		.input(z.number().positive())
 		.query(async ({ input: id, ctx }) => getEvent(id, ctx.session)),
+	updateStatus: protectedProcedure
+		.input(
+			z.object({
+				id: z.number().positive(),
+				status: z.enum(['draft', 'published', 'changesRequested', 'ready']),
+			})
+		)
+		.mutation(async ({ input: { id, status }, ctx }) => {
+			const base = await db
+				.select({ id: baseContent.id, authorId: baseContent.authorId })
+				.from(events)
+				.where(eq(events.id, id))
+				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+				.get({ id: baseContent.id, authorId: baseContent.authorId });
+			if (!base || base.authorId !== ctx.user.id) {
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			}
+			// TODO: allow editing by mods
+			if (!['draft', 'published'].includes(status)) {
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			}
+			await db.update(events).set({ status }).where(eq(events.id, id)).run();
+			return;
+		}),
 	delete: protectedProcedure
 		.input(z.number().positive())
 		.mutation(async ({ input: id, ctx }) => {
