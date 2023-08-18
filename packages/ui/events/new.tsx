@@ -28,6 +28,7 @@ import { newEventSchema } from '@sila/api/eventsSchema';
 import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 import EditorJS from '@editorjs/editorjs';
+import { toast } from 'react-toastify';
 
 export function NewEvent({
 	upd,
@@ -57,7 +58,15 @@ export function NewEvent({
 		error,
 	} = trpc.events.create.useMutation();
 
-	const { mutate: saveChanges } = trpc.events.edit.useMutation();
+	const {
+		mutate: saveChanges,
+		isLoading: updIsLoading,
+		error: updError,
+	} = trpc.events.edit.useMutation({
+		onSuccess: () => {
+			toast.success('Мероприятие успешно обновлено');
+		},
+	});
 
 	const router = useRouter();
 	useEffect(() => {
@@ -181,10 +190,13 @@ export function NewEvent({
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}
 					/>
+					{(error || updError) && (
+						<p className="text-error">{error?.message || updError?.message}</p>
+					)}
 					<Button
 						className="disabled:opacity-50"
 						type="submit"
-						disabled={isLoading || isSuccess}
+						disabled={isLoading || isSuccess || updIsLoading}
 					>
 						{upd?.id ? 'Сохранить изменения' : 'Отправить'}
 					</Button>
