@@ -151,8 +151,10 @@ export const eventRoutes = createTRPCRouter({
 			if (!base || base.authorId !== ctx.user.id) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
-			// TODO: allow editing by mods
-			if (!['draft', 'published'].includes(status)) {
+			if (
+				!['draft', 'published'].includes(status) &&
+				!ctx.user.roles.includes('mod')
+			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
 			await db.update(events).set({ status }).where(eq(events.id, id)).run();
