@@ -1,4 +1,10 @@
-import { InsertUser, User, users } from './schema/user.schema';
+import {
+	InsertUser,
+	User,
+	roles,
+	users,
+	usersToRoles,
+} from './schema/user.schema';
 import { db } from './schema';
 import { eq } from 'drizzle-orm';
 import { omit } from 'remeda';
@@ -8,7 +14,19 @@ export async function createUser(data: InsertUser, trx?: any) {
 }
 
 export async function findOne(email: string) {
-	return await db.select().from(users).where(eq(users.email, email)).get();
+	const userQ = db.select().from(users).where(eq(users.email, email)).get();
+	const userRolesQ = db
+		.select({ role: roles.name })
+		.from(users)
+		.where(eq(users.email, email))
+		.leftJoin(usersToRoles, eq(usersToRoles.userId, users.id))
+		.leftJoin(roles, eq(roles.id, usersToRoles.roleId))
+		.all();
+	const [user, userRoles] = await Promise.all([userQ, userRolesQ]);
+
+	if (!user) return null;
+	const res = { ...user, roles: userRoles.map((r) => r.role) };
+	return res;
 }
 
 export interface ShortUser
@@ -17,6 +35,7 @@ export interface ShortUser
 		'id' | 'name' | 'email' | 'emailVerified' | 'totpEnabled'
 	> {
 	totp?: string | null;
+	roles?: string[];
 }
 
 export function shortUser(user: User): ShortUser {
