@@ -64,12 +64,12 @@ export default function Events() {
 
 	return (
 		<main className="mt-16 text-black max-w-[1400px]">
-			<div className="flex">
-				<h1 className="w-1/2 text-2xl font-medium">
+			<div className="flex flex-wrap px-2">
+				<h1 className="text-2xl font-medium md:w-1/2">
 					Раздел направлен
 					<br /> на развитие культурной жизни.
 				</h1>
-				<p className="mt-4 w-1/2 text-lg">
+				<p className="mt-4 text-lg md:w-1/2">
 					Вы можете узнать о культурных мероприятиях, которые проводят члены
 					сообщества онлайн или офлайн, присоединиться к заинтересовавшему вас
 					культурному мероприятию, а также опубликовать информацию о своем

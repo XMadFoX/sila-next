@@ -32,7 +32,7 @@ export default function DatesBar() {
 
 	return (
 		<div className="mt-8">
-			<ul className="flex overflow-x-scroll gap-2 pb-4 w-full">
+			<ul className="flex overflow-x-scroll gap-2 pb-4 w-full max-w-[100vw]">
 				{dates.map((date, idx) => (
 					<li key={`${idx}:${date}`}>
 						<Button
