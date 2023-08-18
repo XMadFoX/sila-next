@@ -13,7 +13,7 @@ export function Footer() {
 	return (
 		<>
 			<div className="mt-auto" />
-			<footer className="flex flex-col items-center mt-32 w-full min-w-max text-white wmin-h-screen rounded-t-[40px] bg-primary">
+			<footer className="flex flex-col items-center mt-32 w-full text-white rounded-t-[40px] bg-primary">
 				<div className="flex flex-col px-2 pb-7 w-full uppercase border-b border-opacity-50 md:justify-center xl:flex-row xl:px-0 align-center max-w-[1400px]">
 					<div className="mx-auto mt-16 lg:mr-auto">
 						<Image
