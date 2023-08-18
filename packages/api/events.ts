@@ -5,9 +5,9 @@ import {
 	publicProcedure,
 } from './trpc-server';
 import { db, users } from './schema';
-import { baseContent } from './schema/contentBase.schema';
+import { BaseContent, baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
-import { Event, eventText, events } from './schema/events.schema';
+import { eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
@@ -157,7 +157,11 @@ export const eventRoutes = createTRPCRouter({
 			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
-			await db.update(events).set({ status }).where(eq(events.id, id)).run();
+			await db
+				.update(baseContent)
+				.set({ status })
+				.where(eq(baseContent.id, base.id))
+				.run();
 			return;
 		}),
 	delete: protectedProcedure
@@ -192,7 +196,7 @@ export const getEvents = async ({
 	isImportant?: boolean;
 	start?: Date;
 	end?: Date;
-	status?: Event['status'];
+	status?: BaseContent['status'];
 } = {}) => {
 	const res = await db
 		.select()
@@ -202,7 +206,7 @@ export const getEvents = async ({
 				isImportant ? eq(events.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
 				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
-				eq(events.status, 'published')
+				eq(baseContent.status, 'published')
 			)
 		)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))
@@ -224,7 +228,7 @@ export const getEvent = async (id: number, session: Session) => {
 	});
 	// if published as organization, return only org, not author
 	const isAuthor = res?.base.authorId === session?.user?.id;
-	if (!res || (!isAuthor && res.status !== 'published'))
+	if (!res || (!isAuthor && res.base.status !== 'published'))
 		throw new TRPCError({ code: 'NOT_FOUND' });
 	return { ...res, ableToEdit: isAuthor };
 };

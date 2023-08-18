@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertDialog } from '../general/AlertDialog';
 import { trpc } from '../lib';
-import { Event } from '@sila/api/schema';
+import { BaseContent } from '@sila/api/schema';
 
 export function PublishDialog({ id }: { id: number }) {
 	const utils = trpc.useContext();
@@ -20,7 +20,7 @@ export function PublishDialog({ id }: { id: number }) {
 			actionCallback={() => {
 				mutate({
 					id,
-					status: 'published' as Event['status'],
+					status: 'published' as BaseContent['status'],
 				});
 			}}
 		/>

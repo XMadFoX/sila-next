@@ -6,7 +6,7 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import { users } from './user.schema';
 import { events } from './events.schema';
-import { relations } from 'drizzle-orm';
+import { InferModel, relations } from 'drizzle-orm';
 
 export const baseContent = sqliteTable('base_content', {
 	id: integer('id').primaryKey(),
@@ -14,7 +14,15 @@ export const baseContent = sqliteTable('base_content', {
 	publishedAt: integer('published_at', { mode: 'timestamp_ms' }).notNull(),
 	authorId: text('author_id').notNull(),
 	// organizationId: integer('organization_id').references(() => orgs.id),
+	status: text('status', {
+		length: 64,
+		enum: ['draft', 'published', 'changesRequested', 'ready'],
+	})
+		.default('draft')
+		.notNull(),
 });
+
+export type BaseContent = InferModel<typeof baseContent>;
 
 export const baseContentRelations = relations(baseContent, ({ one }) => ({
 	user: one(users, {

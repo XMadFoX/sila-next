@@ -26,12 +26,6 @@ export const events = sqliteTable('events', {
 	registrationUrl: text('registration_url', { length: 255 }),
 	eventTypeId: integer('event_type_id'), //.references(() => eventTypes.id),
 	isImportant: integer('is_important', { mode: 'boolean' }),
-	status: text('status', {
-		length: 64,
-		enum: ['draft', 'published', 'changesRequested', 'ready'],
-	})
-		.default('draft')
-		.notNull(),
 });
 
 export type Event = InferModel<typeof events>;
