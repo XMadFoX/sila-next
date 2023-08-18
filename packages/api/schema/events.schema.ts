@@ -7,6 +7,7 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import { baseContent } from './contentBase.schema';
 import { customJson } from './jsonType';
+import { createInsertSchema } from 'drizzle-zod';
 
 export const events = sqliteTable('events', {
 	id: integer('id').primaryKey(),
@@ -72,3 +73,4 @@ export const eventTypes = sqliteTable(
 );
 
 export type EventType = InferModel<typeof eventTypes>;
+export const insertEventTypesSchema = createInsertSchema(eventTypes);
