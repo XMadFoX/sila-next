@@ -11,8 +11,10 @@ import { eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
+import { eventTypesRoutes } from './eventTypes';
 
 export const eventRoutes = createTRPCRouter({
+	types: eventTypesRoutes,
 	create: protectedProcedure
 		.input(newEventSchemaApi)
 		.mutation(async ({ input, ctx }) => {
