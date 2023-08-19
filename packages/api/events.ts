@@ -145,7 +145,11 @@ export const eventRoutes = createTRPCRouter({
 		)
 		.mutation(async ({ input: { id, status }, ctx }) => {
 			const base = await db
-				.select({ id: baseContent.id, authorId: baseContent.authorId })
+				.select({
+					id: baseContent.id,
+					authorId: baseContent.authorId,
+					status: baseContent.status,
+				})
 				.from(events)
 				.where(eq(events.id, id))
 				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
@@ -154,9 +158,12 @@ export const eventRoutes = createTRPCRouter({
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
 			if (
-				!['draft', 'published'].includes(status) &&
+				!['draft', 'published', 'ready'].includes(status) &&
 				!ctx.user.roles.includes('mod')
 			) {
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			}
+			if (status === 'ready' && base.status !== 'changesRequested') {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
 			await db
