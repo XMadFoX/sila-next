@@ -1,5 +1,9 @@
 import React from 'react';
-import { CreateEvent, ListEvents } from 'ui/admin/events/types';
+import { ListEvents } from 'ui/admin/events/types';
+import dynamic from 'next/dynamic';
+const CreateEvent = dynamic(() => import('ui/admin/events/types/create'), {
+	ssr: false,
+});
 
 export default function page() {
 	return (

@@ -35,6 +35,8 @@ export const adminUserRoutes = createTRPCRouter({
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.user.roles.includes('admin'))
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			if (input.roleId === 1 || input.roleId === 2)
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			const res = await db.insert(usersToRoles).values(input).run();
 			return res;
 		}),
@@ -42,6 +44,8 @@ export const adminUserRoutes = createTRPCRouter({
 		.input(z.object({ userId: z.string(), roleId: z.number() }))
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.user.roles.includes('admin'))
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			if (input.roleId === 1 || input.roleId === 2)
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			const res = await db
 				.delete(usersToRoles)
