@@ -29,6 +29,11 @@ export default function Table() {
 			utils.users.list.invalidate();
 		},
 	});
+	const { mutate: removeRole } = trpc.users.removeRole.useMutation({
+		onSuccess: () => {
+			utils.users.list.invalidate();
+		},
+	});
 
 	const columns = [
 		columnHelper.accessor('id', {
@@ -53,6 +58,12 @@ export default function Table() {
 									key={role}
 									className="hover:text-error"
 									title={`Удалить ${role} `}
+									onClick={() => {
+										removeRole({
+											userId: info.table.getRow(info.row.id).getValue('id'),
+											roleId: roles?.find((r) => r.name === role)?.id ?? -1,
+										});
+									}}
 								>
 									{role}
 								</button>
