@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { db, roles, users, usersToRoles } from '../schema';
 import { createTRPCRouter, protectedProcedure } from '../trpc-server';
 import { z } from 'zod';
@@ -30,12 +30,28 @@ export const adminUserRoutes = createTRPCRouter({
 
 		return res;
 	}),
-	add: protectedProcedure
+	addRole: protectedProcedure
 		.input(z.object({ userId: z.string(), roleId: z.number() }))
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.user.roles.includes('admin'))
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			const res = await db.insert(usersToRoles).values(input).run();
+			return res;
+		}),
+	removeRole: protectedProcedure
+		.input(z.object({ userId: z.string(), roleId: z.number() }))
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.user.roles.includes('admin'))
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const res = await db
+				.delete(usersToRoles)
+				.where(
+					and(
+						eq(usersToRoles.userId, input.userId),
+						eq(usersToRoles.roleId, input.roleId)
+					)
+				)
+				.run();
 			return res;
 		}),
 });
