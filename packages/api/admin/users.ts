@@ -30,7 +30,6 @@ export const adminUserRoutes = createTRPCRouter({
 
 		return res;
 	}),
-	// change user role
 	add: protectedProcedure
 		.input(z.object({ userId: z.string(), roleId: z.number() }))
 		.mutation(async ({ input, ctx }) => {
