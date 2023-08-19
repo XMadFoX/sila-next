@@ -75,6 +75,8 @@ export function NewEvent({
 
 	const editorRef = React.useRef<EditorJS | null>(null);
 
+	const { data: eventTypes } = trpc.events.types.list.useQuery();
+
 	return (
 		<div className="w-full max-w-3xl">
 			<FormProvider {...methods}>
@@ -182,10 +184,22 @@ export function NewEvent({
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
 					/>
-					<EventInputField
-						aria-label="Тип"
-						{...methods.register('eventTypeId', { valueAsNumber: true })}
-					/>
+					{eventTypes && eventTypes?.length > 0 && (
+						<Combobox
+							{...methods.register('eventTypeId')}
+							label="Тип"
+							placeholder="Выберите тип"
+							searchText="Начните вводить"
+							noResultsText="Нет результатов"
+							formDescription=""
+							options={eventTypes.map((c) => ({
+								label: c.name,
+								value: `${c.id}:${c.name}`,
+							}))}
+							splitChar=":"
+							form={methods}
+						/>
+					)}
 					<EventInputField
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}

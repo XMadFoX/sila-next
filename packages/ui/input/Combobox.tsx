@@ -68,7 +68,8 @@ export function Combobox({
 								>
 									{field.value
 										? options.find(
-												(option) => id(splitChar, option.value) === field.value
+												// some options can have original id as number
+												(option) => id(splitChar, option.value) == field.value
 										  )?.label
 										: placeholder}
 									<ChevronsUpDown className="ml-2 w-4 h-4 opacity-50 shrink-0" />
