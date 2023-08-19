@@ -8,44 +8,92 @@ import {
 	useReactTable,
 } from '@tanstack/react-table';
 import { userList } from '@sila/api/admin/users';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '../../general/dropdown-menu';
 
 type ArrayElementType<T> = T extends Array<infer U> ? U : never;
 type single = ArrayElementType<userList>;
 const columnHelper = createColumnHelper<single>();
-const columns = [
-	columnHelper.accessor('id', {
-		cell: (info) => (
-			<p className="overflow-x-scroll whitespace-nowrap max-w-[5vw]">
-				{info.getValue()}
-			</p>
-		),
-		footer: (info) => info.column.id,
-	}),
-	columnHelper.accessor('name', {
-		cell: (info) => info.getValue(),
-		footer: (info) => info.column.id,
-	}),
-	columnHelper.accessor('roles', {
-		cell: (info) => (
-			<p className="text-error">{JSON.stringify(info.getValue())}</p>
-		),
-		footer: (info) => info.column.id,
-	}),
-	columnHelper.accessor('email', {
-		cell: (info) => info.getValue(),
-		footer: (info) => info.column.id,
-	}),
-	columnHelper.accessor('totpEnabled', {
-		cell: (info) => info.getValue()?.toLocaleString(),
-		footer: (info) => info.column.id,
-	}),
-	columnHelper.accessor('createdAt', {
-		cell: (info) => info.getValue()?.toLocaleString(),
-		footer: (info) => info.column.id,
-	}),
-];
+
 export default function Table() {
+	const utils = trpc.useContext();
 	const { data: users } = trpc.users.list.useQuery();
+	const { data: roles } = trpc.roles.list.useQuery();
+
+	const { mutate: addRole } = trpc.users.addRole.useMutation({
+		onSuccess: () => {
+			utils.users.list.invalidate();
+		},
+	});
+
+	const columns = [
+		columnHelper.accessor('id', {
+			cell: (info) => (
+				<p className="overflow-x-scroll whitespace-nowrap max-w-[5vw]">
+					{info.getValue()}
+				</p>
+			),
+			footer: (info) => info.column.id,
+		}),
+		columnHelper.accessor('name', {
+			cell: (info) => info.getValue(),
+			footer: (info) => info.column.id,
+		}),
+		columnHelper.accessor('roles', {
+			cell: (info) => {
+				return (
+					<p className="">
+						<ul className="flex gap-1">
+							{info?.getValue()?.map((role) => (
+								<button
+									key={role}
+									className="hover:text-error"
+									title={`Удалить ${role} `}
+								>
+									{role}
+								</button>
+							))}
+						</ul>
+						<DropdownMenu>
+							<DropdownMenuTrigger>Добавить</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								{roles?.map((role) => (
+									<DropdownMenuItem
+										key={role.id}
+										onClick={() =>
+											addRole({
+												userId: info.table.getRow(info.row.id).getValue('id'),
+												roleId: role.id,
+											})
+										}
+									>
+										{role.name}
+									</DropdownMenuItem>
+								))}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</p>
+				);
+			},
+			footer: (info) => info.column.id,
+		}),
+		columnHelper.accessor('email', {
+			cell: (info) => info.getValue(),
+			footer: (info) => info.column.id,
+		}),
+		columnHelper.accessor('totpEnabled', {
+			cell: (info) => info.getValue()?.toLocaleString(),
+			footer: (info) => info.column.id,
+		}),
+		columnHelper.accessor('createdAt', {
+			cell: (info) => info.getValue()?.toLocaleString(),
+			footer: (info) => info.column.id,
+		}),
+	];
 
 	const table = useReactTable({
 		data: users ?? [],
