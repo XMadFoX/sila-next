@@ -1,17 +1,6 @@
 import { eq } from 'drizzle-orm';
-import {
-	db,
-	eventTypes,
-	insertEventTypesSchema,
-	roles,
-	users,
-	usersToRoles,
-} from '../schema';
-import {
-	createTRPCRouter,
-	protectedProcedure,
-	publicProcedure,
-} from '../trpc-server';
+import { db, roles, users, usersToRoles } from '../schema';
+import { createTRPCRouter, protectedProcedure } from '../trpc-server';
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 
@@ -31,11 +20,25 @@ export const adminUserRoutes = createTRPCRouter({
 		if (!usersList) return null;
 		const res = usersList.map((user) => {
 			const userRolesList = userRoles.filter((r) => r.userId === user.id);
-			return { ...user, roles: userRolesList.map((r) => r.role) };
+			return {
+				...user,
+				...(userRolesList[0].role && {
+					roles: userRolesList.map((r) => r.role),
+				}),
+			};
 		});
 
 		return res;
 	}),
+	// change user role
+	add: protectedProcedure
+		.input(z.object({ userId: z.string(), roleId: z.number() }))
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.user.roles.includes('admin'))
+				throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const res = await db.insert(usersToRoles).values(input).run();
+			return res;
+		}),
 });
 
 import type { inferProcedureOutput } from '@trpc/server';
