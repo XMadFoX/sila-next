@@ -204,6 +204,27 @@ export function NewEvent({
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}
 					/>
+					{/* contacts info */}
+					<legend className="text-xl font-bold">Контакты организатора</legend>
+					<EventInputField
+						aria-label="Телефон"
+						{...methods.register('contacts.phone')}
+					/>
+					<EventInputField
+						aria-label="Эл. почта"
+						{...methods.register('contacts.email')}
+					/>
+					<EventInputField
+						aria-label="Сайт"
+						{...methods.register('contacts.website')}
+					/>
+					<ErrorMessage
+						name="contacts"
+						errors={methods.formState.errors}
+						render={(err) => (
+							<label className="text-error">{err.message}</label>
+						)}
+					/>
 					{(error || updError) && (
 						<p className="text-error">{error?.message || updError?.message}</p>
 					)}

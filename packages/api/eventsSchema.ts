@@ -22,9 +22,18 @@ const baseSchema = z.object({
 		}),
 	contacts: z
 		.object({
-			phone: z.literal('').or(z.string().regex(/^\+[0-9]{10,16}$/)),
-			email: z.literal('').or(z.string().email().min(3).max(255)),
-			website: z.literal('').or(z.string().url().min(3).max(255)),
+			phone: z
+				.literal('')
+				.or(z.string().regex(/^\+[0-9]{10,16}$/))
+				.or(z.undefined()),
+			email: z
+				.literal('')
+				.or(z.string().email().min(3).max(255))
+				.or(z.undefined()),
+			website: z
+				.literal('')
+				.or(z.string().url().min(3).max(255))
+				.or(z.undefined()),
 		})
 		.refine(
 			(v) => {
@@ -32,7 +41,13 @@ const baseSchema = z.object({
 				return Object.values(v).some((v) => v !== '');
 			},
 			{ message: 'Обязательно заполните хотя бы одно поле' }
-		),
+		)
+		.transform((v) => {
+			// remove empty strings & do "as" to Partial without hardcoding
+			return Object.fromEntries(
+				Object.entries(v).filter(([_, v]) => v !== '')
+			) as Partial<typeof v>;
+		}),
 	// oraganizationId: z.number().int().optional(),
 });
 

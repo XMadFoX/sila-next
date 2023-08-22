@@ -25,6 +25,7 @@ export const eventRoutes = createTRPCRouter({
 					title: input.title,
 					publishedAt: new Date(),
 					authorId: ctx.session.user.id,
+					contacts: input.contacts,
 				})
 				.returning({ id: baseContent.id })
 				.get({ id: baseContent.id });
@@ -117,6 +118,7 @@ export const eventRoutes = createTRPCRouter({
 				.update(baseContent)
 				.set({
 					title: data.title,
+					contacts: data.contacts,
 				})
 				.where(eq(baseContent.id, res.bId))
 				.run();
