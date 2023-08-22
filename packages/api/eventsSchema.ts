@@ -20,6 +20,19 @@ const baseSchema = z.object({
 		.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
 			message: 'Неправильный формат',
 		}),
+	contacts: z
+		.object({
+			phone: z.literal('').or(z.string().regex(/^\+[0-9]{10,16}$/)),
+			email: z.literal('').or(z.string().email().min(3).max(255)),
+			website: z.literal('').or(z.string().url().min(3).max(255)),
+		})
+		.refine(
+			(v) => {
+				// at least one field should be filled (and not empty string)
+				return Object.values(v).some((v) => v !== '');
+			},
+			{ message: 'Обязательно заполните хотя бы одно поле' }
+		),
 	// oraganizationId: z.number().int().optional(),
 });
 
