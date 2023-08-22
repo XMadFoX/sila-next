@@ -1,12 +1,8 @@
-import {
-	integer,
-	primaryKey,
-	sqliteTable,
-	text,
-} from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { users } from './user.schema';
 import { events } from './events.schema';
 import { InferModel, relations } from 'drizzle-orm';
+import { customJson } from './jsonType';
 
 export const baseContent = sqliteTable('base_content', {
 	id: integer('id').primaryKey(),
@@ -20,6 +16,13 @@ export const baseContent = sqliteTable('base_content', {
 	})
 		.default('draft')
 		.notNull(),
+	contacts: customJson<{
+		phone?: string;
+		email?: string;
+		website?: string;
+	}>('contacts')
+		.notNull()
+		.default({}),
 });
 
 export type BaseContent = InferModel<typeof baseContent>;
