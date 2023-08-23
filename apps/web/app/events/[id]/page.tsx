@@ -2,7 +2,12 @@
 
 import { useParams } from 'next/navigation';
 import React, { Suspense } from 'react';
-import { EventHeader, EventMoreDropdown, PublishDialog } from 'ui/events';
+import {
+	ContactInfo,
+	EventHeader,
+	EventMoreDropdown,
+	PublishDialog,
+} from 'ui/events';
 import { notFound } from 'next/navigation';
 import { TRPCError } from '@trpc/server';
 import Blocks from 'editorjs-blocks-react-renderer';
@@ -60,7 +65,7 @@ export default function EventPage() {
 			<div className="my-10 prose">
 				<Blocks data={data.text.text as any} />
 			</div>
-			{/* org contacts */}
+			<ContactInfo {...data.base.contacts} />
 			{/* events by this publisher */}
 		</section>
 	);

@@ -3,4 +3,5 @@ export * from './EventHeader';
 export * from './DangerZone';
 export * from './PublishDialog';
 import EventMoreDropdown from './EventMoreDropdown';
-export { EventMoreDropdown };
+import ContactInfo from './ContactInfo';
+export { EventMoreDropdown, ContactInfo };
