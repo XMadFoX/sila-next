@@ -71,6 +71,13 @@
       "when": 1692732784991,
       "tag": "0009_sharp_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1693065452317,
+      "tag": "0010_quiet_jack_power",
+      "breakpoints": true
     }
   ]
 }

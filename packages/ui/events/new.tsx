@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../general/Popover';
 import { cn } from '../lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { addMinutes, format } from 'date-fns';
-import { FormControl, FormField, FormItem } from '../input/form';
+import { FormControl, FormField, FormItem, FormLabel } from '../input/form';
 import { Checkbox } from '../input/checkbox';
 import { Combobox } from '../input/Combobox';
 import countries from '@sila/api/countries.json';
@@ -29,6 +29,13 @@ import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 import EditorJS from '@editorjs/editorjs';
 import { toast } from 'react-toastify';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '../input/select';
 
 export function NewEvent({
 	upd,
@@ -200,6 +207,31 @@ export function NewEvent({
 							form={methods}
 						/>
 					)}
+					<FormField
+						control={methods.control}
+						name="entryType"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Тип входа</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+									{...methods.register('entryType')}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Выберите" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="free">Бесплатно</SelectItem>
+										<SelectItem value="donation">Пожертвования</SelectItem>
+										<SelectItem value="paid">Платно</SelectItem>
+									</SelectContent>
+								</Select>
+							</FormItem>
+						)}
+					/>
 					<EventInputField
 						aria-label="Ссылка на регистраю"
 						{...methods.register('registrationUrl')}
@@ -258,8 +290,6 @@ const Address = () => {
 				<label htmlFor="isOnline" className="mr-2">
 					Онлайн
 				</label>
-				<Checkbox id="isFree" {...methods.register('isFree')} />
-				<label htmlFor="isFree">Бесплатно</label>
 			</div>
 			<div
 				className={clsx(

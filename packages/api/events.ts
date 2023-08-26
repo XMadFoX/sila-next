@@ -39,7 +39,7 @@ export const eventRoutes = createTRPCRouter({
 					baseId: res.id,
 					description: input.description,
 					// duration: input.duration,
-					isFree: input.isFree,
+					entryType: input.entryType,
 					isOnline: input.isOnline,
 					registrationUrl: input.registrationUrl,
 					coverImage: input.coverImage,
@@ -91,7 +91,7 @@ export const eventRoutes = createTRPCRouter({
 				.set({
 					description: data.description,
 					// duration: data.duration,
-					isFree: data.isFree,
+					entryType: data.entryType,
 					isOnline: data.isOnline,
 					registrationUrl: data.registrationUrl,
 					coverImage: data.coverImage,

@@ -15,8 +15,10 @@ export const events = sqliteTable('events', {
 	date: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
 	// TODO: schedule?
 	duration: integer('duration'),
-	isOnline: integer('is_online', { mode: 'boolean' }),
-	isFree: integer('is_free', { mode: 'boolean' }),
+	isOnline: integer('is_online', { mode: 'boolean' }).notNull(),
+	entryType: text('entry_type', {
+		enum: ['free', 'paid', 'donation'],
+	}).notNull(),
 	country: text('country', { length: 2 }),
 	city: text('city', { length: 64 }),
 	address: text('address', { length: 128 }),

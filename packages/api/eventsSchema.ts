@@ -6,7 +6,7 @@ const baseSchema = z.object({
 	// later image id on CF images
 	coverImage: z.string().min(3).max(255).url(),
 	// duration: z.number().int().min(0).optional(),
-	isFree: z.boolean().optional(),
+	entryType: z.enum(['free', 'paid', 'donation']),
 	registrationUrl: z.union([
 		z.string().max(512).url().optional(),
 		z.literal(''),
