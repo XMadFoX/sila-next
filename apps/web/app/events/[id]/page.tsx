@@ -49,6 +49,7 @@ export default function EventPage() {
 				{(data?.ableToEdit || session?.user.roles?.includes('mod')) && (
 					<EventMoreDropdown
 						id={id}
+						status={data.base.status}
 						ableToEdit={data?.ableToEdit}
 						mod={session?.user.roles?.includes('mod') ?? false}
 					/>

@@ -12,13 +12,16 @@ import { trpc } from '../lib';
 import { AlertDialog } from '../general/AlertDialog';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BaseContent } from '@sila/api/schema';
 
 export default function EventMoreDropdown({
 	id,
+	status,
 	ableToEdit,
 	mod,
 }: {
 	id: number;
+	status: BaseContent['status'];
 	ableToEdit: boolean;
 	mod: boolean;
 }) {
@@ -54,9 +57,16 @@ export default function EventMoreDropdown({
 								<Link href={`/events/${id}/edit`}>Редактировать</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<button onClick={() => updateStatus({ id, status: 'draft' })}>
-									Снять с публикации
-								</button>
+								{['ready', 'published'].includes(status) && (
+									<button onClick={() => updateStatus({ id, status: 'draft' })}>
+										Снять с публикации
+									</button>
+								)}
+								{['changesRequested', 'draft'].includes(status) && (
+									<button onClick={() => updateStatus({ id, status: 'ready' })}>
+										Отправить на модерацию
+									</button>
+								)}
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<button onClick={() => setDialog('editor:delete')}>
@@ -69,13 +79,22 @@ export default function EventMoreDropdown({
 						<>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<button
-									onClick={() =>
-										updateStatus({ id, status: 'changesRequested' })
-									}
-								>
-									Снять с публикации
-								</button>
+								{status === 'published' && (
+									<button
+										onClick={() =>
+											updateStatus({ id, status: 'changesRequested' })
+										}
+									>
+										Снять с публикации
+									</button>
+								)}
+								{status === 'ready' && (
+									<button
+										onClick={() => updateStatus({ id, status: 'published' })}
+									>
+										Одобрить публикацию
+									</button>
+								)}
 							</DropdownMenuItem>
 						</>
 					)}
