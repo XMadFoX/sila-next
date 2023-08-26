@@ -54,7 +54,7 @@ export default function EventPage() {
 			</div>
 			<EventHeader
 				timestamp={data.date}
-				isFree={!!data.isFree}
+				entryType={data.entryType}
 				location={
 					data.city && data.address
 						? { city: data.city, address: data.address }

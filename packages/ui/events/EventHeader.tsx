@@ -1,6 +1,7 @@
 import React from 'react';
 import { newButtonVariants } from '../general';
 import { cn } from '../lib/utils';
+import entryTypes from '@sila/api/entryTypes';
 
 interface EventHeaderProps {
 	timestamp: Date;
@@ -9,7 +10,7 @@ interface EventHeaderProps {
 		city: string;
 		address: string;
 	} | null;
-	isFree?: boolean;
+	entryType: keyof typeof entryTypes;
 }
 
 export function EventHeader(props: EventHeaderProps) {
@@ -59,11 +60,9 @@ export function EventHeader(props: EventHeaderProps) {
 					<Tag>Онлайн</Tag>
 				)}
 			</Cell>
-			{props.isFree && (
-				<Cell className="px-8">
-					<Tag>Бесплатно</Tag>
-				</Cell>
-			)}
+			<Cell className="px-8">
+				<Tag>{entryTypes[props.entryType]}</Tag>
+			</Cell>
 		</ul>
 	);
 }

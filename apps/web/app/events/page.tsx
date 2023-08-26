@@ -9,16 +9,17 @@ import { $filter, today } from './filter.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
+import entryTypes from '@sila/api/entryTypes';
 
 const getBadges = ({
-	isFree,
+	entryType,
 	isOnline,
 }: {
-	isFree: boolean;
+	entryType: keyof typeof entryTypes;
 	isOnline: boolean;
 }) => {
 	const badges: string[] = [];
-	if (isFree) badges.push('Бесплатно');
+	badges.push(entryTypes[entryType]);
 	if (isOnline) badges.push('Онлайн');
 	return badges;
 };
@@ -95,7 +96,7 @@ export default function Events() {
 											className="max-w-min"
 											big
 											badges={getBadges({
-												isFree: i.events.isFree ?? false,
+												entryType: i.events.entryType,
 												isOnline: i.events.isOnline ?? false,
 											})}
 										/>
@@ -106,9 +107,9 @@ export default function Events() {
 											location={
 												i.events.city && i.events.address
 													? {
-															city: i.events.city,
-															address: i.events.address,
-													  }
+														city: i.events.city,
+														address: i.events.address,
+													}
 													: null
 											}
 											description={i.events.description}
@@ -145,7 +146,7 @@ export default function Events() {
 									image={i.events.coverImage}
 									alt=""
 									badges={getBadges({
-										isFree: i.events.isFree ?? false,
+										entryType: i.events.entryType,
 										isOnline: i.events.isOnline ?? false,
 									})}
 								/>
@@ -156,9 +157,9 @@ export default function Events() {
 									location={
 										i.events.city && i.events.address
 											? {
-													city: i.events.city,
-													address: i.events.address,
-											  }
+												city: i.events.city,
+												address: i.events.address,
+											}
 											: null
 									}
 									description={i.events.description}
