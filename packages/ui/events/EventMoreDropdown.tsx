@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { trpc } from '../lib';
 import { AlertDialog } from '../general/AlertDialog';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function EventMoreDropdown({
 	id,
@@ -23,8 +24,18 @@ export default function EventMoreDropdown({
 }) {
 	const [dialog, setDialog] = useState<string | null>(null);
 
-	const { mutate: updateStatus } = trpc.events.updateStatus.useMutation();
-	const { mutate: deleteEvent } = trpc.events.delete.useMutation();
+	const router = useRouter();
+	const utils = trpc.useContext();
+	const refetch = () => utils.events.getOne.invalidate(id);
+	const { mutate: updateStatus } = trpc.events.updateStatus.useMutation({
+		onSuccess: refetch,
+	});
+	const { mutate: deleteEvent } = trpc.events.delete.useMutation({
+		onSuccess: () => {
+			refetch();
+			router.push('/me');
+		},
+	});
 
 	return (
 		<>
