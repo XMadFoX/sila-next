@@ -7,16 +7,22 @@ export function AlertDialog({
 	trigger,
 	actionText,
 	actionCallback,
+	open,
+	close,
 }: {
 	title: string;
 	description: string;
-	trigger: React.ReactNode;
+	trigger?: React.ReactNode;
 	actionText: string;
 	actionCallback: () => void;
+	open?: boolean;
+	close?: () => void;
 }) {
 	return (
-		<RadixAlertDialog.Root>
-			<RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+		<RadixAlertDialog.Root open={open} onOpenChange={() => close && close()}>
+			{trigger && (
+				<RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+			)}
 			<RadixAlertDialog.Portal>
 				<RadixAlertDialog.Overlay className="bg-[#000000aa] data-[state=open]:animate-overlayShow fixed inset-0" />
 				<RadixAlertDialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">

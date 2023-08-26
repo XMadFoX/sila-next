@@ -107,9 +107,9 @@ export default function Events() {
 											location={
 												i.events.city && i.events.address
 													? {
-														city: i.events.city,
-														address: i.events.address,
-													}
+															city: i.events.city,
+															address: i.events.address,
+													  }
 													: null
 											}
 											description={i.events.description}
@@ -157,9 +157,9 @@ export default function Events() {
 									location={
 										i.events.city && i.events.address
 											? {
-												city: i.events.city,
-												address: i.events.address,
-											}
+													city: i.events.city,
+													address: i.events.address,
+											  }
 											: null
 									}
 									description={i.events.description}

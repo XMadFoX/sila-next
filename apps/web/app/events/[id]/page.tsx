@@ -46,11 +46,13 @@ export default function EventPage() {
 				<h1 className="my-10 text-3xl font-medium text-black">
 					{data.base.title}
 				</h1>
-				<EventMoreDropdown
-					id={id}
-					ableToEdit={data?.ableToEdit}
-					mod={session?.user.roles?.includes('mod') ?? false}
-				/>
+				{(data?.ableToEdit || session?.user.roles?.includes('mod')) && (
+					<EventMoreDropdown
+						id={id}
+						ableToEdit={data?.ableToEdit}
+						mod={session?.user.roles?.includes('mod') ?? false}
+					/>
+				)}
 			</div>
 			<EventHeader
 				timestamp={data.date}
