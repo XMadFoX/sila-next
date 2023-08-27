@@ -131,6 +131,9 @@ export const eventRoutes = createTRPCRouter({
 					isImportant: z.boolean().optional(),
 					start: z.date().optional(),
 					end: z.date().optional(),
+					status: z
+						.enum(['draft', 'published', 'changesRequested', 'ready'])
+						.optional(),
 				})
 				.optional()
 		)
@@ -165,7 +168,10 @@ export const eventRoutes = createTRPCRouter({
 			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
-			if (status === 'ready' && base.status !== 'changesRequested') {
+			if (
+				status === 'ready' &&
+				!['changesRequested', 'draft'].includes(base.status)
+			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
 			await db
@@ -217,7 +223,7 @@ export const getEvents = async ({
 				isImportant ? eq(events.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
 				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
-				eq(baseContent.status, 'published')
+				eq(baseContent.status, status)
 			)
 		)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))

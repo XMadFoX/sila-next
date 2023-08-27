@@ -59,7 +59,9 @@ export default function EventMoreDropdown({
 							<DropdownMenuItem>
 								{['ready', 'published'].includes(status) && (
 									<button onClick={() => updateStatus({ id, status: 'draft' })}>
-										Снять с публикации
+										{status === 'published'
+											? 'Снять с публикации'
+											: 'Отменить публикацию'}
 									</button>
 								)}
 								{['changesRequested', 'draft'].includes(status) && (

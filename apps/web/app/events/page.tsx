@@ -9,20 +9,7 @@ import { $filter, today } from './filter.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
-import entryTypes from '@sila/api/entryTypes';
-
-const getBadges = ({
-	entryType,
-	isOnline,
-}: {
-	entryType: keyof typeof entryTypes;
-	isOnline: boolean;
-}) => {
-	const badges: string[] = [];
-	badges.push(entryTypes[entryType]);
-	if (isOnline) badges.push('Онлайн');
-	return badges;
-};
+import { getBadges } from './utils';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
