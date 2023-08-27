@@ -5,7 +5,11 @@ const config = {
 	reactStrictMode: true,
 	// allow images from picsum
 	images: {
-		remotePatterns: [{ protocol: 'https', hostname: 'picsum.photos' }],
+		dangerouslyAllowSVG: true,
+		remotePatterns: [
+			{ protocol: 'https', hostname: 'picsum.photos' },
+			{ protocol: 'https', hostname: 'api.dicebear.com' },
+		],
 	},
 	webpack(config) {
 		config.experiments = {
