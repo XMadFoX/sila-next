@@ -1,6 +1,6 @@
 'use client';
 
-import { rounding, Rounding } from '../lib/utils';
+import { cn, rounding, Rounding } from '../lib/utils';
 import clsx from 'clsx';
 import * as React from 'react';
 import { EnvironmentContext, LinkProps as EnvLinkProps } from '../env';
@@ -18,6 +18,7 @@ type SharedProps = {
 	size?: 'sm' | 'md' | 'lg' | null;
 	bg?: string;
 	rounded?: Rounding;
+	wrapperClassName?: string;
 };
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
@@ -87,7 +88,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonOrLinkProps>(
 				</Link>,
 				intent === 'outlined',
 				bg,
-				gradientDirection
+				gradientDirection,
+				args.wrapperClassName
 			);
 		}
 
@@ -107,7 +109,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonOrLinkProps>(
 			</button>,
 			intent === 'outlined',
 			bg,
-			gradientDirection
+			gradientDirection,
+			args.wrapperClassName
 		);
 	}
 );
@@ -117,7 +120,8 @@ export function Wrap(
 	children: React.ReactElement,
 	doWrap: boolean,
 	bgColor: string | undefined = undefined,
-	gradientDirection: GradientDirection | undefined = undefined
+	gradientDirection: GradientDirection | undefined = undefined,
+	wrapperClassName: string | undefined = undefined
 ): React.ReactElement {
 	if (doWrap) {
 		const modified = React.cloneElement(children, {
@@ -126,7 +130,10 @@ export function Wrap(
 
 		return (
 			<GradientWrapper
-				className="mr-2 mb-2 text-white from-primary-a to-primary-c"
+				className={cn(
+					'mr-2 mb-2 text-white from-primary-a to-primary-c',
+					wrapperClassName
+				)}
 				rounded="full"
 				gradientDirection={gradientDirection}
 			>
