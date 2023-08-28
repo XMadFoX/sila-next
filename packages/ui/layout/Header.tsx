@@ -29,21 +29,23 @@ export function Header() {
           /> */}
 					{session ? (
 						<div className="flex gap-2 items-center ml-auto">
-							<p>{session.user.name}</p>
-							<Image
-								alt=""
-								src={getAvatarUrl(session.user.image, session.user.id)}
-								width={44}
-								height={44}
-								className="w-11 h-11 rounded-full"
-							/>
-							<Button
-								onClick={() => logout()}
-								className="px-8 h-11 text-sm uppercase"
-								size={null}
-							>
-								Выйти
-							</Button>
+							{/* <p>{session.user.name}</p> */}
+							<Link href="/me">
+								<Image
+									alt=""
+									src={getAvatarUrl(session.user.image, session.user.id)}
+									width={44}
+									height={44}
+									className="w-11 h-11 rounded-full"
+								/>
+							</Link>
+							{/* <Button */}
+							{/* 	onClick={() => logout()} */}
+							{/* 	className="px-8 h-11 text-sm uppercase" */}
+							{/* 	size={null} */}
+							{/* > */}
+							{/* 	Выйти */}
+							{/* </Button> */}
 						</div>
 					) : (
 						<Button
