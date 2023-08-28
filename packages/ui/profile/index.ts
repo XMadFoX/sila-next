@@ -1,2 +1,3 @@
 import Header from './Header';
-export { Header };
+import Profile from './Profile';
+export { Header, Profile };
