@@ -1,6 +1,12 @@
+import { db, users } from './schema';
 import { login, register } from './auth';
-import { createTRPCRouter, publicProcedure } from './trpc-server';
+import {
+	createTRPCRouter,
+	protectedProcedure,
+	publicProcedure,
+} from './trpc-server';
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
 
 export const loginSchema = z.object({
 	email: z.string().email(),
@@ -43,4 +49,15 @@ export const authRoutes = createTRPCRouter({
 		// return createResponse(res, 'Logged out');
 		return 'ok';
 	}),
+	update: protectedProcedure
+		.input(z.object({ name: z.string(), email: z.string().email() }))
+		.mutation(async ({ input, ctx }) => {
+			const user = ctx.user;
+			const res = await db
+				.update(users)
+				.set(input)
+				.where(eq(users.id, user.id))
+				.run();
+			return;
+		}),
 });
