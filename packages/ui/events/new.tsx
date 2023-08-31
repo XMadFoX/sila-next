@@ -38,8 +38,10 @@ import {
 } from '../input/select';
 
 export function NewEvent({
+	type = 'events',
 	upd,
 }: {
+	type?: 'events' | 'cooperation';
 	upd?: {
 		id: number;
 		values: z.infer<typeof newEventSchema>;
@@ -86,6 +88,7 @@ export function NewEvent({
 
 	return (
 		<div className="w-full max-w-3xl">
+			{type}
 			<FormProvider {...methods}>
 				<form
 					onInvalid={(e) => {

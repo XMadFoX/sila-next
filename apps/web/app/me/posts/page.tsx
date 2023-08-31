@@ -66,7 +66,7 @@ export default function Page() {
 }
 
 const Publish = ({ className }: { className?: string }) => (
-	<Button className={clsx('mt-8', className)} href="/my/posts/new">
+	<Button className={clsx('mt-8', className)} href="/me/posts/new">
 		Разместить объявление
 	</Button>
 );
