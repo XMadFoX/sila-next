@@ -55,6 +55,7 @@ const eventBaseSchema = baseSchema.extend({
 });
 
 const projectBaseSchema = baseSchema.extend({
+	kind: z.literal('project'),
 	title: z.string().min(10).max(64),
 	projectTopicId: z.number().int().optional(),
 });

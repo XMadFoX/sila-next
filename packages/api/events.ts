@@ -9,14 +9,20 @@ import { BaseContent, baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
 import { eventText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
-import { newEventSchemaApi } from './eventsSchema';
+import { newEventSchemaApi, newProjectSchema } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
 
 export const eventRoutes = createTRPCRouter({
 	types: eventTypesRoutes,
 	create: protectedProcedure
-		.input(newEventSchemaApi)
+		.input((value) => {
+			if (!value || typeof value !== 'object' || !('kind' in value))
+				throw new TRPCError({ code: 'BAD_REQUEST' });
+			if (value?.kind === 'event') {
+				return newEventSchemaApi.parse(value);
+			} else return newProjectSchema.parse(value);
+		})
 		.mutation(async ({ input, ctx }) => {
 			console.log('before base content');
 			const res = await db
@@ -26,6 +32,7 @@ export const eventRoutes = createTRPCRouter({
 					publishedAt: new Date(),
 					authorId: ctx.session.user.id,
 					contacts: input.contacts,
+					// ? kind
 				})
 				.returning({ id: baseContent.id })
 				.get({ id: baseContent.id });
@@ -33,6 +40,10 @@ export const eventRoutes = createTRPCRouter({
 
 			console.log('after base content insert');
 			if (!res?.id) return;
+			if (input.kind !== 'event')
+				throw new TRPCError({
+					code: 'NOT_IMPLEMENTED',
+				});
 			const { id: eventId } = await db
 				.insert(events)
 				.values({
