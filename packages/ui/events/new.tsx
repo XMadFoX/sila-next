@@ -210,6 +210,7 @@ export function NewEvent({
 								value: `${c.id}:${c.name}`,
 							}))}
 							splitChar=":"
+							parse={(v) => parseInt(v)}
 							form={methods}
 						/>
 					)}

@@ -35,6 +35,7 @@ export function Combobox({
 	form,
 	splitChar,
 	useLabelAsValue = false,
+	parse,
 }: {
 	label: string;
 	name: string;
@@ -46,6 +47,7 @@ export function Combobox({
 	form: any;
 	splitChar?: string;
 	useLabelAsValue?: boolean;
+	parse?: (value: string) => unknown;
 }) {
 	return (
 		<FormField
@@ -101,7 +103,9 @@ export function Combobox({
 														useLabelAsValue
 															? option.label
 															: splitChar
-															? value.split(splitChar)[0]
+															? parse
+																? parse(value.split(splitChar)[0])
+																: value.split(splitChar)[0]
 															: value
 													);
 												}}
