@@ -24,7 +24,7 @@ import countries from '@sila/api/countries.json';
 import cities from '@sila/api/clientCities25.json';
 import { EditorContainer } from '../editor/editor';
 import clsx from 'clsx';
-import { newEventSchema } from '@sila/api/eventsSchema';
+import { newEventSchema, newProjectSchema } from '@sila/api/eventsSchema';
 import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 import EditorJS from '@editorjs/editorjs';
@@ -39,14 +39,20 @@ import {
 
 export function NewEvent({
 	upd,
+	project,
 }: {
 	upd?: {
 		id: number;
-		values: z.infer<typeof newEventSchema>;
+		values: any;
 	};
+	project?: boolean;
 }) {
-	const methods = useForm<z.infer<typeof newEventSchema>>({
-		resolver: zodResolver(newEventSchema),
+	const methods = useForm<typeof newEventSchema | typeof newProjectSchema>({
+		resolver: project
+			? // @ts-ignore: TS2589
+			  zodResolver(newProjectSchema)
+			: // @ts-ignore
+			  zodResolver(newEventSchema),
 		defaultValues: async () => {
 			if (upd?.values) return upd.values;
 			const raw = localStorage.getItem('newEvent');
@@ -93,7 +99,7 @@ export function NewEvent({
 					}}
 					onSubmit={handleSubmit(
 						async (d) => {
-							console.log(d);
+							console.log('valid', d);
 							const articleData = await (editorRef?.current as any).save();
 							localStorage.setItem('newEvent', JSON.stringify(d));
 
@@ -119,7 +125,7 @@ export function NewEvent({
 							}
 						},
 						async (invalid) => {
-							console.log(invalid);
+							console.log('invalid', invalid);
 						}
 					)}
 					className="flex flex-col gap-2"
@@ -191,7 +197,7 @@ export function NewEvent({
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
 					/>
-					{eventTypes && eventTypes?.length > 0 && (
+					{!project && eventTypes && eventTypes?.length > 0 && (
 						<Combobox
 							{...methods.register('eventTypeId')}
 							label="Тип"
@@ -232,10 +238,12 @@ export function NewEvent({
 							</FormItem>
 						)}
 					/>
-					<EventInputField
-						aria-label="Ссылка на регистраю"
-						{...methods.register('registrationUrl')}
-					/>
+					{!project && (
+						<EventInputField
+							aria-label="Ссылка на регистраю"
+							{...methods.register('registrationUrl')}
+						/>
+					)}
 					{/* contacts info */}
 					<legend className="text-xl font-bold">Контакты организатора</legend>
 					<EventInputField
