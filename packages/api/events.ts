@@ -12,6 +12,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi, newProjectSchema } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
+import { omit } from 'remeda';
 
 export const eventRoutes = createTRPCRouter({
 	types: eventTypesRoutes,
@@ -48,20 +49,10 @@ export const eventRoutes = createTRPCRouter({
 				.insert(events)
 				.values({
 					baseId: res.id,
-					description: input.description,
 					// duration: input.duration,
-					entryType: input.entryType,
-					isOnline: input.isOnline,
-					registrationUrl: input.registrationUrl,
-					coverImage: input.coverImage,
 					eventTypeId: input.eventTypeId,
 					date: input.timestamp,
-					...(!input.isOnline && {
-						country: input.country,
-						city: input.city,
-						address: input.address,
-						mapData: input.maps_link,
-					}),
+					...omit(input, ['title', 'contacts', 'timestamp', 'date']),
 				})
 				.returning({ id: events.id })
 				.get({ id: events.id });
@@ -100,20 +91,9 @@ export const eventRoutes = createTRPCRouter({
 			const res = await db
 				.update(events)
 				.set({
-					description: data.description,
 					// duration: data.duration,
-					entryType: data.entryType,
-					isOnline: data.isOnline,
-					registrationUrl: data.registrationUrl,
-					coverImage: data.coverImage,
-					eventTypeId: data.eventTypeId,
 					date: data.timestamp,
-					...(!data.isOnline && {
-						country: data.country,
-						city: data.city,
-						address: data.address,
-						mapData: data.maps_link,
-					}),
+					...omit(data, ['title', 'contacts', 'timestamp', 'date']),
 				})
 				.where(eq(events.id, id))
 				.returning({ id: events.id, bId: events.baseId })
