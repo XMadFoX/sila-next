@@ -13,6 +13,7 @@ const baseSchema = z.object({
 		.regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
 			message: 'Неправильный формат',
 		}),
+	entryType: z.enum(['free', 'paid', 'donation']),
 	contacts: z
 		.object({
 			phone: z
@@ -50,12 +51,11 @@ const eventBaseSchema = baseSchema.extend({
 		z.literal(''),
 	]),
 	eventTypeId: z.number().int().optional(),
-	entryType: z.enum(['free', 'paid', 'donation']),
 	// duration: z.number().int().min(0).optional(),
 });
 
 const projectBaseSchema = baseSchema.extend({
-	kind: z.literal('project'),
+	// kind: z.literal('project'),
 	title: z.string().min(10).max(64),
 	projectTopicId: z.number().int().optional(),
 });
@@ -86,7 +86,19 @@ const apiSchema = eventBaseSchema.extend({
 	timestamp: z.date().min(new Date()),
 	articleData: z.any(),
 });
+
+const projectApiSchema = projectBaseSchema.extend({
+	kind: z.literal('project'),
+	timestamp: z.date().min(new Date()),
+	articleData: z.any(),
+});
+
 export const newEventSchemaApi = z.discriminatedUnion('isOnline', [
 	apiSchema.extend({ ...onlineCond }),
 	apiSchema.extend({ ...offlineCond }),
+]);
+
+export const newProjectSchemaApi = z.discriminatedUnion('isOnline', [
+	projectApiSchema.extend({ ...onlineCond }),
+	projectApiSchema.extend({ ...offlineCond }),
 ]);

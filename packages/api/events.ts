@@ -7,12 +7,13 @@ import {
 import { db, users } from './schema';
 import { BaseContent, baseContent } from './schema/contentBase.schema';
 import { z } from 'zod';
-import { eventText, events } from './schema/events.schema';
+import { articleText, events } from './schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
-import { newEventSchemaApi, newProjectSchema } from './eventsSchema';
+import { newEventSchemaApi, newProjectSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
 import { omit } from 'remeda';
+import { projects } from './schema/cooperation.schema';
 
 export const eventRoutes = createTRPCRouter({
 	types: eventTypesRoutes,
@@ -22,7 +23,7 @@ export const eventRoutes = createTRPCRouter({
 				throw new TRPCError({ code: 'BAD_REQUEST' });
 			if (value?.kind === 'event') {
 				return newEventSchemaApi.parse(value);
-			} else return newProjectSchema.parse(value);
+			} else return newProjectSchemaApi.parse(value);
 		})
 		.mutation(async ({ input, ctx }) => {
 			console.log('before base content');
@@ -41,29 +42,40 @@ export const eventRoutes = createTRPCRouter({
 
 			console.log('after base content insert');
 			if (!res?.id) return;
-			if (input.kind !== 'event')
-				throw new TRPCError({
-					code: 'NOT_IMPLEMENTED',
-				});
-			const { id: eventId } = await db
-				.insert(events)
-				.values({
-					baseId: res.id,
-					// duration: input.duration,
-					eventTypeId: input.eventTypeId,
-					date: input.timestamp,
-					...omit(input, ['title', 'contacts', 'timestamp', 'date']),
-				})
-				.returning({ id: events.id })
-				.get({ id: events.id });
+			let adId: null | number = null;
+			if (input.kind === 'event') {
+				const { id } = await db
+					.insert(events)
+					.values({
+						baseId: res.id,
+						// duration: input.duration,
+						eventTypeId: input.eventTypeId,
+						date: input.timestamp,
+						...omit(input, ['title', 'contacts', 'timestamp', 'date']),
+					})
+					.returning({ id: events.id })
+					.get({ id: events.id });
+				adId = id;
+			} else if (input.kind == 'project') {
+				const { id } = await db
+					.insert(projects)
+					.values({
+						baseId: res.id,
+						date: input.timestamp,
+						...omit(input, ['title', 'contacts', 'timestamp', 'date']),
+					})
+					.returning({ id: projects.id })
+					.get({ id: projects.id });
+				adId = id;
+			}
 			await db
-				.insert(eventText)
+				.insert(articleText)
 				.values({
 					text: input.articleData,
-					articleId: eventId,
+					articleId: adId,
 				})
 				.run();
-			return eventId;
+			return adId;
 		}),
 	edit: protectedProcedure
 		.input(
@@ -99,11 +111,11 @@ export const eventRoutes = createTRPCRouter({
 				.returning({ id: events.id, bId: events.baseId })
 				.get();
 			await db
-				.update(eventText)
+				.update(articleText)
 				.set({
 					text: data.articleData,
 				})
-				.where(eq(eventText.articleId, id))
+				.where(eq(articleText.articleId, id))
 				.run();
 			await db
 				.update(baseContent)
@@ -187,7 +199,7 @@ export const eventRoutes = createTRPCRouter({
 			}
 
 			await db.transaction(async (db) => {
-				await db.delete(eventText).where(eq(eventText.articleId, id)).run();
+				await db.delete(articleText).where(eq(articleText.articleId, id)).run();
 				await db.delete(events).where(eq(events.id, id)).run();
 				await db.delete(baseContent).where(eq(baseContent.id, base.id)).run();
 			});
