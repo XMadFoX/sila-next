@@ -9,26 +9,29 @@ import { baseContent } from './contentBase.schema';
 import { customJson } from './jsonType';
 import { createInsertSchema } from 'drizzle-zod';
 
-export const events = sqliteTable('events', {
+export const adBase = {
 	id: integer('id').primaryKey(),
 	baseId: integer('base_id').notNull(),
 	date: integer('timestamp', { mode: 'timestamp_ms' }).notNull(),
-	// TODO: schedule?
-	duration: integer('duration'),
 	isOnline: integer('is_online', { mode: 'boolean' }).notNull(),
-	entryType: text('entry_type', {
-		enum: ['free', 'paid', 'donation'],
-	}).notNull(),
 	country: text('country', { length: 2 }),
 	city: text('city', { length: 64 }),
 	address: text('address', { length: 128 }),
-	mapData: text('map_data', { length: 64 }),
-	// TODO: contacts
 	coverImage: text('cover_image', { length: 255 }).notNull(),
 	description: text('description', { length: 255 }).notNull(),
+	mapData: text('map_data', { length: 64 }),
+	isImportant: integer('is_important', { mode: 'boolean' }),
+	entryType: text('entry_type', {
+		enum: ['free', 'paid', 'donation'],
+	}).notNull(),
+};
+
+export const events = sqliteTable('events', {
+	...adBase,
+	// TODO: schedule?
+	// duration: integer('duration'),
 	registrationUrl: text('registration_url', { length: 255 }),
 	eventTypeId: integer('event_type_id'), //.references(() => eventTypes.id),
-	isImportant: integer('is_important', { mode: 'boolean' }),
 });
 
 export type Event = InferModel<typeof events>;
@@ -46,9 +49,9 @@ export const eventRealtions = relations(events, ({ one }) => ({
 		fields: [events.eventTypeId],
 		references: [eventTypes.id],
 	}),
-	text: one(eventText, {
+	text: one(articleText, {
 		fields: [events.id],
-		references: [eventText.articleId],
+		references: [articleText.articleId],
 	}),
 	base: one(baseContent, {
 		fields: [events.baseId],
@@ -56,7 +59,7 @@ export const eventRealtions = relations(events, ({ one }) => ({
 	}),
 }));
 
-export const eventText = sqliteTable('article_texts', {
+export const articleText = sqliteTable('article_texts', {
 	id: integer('id').primaryKey().notNull(),
 	articleId: integer('article_id'),
 	// text: blob('text', { mode: 'json' }).notNull(),
