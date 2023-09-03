@@ -5,6 +5,7 @@ import { createTRPCRouter } from './trpc-server';
 import { authRoutes } from './authRoutes';
 import { adminUserRoutes } from './admin/users';
 import { adminRolesRoutes } from './admin/roles';
+import { projectRoutes } from './projects';
 
 export const appRouter = createTRPCRouter({
 	auth: authRoutes,
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
 	test: routes,
 	totp: totpRoutes,
 	events: eventRoutes,
+	projects: projectRoutes,
 });
 
 export type AppRouter = typeof appRouter;
