@@ -81,7 +81,7 @@ export const eventRoutes = createTRPCRouter({
 		.input(
 			z.object({
 				id: z.number().positive(),
-				data: newEventSchemaApi,
+				data: z.union([newEventSchemaApi, newProjectSchemaApi]),
 			})
 		)
 		.mutation(async ({ input, ctx }) => {
@@ -101,11 +101,19 @@ export const eventRoutes = createTRPCRouter({
 			}
 
 			const res = await db
-				.update(events)
+				.update(data.kind === 'event' ? events : projects)
 				.set({
-					// duration: data.duration,
 					date: data.timestamp,
-					...omit(data, ['title', 'contacts', 'timestamp', 'date']),
+					...omit(data, [
+						'title',
+						'contacts',
+						'timestamp',
+						'date',
+						'time',
+						'articleData',
+						'text',
+						'kind',
+					]),
 				})
 				.where(eq(events.id, id))
 				.returning({ id: events.id, bId: events.baseId })

@@ -47,7 +47,9 @@ export function NewEvent({
 	};
 	project?: boolean;
 }) {
-	const methods = useForm<typeof newEventSchema | typeof newProjectSchema>({
+	const methods = useForm<
+		z.infer<typeof newEventSchema> | z.infer<typeof newProjectSchema>
+	>({
 		resolver: project
 			? // @ts-ignore: TS2589
 			  zodResolver(newProjectSchema)
@@ -114,10 +116,12 @@ export function NewEvent({
 							// send
 							const payload = {
 								...d,
+								kind: (project ? 'project' : 'event') as 'event' | 'project',
 								articleData,
 								timestamp: combinedDateTime,
 							};
 
+							console.log('payload', payload);
 							if (upd?.id) {
 								saveChanges({ id: upd.id, data: payload });
 							} else {
