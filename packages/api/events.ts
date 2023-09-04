@@ -149,7 +149,9 @@ export const eventRoutes = createTRPCRouter({
 					end: z.date().optional(),
 					status: z
 						.enum(['draft', 'published', 'changesRequested', 'ready'])
+						.nullable()
 						.optional(),
+					author: z.string().optional(),
 				})
 				.optional()
 		)
@@ -226,12 +228,14 @@ export const getEvents = async ({
 	isImportant,
 	start,
 	end,
+	author,
 	status = 'published',
 }: {
 	isImportant?: boolean;
 	start?: Date;
 	end?: Date;
-	status?: BaseContent['status'];
+	author?: string;
+	status?: BaseContent['status'] | null;
 } = {}) => {
 	const res = await db
 		.select()
@@ -241,7 +245,8 @@ export const getEvents = async ({
 				isImportant ? eq(events.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
 				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
-				eq(baseContent.status, status)
+				author ? eq(baseContent.authorId, author) : sql`true`,
+				...(status ? [eq(baseContent.status, status)] : [])
 			)
 		)
 		.innerJoin(baseContent, eq(events.baseId, baseContent.id))

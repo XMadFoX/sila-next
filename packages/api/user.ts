@@ -32,7 +32,7 @@ export async function findOne(email: string) {
 export interface ShortUser
 	extends Pick<
 		User,
-		'id' | 'name' | 'email' | 'emailVerified' | 'totpEnabled'
+		'id' | 'name' | 'image' | 'email' | 'emailVerified' | 'totpEnabled'
 	> {
 	totp?: string | null;
 	roles?: string[];

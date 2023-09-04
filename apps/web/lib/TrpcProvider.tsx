@@ -15,7 +15,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
 					queries: {
 						retry: (failureCount, error) => {
 							if (error instanceof TRPCClientError) {
-								if (error.data.httpStatus === 404) return false;
+								if (error?.data?.httpStatus === 404) return false;
 							}
 							if (failureCount > 3) return false;
 							return true;

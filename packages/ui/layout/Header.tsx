@@ -6,6 +6,7 @@ import { navLinks } from './navLinks';
 import { EnvironmentContext } from '../env/';
 import useSession from '../useSession';
 import useLogout from '../useLogout';
+import { getAvatarUrl } from '../profile/avatar';
 
 export function Header() {
 	const { Image, Link, usePathname } = useContext(EnvironmentContext);
@@ -28,15 +29,23 @@ export function Header() {
           /> */}
 					{session ? (
 						<div className="flex gap-2 items-center ml-auto">
-							<p>{session?.user?.name}</p>
-							<div className="w-11 h-11 rounded-full bg-dark-grey"></div>
-							<Button
-								onClick={() => logout()}
-								className="px-8 h-11 text-sm uppercase"
-								size={null}
-							>
-								Выйти
-							</Button>
+							{/* <p>{session.user.name}</p> */}
+							<Link href="/me">
+								<Image
+									alt=""
+									src={getAvatarUrl(session.user.image, session.user.id)}
+									width={44}
+									height={44}
+									className="w-11 h-11 rounded-full"
+								/>
+							</Link>
+							{/* <Button */}
+							{/* 	onClick={() => logout()} */}
+							{/* 	className="px-8 h-11 text-sm uppercase" */}
+							{/* 	size={null} */}
+							{/* > */}
+							{/* 	Выйти */}
+							{/* </Button> */}
 						</div>
 					) : (
 						<Button

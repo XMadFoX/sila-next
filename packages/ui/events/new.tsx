@@ -39,9 +39,11 @@ import {
 import { linkMap } from '../card';
 
 export function NewEvent({
+	type = 'events',
 	upd,
 	project,
 }: {
+	type?: 'events' | 'cooperation';
 	upd?: {
 		id: number;
 		values: any;
@@ -96,6 +98,7 @@ export function NewEvent({
 
 	return (
 		<div className="w-full max-w-3xl">
+			{type}
 			<FormProvider {...methods}>
 				<form
 					onInvalid={(e) => {
