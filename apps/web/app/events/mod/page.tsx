@@ -3,39 +3,20 @@
 import CardList from 'components/landing/CardsContainer';
 import { trpc } from 'lib/trpc';
 import React from 'react';
-import { Card } from 'ui';
-import { getBadges } from '../utils';
+import { FullCard } from 'ui/card';
 
-export default function page() {
+export default function ModPage() {
 	const { data } = trpc.events.find.useQuery({ status: 'ready' });
 	return (
 		<CardList>
 			{data?.map((i) => (
-				<Card kind="event" key={i.events.id} id={i.events.id}>
-					<Card.Preview
-						image={i.events.coverImage}
-						alt=""
-						badges={getBadges({
-							entryType: i.events.entryType,
-							isOnline: i.events.isOnline ?? false,
-						})}
-					/>
-					<Card.Details
-						kind="event"
-						date={i.events.date}
-						title={i.base_content.title}
-						org={{ link: '', name: i.users.name }}
-						location={
-							i.events.city && i.events.address
-								? {
-										city: i.events.city,
-										address: i.events.address,
-								  }
-								: null
-						}
-						description={i.events.description}
-					/>
-				</Card>
+				<FullCard
+					base={i.base_content}
+					item={i.events}
+					user={i.users}
+					kind="event"
+					key={i.base_content.id}
+				/>
 			))}
 		</CardList>
 	);

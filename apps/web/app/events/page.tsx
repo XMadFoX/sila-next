@@ -9,12 +9,14 @@ import { $filter, today } from './filter.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getBadges } from './utils';
+import { getBadges, FullCard } from 'ui/card';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
 	month: 'long',
 });
+
+const kind = 'event' as const;
 
 export default function Events() {
 	const filter = useStore($filter);
@@ -71,39 +73,15 @@ export default function Events() {
 						<Slider className="mx-auto mt-8">
 							{important?.map((i, idx) => (
 								<Slide key={i.events.id}>
-									<Card
-										kind="event"
+									<FullCard
+										kind={kind}
+										base={i.base_content}
+										item={i.events}
+										user={i.users}
+										key={i.base_content.id}
 										big
-										key={i.events.id}
-										id={i.events.id}
 										gradientClass="w-full min-w-max"
-									>
-										<Card.Preview
-											image={i.events.coverImage}
-											alt=""
-											className="max-w-min"
-											big
-											badges={getBadges({
-												entryType: i.events.entryType,
-												isOnline: i.events.isOnline ?? false,
-											})}
-										/>
-										<Card.Details
-											kind="event"
-											date={i.events.date}
-											title={i.base_content.title}
-											org={{ link: '/events/by/1', name: i.users.name }}
-											location={
-												i.events.city && i.events.address
-													? {
-															city: i.events.city,
-															address: i.events.address,
-													  }
-													: null
-											}
-											description={i.events.description}
-										/>
-									</Card>
+									/>
 								</Slide>
 							))}
 						</Slider>
@@ -130,31 +108,13 @@ export default function Events() {
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (
-							<Card kind="event" key={i.events.id} id={i.events.id}>
-								<Card.Preview
-									image={i.events.coverImage}
-									alt=""
-									badges={getBadges({
-										entryType: i.events.entryType,
-										isOnline: i.events.isOnline ?? false,
-									})}
-								/>
-								<Card.Details
-									kind="event"
-									date={i.events.date}
-									title={i.base_content.title}
-									org={{ link: '', name: i.users.name }}
-									location={
-										i.events.city && i.events.address
-											? {
-													city: i.events.city,
-													address: i.events.address,
-											  }
-											: null
-									}
-									description={i.events.description}
-								/>
-							</Card>
+							<FullCard
+								kind={kind}
+								base={i.base_content}
+								item={i.events}
+								user={i.users}
+								key={i.base_content.id}
+							/>
 						);
 					})}
 				</CardList>

@@ -9,12 +9,14 @@ import { $filter, today } from '../events/filter.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getBadges } from '../events/utils';
+import { getBadges, FullCard } from 'ui/card';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
 	month: 'long',
 });
+
+const kind = 'project' as const;
 
 export default function Events() {
 	const filter = useStore($filter);
@@ -76,39 +78,15 @@ export default function Events() {
 						<Slider className="mx-auto mt-8">
 							{important?.map((i, idx) => (
 								<Slide key={i.cooperation.id}>
-									<Card
-										kind="project"
+									<FullCard
+										kind={kind}
+										base={i.base_content}
+										item={i.cooperation}
+										user={i.users}
+										key={i.base_content.id}
 										big
-										key={i.cooperation.id}
-										id={i.cooperation.id}
 										gradientClass="w-full min-w-max"
-									>
-										<Card.Preview
-											image={i.cooperation.coverImage}
-											alt=""
-											className="max-w-min"
-											big
-											badges={getBadges({
-												entryType: i.cooperation.entryType,
-												isOnline: i.cooperation.isOnline ?? false,
-											})}
-										/>
-										<Card.Details
-											kind="project"
-											date={i.cooperation.date}
-											title={i.base_content.title}
-											org={{ link: '/events/by/1', name: i.users.name }}
-											location={
-												i.cooperation.city && i.cooperation.address
-													? {
-															city: i.cooperation.city,
-															address: i.cooperation.address,
-													  }
-													: null
-											}
-											description={i.cooperation.description}
-										/>
-									</Card>
+									/>
 								</Slide>
 							))}
 						</Slider>
@@ -135,31 +113,13 @@ export default function Events() {
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (
-							<Card kind="project" key={i.cooperation.id} id={i.cooperation.id}>
-								<Card.Preview
-									image={i.cooperation.coverImage}
-									alt=""
-									badges={getBadges({
-										entryType: i.cooperation.entryType,
-										isOnline: i.cooperation.isOnline ?? false,
-									})}
-								/>
-								<Card.Details
-									kind="project"
-									date={i.cooperation.date}
-									title={i.base_content.title}
-									org={{ link: '', name: i.users.name }}
-									location={
-										i.cooperation.city && i.cooperation.address
-											? {
-													city: i.cooperation.city,
-													address: i.cooperation.address,
-											  }
-											: null
-									}
-									description={i.cooperation.description}
-								/>
-							</Card>
+							<FullCard
+								kind={kind}
+								base={i.base_content}
+								item={i.cooperation}
+								user={i.users}
+								key={i.base_content.id}
+							/>
 						);
 					})}
 				</CardList>

@@ -15,6 +15,11 @@ import { eventTypesRoutes } from './eventTypes';
 import { omit } from 'remeda';
 import { projects } from './schema/cooperation.schema';
 
+export const kindToColumn = {
+	event: events,
+	project: projects,
+};
+
 export const eventRoutes = createTRPCRouter({
 	types: eventTypesRoutes,
 	create: protectedProcedure
@@ -161,10 +166,6 @@ export const eventRoutes = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input: { id, status, kind }, ctx }) => {
-			const kindToColumn = {
-				event: events,
-				project: projects,
-			};
 			const column = kindToColumn[kind];
 			const base = await db
 				.select({
