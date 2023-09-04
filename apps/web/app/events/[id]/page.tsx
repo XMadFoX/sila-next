@@ -19,6 +19,8 @@ function isData(data: any): data is TRPCError {
 	return data! instanceof TRPCError;
 }
 
+const kind = 'event';
+
 export default function EventPage() {
 	const params = useParams();
 	const { data: session } = useSession();
@@ -36,7 +38,7 @@ export default function EventPage() {
 		<section>
 			{data.base.status === 'draft' && data.ableToEdit && (
 				<p className="p-4 mt-4 rounded-full border border-error">
-					Это черновик. Вы можете <PublishDialog id={id} /> или{' '}
+					Это черновик. Вы можете <PublishDialog kind={kind} id={id} /> или{' '}
 					<Link className="underline" href={`/events/${id}/edit`}>
 						отредактировать
 					</Link>
@@ -48,6 +50,7 @@ export default function EventPage() {
 				</h1>
 				{(data?.ableToEdit || session?.user.roles?.includes('mod')) && (
 					<EventMoreDropdown
+						kind={kind}
 						id={id}
 						status={data.base.status}
 						ableToEdit={data?.ableToEdit}

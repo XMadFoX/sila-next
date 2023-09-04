@@ -15,8 +15,8 @@ export interface CardProps {
 }
 
 export const linkMap = {
-	event: 'events',
-	project: 'projects',
+	event: 'events' as const,
+	project: 'projects' as const,
 };
 
 export function Card({ children, big, id, gradientClass, kind }: CardProps) {

@@ -157,18 +157,24 @@ export const eventRoutes = createTRPCRouter({
 			z.object({
 				id: z.number().positive(),
 				status: z.enum(['draft', 'published', 'changesRequested', 'ready']),
+				kind: z.enum(['event', 'project']),
 			})
 		)
-		.mutation(async ({ input: { id, status }, ctx }) => {
+		.mutation(async ({ input: { id, status, kind }, ctx }) => {
+			const kindToColumn = {
+				event: events,
+				project: projects,
+			};
+			const column = kindToColumn[kind];
 			const base = await db
 				.select({
 					id: baseContent.id,
 					authorId: baseContent.authorId,
 					status: baseContent.status,
 				})
-				.from(events)
-				.where(eq(events.id, id))
-				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+				.from(column)
+				.where(eq(column.id, id))
+				.innerJoin(baseContent, eq(column.baseId, baseContent.id))
 				.get({ id: baseContent.id, authorId: baseContent.authorId });
 			if (!base || base.authorId !== ctx.user.id) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });

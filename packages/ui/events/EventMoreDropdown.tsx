@@ -13,23 +13,26 @@ import { AlertDialog } from '../general/AlertDialog';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BaseContent } from '@sila/api/schema';
+import { linkMap } from '../card';
 
 export default function EventMoreDropdown({
 	id,
 	status,
 	ableToEdit,
 	mod,
+	kind,
 }: {
 	id: number;
 	status: BaseContent['status'];
 	ableToEdit: boolean;
 	mod: boolean;
+	kind: 'event' | 'project';
 }) {
 	const [dialog, setDialog] = useState<string | null>(null);
 
 	const router = useRouter();
 	const utils = trpc.useContext();
-	const refetch = () => utils.events.getOne.invalidate(id);
+	const refetch = () => utils[linkMap[kind]].getOne.invalidate(id);
 	const { mutate: updateStatus } = trpc.events.updateStatus.useMutation({
 		onSuccess: refetch,
 	});
@@ -58,14 +61,18 @@ export default function EventMoreDropdown({
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								{['ready', 'published'].includes(status) && (
-									<button onClick={() => updateStatus({ id, status: 'draft' })}>
+									<button
+										onClick={() => updateStatus({ id, status: 'draft', kind })}
+									>
 										{status === 'published'
 											? 'Снять с публикации'
 											: 'Отменить публикацию'}
 									</button>
 								)}
 								{['changesRequested', 'draft'].includes(status) && (
-									<button onClick={() => updateStatus({ id, status: 'ready' })}>
+									<button
+										onClick={() => updateStatus({ id, status: 'ready', kind })}
+									>
 										Отправить на модерацию
 									</button>
 								)}
@@ -84,7 +91,7 @@ export default function EventMoreDropdown({
 								{status === 'published' && (
 									<button
 										onClick={() =>
-											updateStatus({ id, status: 'changesRequested' })
+											updateStatus({ id, status: 'changesRequested', kind })
 										}
 									>
 										Снять с публикации
@@ -92,7 +99,9 @@ export default function EventMoreDropdown({
 								)}
 								{status === 'ready' && (
 									<button
-										onClick={() => updateStatus({ id, status: 'published' })}
+										onClick={() =>
+											updateStatus({ id, status: 'published', kind })
+										}
 									>
 										Одобрить публикацию
 									</button>

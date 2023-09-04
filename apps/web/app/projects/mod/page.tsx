@@ -28,9 +28,9 @@ export default function page() {
 						location={
 							i.cooperation.city && i.cooperation.address
 								? {
-									city: i.cooperation.city,
-									address: i.cooperation.address,
-								}
+										city: i.cooperation.city,
+										address: i.cooperation.address,
+								  }
 								: null
 						}
 						description={i.cooperation.description}

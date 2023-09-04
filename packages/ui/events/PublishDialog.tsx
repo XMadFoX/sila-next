@@ -2,25 +2,35 @@ import React from 'react';
 import { AlertDialog } from '../general/AlertDialog';
 import { trpc } from '../lib';
 import { BaseContent } from '@sila/api/schema';
+import { linkMap } from '../card';
 
-export function PublishDialog({ id }: { id: number }) {
+export function PublishDialog({
+	id,
+	kind,
+}: {
+	id: number;
+	kind: 'event' | 'project';
+}) {
 	const utils = trpc.useContext();
 	const { mutate } = trpc.events.updateStatus.useMutation({
 		onSuccess: () => {
-			utils.events.getOne.invalidate(id);
+			utils[linkMap[kind]].getOne.invalidate(id);
 		},
 	});
 
 	return (
 		<AlertDialog
-			title="Опубликовать мероприятие?"
-			description="Оно станет доступно публично"
-			trigger={<button className="underline">опубликовать его сейчас</button>}
-			actionText="Опубликовать"
+			title="Отправить на модерацию?"
+			description=""
+			trigger={
+				<button className="underline">отправить его на модерацию</button>
+			}
+			actionText="Да"
 			actionCallback={() => {
 				mutate({
 					id,
-					status: 'published' as BaseContent['status'],
+					status: 'ready' as BaseContent['status'],
+					kind,
 				});
 			}}
 		/>

@@ -66,7 +66,7 @@ export default function ProjectPage() {
 						? { city: data.city, address: data.address }
 						: null
 				}
-			// duration={data?.duration}
+				// duration={data?.duration}
 			/>
 			<div className="my-10 prose">
 				<Blocks data={data.text.text as any} />
