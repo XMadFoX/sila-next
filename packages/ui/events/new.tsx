@@ -36,6 +36,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../input/select';
+import { linkMap } from '../card';
 
 export function NewEvent({
 	upd,
@@ -85,7 +86,8 @@ export function NewEvent({
 
 	const router = useRouter();
 	useEffect(() => {
-		if (insertedId) router.push(`/events/${insertedId}`);
+		if (insertedId)
+			router.push(`/${linkMap[project ? 'project' : 'event']}/${insertedId}`);
 	}, [insertedId, router]);
 
 	const editorRef = React.useRef<EditorJS | null>(null);

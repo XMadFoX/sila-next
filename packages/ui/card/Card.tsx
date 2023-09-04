@@ -14,10 +14,11 @@ export interface CardProps {
 	kind: 'event' | 'project';
 }
 
-const linkMap = {
+export const linkMap = {
 	event: 'events',
 	project: 'projects',
 };
+
 export function Card({ children, big, id, gradientClass, kind }: CardProps) {
 	return (
 		<Link
