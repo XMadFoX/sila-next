@@ -22,7 +22,7 @@ export default function EventsSection() {
 					<Slider className="mx-auto mt-8">
 						{Array.from({ length: 9 }, (_, i) => (
 							<Slide key={i}>
-								<Card id={1} big gradientClass="min-w-max w-full">
+								<Card kind="event" id={1} big gradientClass="min-w-max w-full">
 									<CardPreview
 										big
 										className="max-w-min"
@@ -42,7 +42,7 @@ export default function EventsSection() {
 				<CardList>
 					{Array.from({ length: 6 }, (_, i) => (
 						<li className="mx-auto min-w-fit" key={i}>
-							<Card id={1} key={i} gradientClass="h-full">
+							<Card kind="event" id={1} key={i} gradientClass="h-full">
 								<CardPreview {...cardMock.preview} />
 								<CardDetails {...cardMock.details} />
 							</Card>

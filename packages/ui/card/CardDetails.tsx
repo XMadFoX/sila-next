@@ -12,6 +12,7 @@ interface CardDetailsProps {
 		name: string;
 		link: string;
 	};
+	kind: 'event' | 'project';
 }
 
 function cutText(text: string, maxLength: number) {
@@ -22,7 +23,7 @@ function cutText(text: string, maxLength: number) {
 	return text.slice(0, maxLength) + '...';
 }
 
-export function CardDetails(props: CardDetailsProps) {
+export function CardDetails({ kind, ...props }: CardDetailsProps) {
 	const { Link } = useContext(EnvironmentContext);
 
 	return (
@@ -39,17 +40,19 @@ export function CardDetails(props: CardDetailsProps) {
 					'Онлайн'
 				)}
 			</address>
-			<time className="mt-4 text-base font-medium text-black">
-				{props.date.toLocaleTimeString('ru-RU', {
-					hour: '2-digit',
-					minute: '2-digit',
-					day: '2-digit',
-					month: 'long',
-					...(props.date.getFullYear() !== new Date().getFullYear() && {
-						year: 'numeric',
-					}),
-				})}
-			</time>
+			{kind === 'event' && (
+				<time className="mt-4 text-base font-medium text-black">
+					{props.date.toLocaleTimeString('ru-RU', {
+						hour: '2-digit',
+						minute: '2-digit',
+						day: '2-digit',
+						month: 'long',
+						...(props.date.getFullYear() !== new Date().getFullYear() && {
+							year: 'numeric',
+						}),
+					})}
+				</time>
+			)}
 			<p className="mt-4 text-sm text-black">
 				{cutText(props.description, 190)}
 			</p>
@@ -60,6 +63,15 @@ export function CardDetails(props: CardDetailsProps) {
 			>
 				Организатор: {props.org.name}
 			</Link>
+			{kind === 'project' && (
+				<time className="mt-4 text-base font-medium text-black">
+					Прием заявок до:{' '}
+					{props.date.toLocaleString('ru-RU', {
+						dateStyle: 'short',
+						timeStyle: 'medium',
+					})}
+				</time>
+			)}
 		</figcaption>
 	);
 }

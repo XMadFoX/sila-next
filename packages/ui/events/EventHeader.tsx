@@ -5,7 +5,7 @@ import entryTypes from '@sila/api/entryTypes';
 
 interface EventHeaderProps {
 	timestamp: Date;
-	duration: number | null;
+	// duration: number | null;
 	location: {
 		city: string;
 		address: string;

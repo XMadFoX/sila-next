@@ -72,6 +72,7 @@ export default function Events() {
 							{important?.map((i, idx) => (
 								<Slide key={i.events.id}>
 									<Card
+										kind="event"
 										big
 										key={i.events.id}
 										id={i.events.id}
@@ -88,6 +89,7 @@ export default function Events() {
 											})}
 										/>
 										<Card.Details
+											kind="event"
 											date={i.events.date}
 											title={i.base_content.title}
 											org={{ link: '/events/by/1', name: i.users.name }}
@@ -128,7 +130,7 @@ export default function Events() {
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (
-							<Card key={i.events.id} id={i.events.id}>
+							<Card kind="event" key={i.events.id} id={i.events.id}>
 								<Card.Preview
 									image={i.events.coverImage}
 									alt=""
@@ -138,6 +140,7 @@ export default function Events() {
 									})}
 								/>
 								<Card.Details
+									kind="event"
 									date={i.events.date}
 									title={i.base_content.title}
 									org={{ link: '', name: i.users.name }}

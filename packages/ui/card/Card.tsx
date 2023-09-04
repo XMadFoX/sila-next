@@ -11,12 +11,17 @@ export interface CardProps {
 	children: React.ReactNode;
 	big?: boolean;
 	gradientClass?: string;
+	kind: 'event' | 'project';
 }
 
-export function Card({ children, big, id, gradientClass }: CardProps) {
+const linkMap = {
+	event: 'events',
+	project: 'projects',
+};
+export function Card({ children, big, id, gradientClass, kind }: CardProps) {
 	return (
 		<Link
-			href={`/events/${id}`}
+			href={`${linkMap[kind]}/${id}`}
 			draggable={false}
 			onClick={(e: React.MouseEvent<HTMLElement>) => {
 				const allowedTags = [

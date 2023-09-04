@@ -11,7 +11,7 @@ export default function page() {
 	return (
 		<CardList>
 			{data?.map((i) => (
-				<Card key={i.events.id} id={i.events.id}>
+				<Card kind="event" key={i.events.id} id={i.events.id}>
 					<Card.Preview
 						image={i.events.coverImage}
 						alt=""
@@ -21,6 +21,7 @@ export default function page() {
 						})}
 					/>
 					<Card.Details
+						kind="event"
 						date={i.events.date}
 						title={i.base_content.title}
 						org={{ link: '', name: i.users.name }}

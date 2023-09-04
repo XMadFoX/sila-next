@@ -31,7 +31,7 @@ export default function BlogSection() {
 			<CardList>
 				{Array.from({ length: 3 }, (_, i) => (
 					<li className="mx-auto min-w-fit" key={i}>
-						<Card id={1} key={i} gradientClass="h-full">
+						<Card kind="event" id={1} key={i} gradientClass="h-full">
 							<CardPreview {...cardMock.preview} />
 							<CardDetails {...cardMock.details} />
 						</Card>

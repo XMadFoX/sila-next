@@ -56,7 +56,7 @@ export default function Events() {
 				<h1 className="text-2xl font-medium md:w-1/2">
 					Раздел направлен
 					<br />
-					на развитие деловых связей между участниками сообщества.
+					на развитие деловых связеймежду участниками сообщества.
 				</h1>
 				<div className="md:w-1/2">
 					<p className="mt-4 text-lg">
@@ -77,6 +77,7 @@ export default function Events() {
 							{important?.map((i, idx) => (
 								<Slide key={i.cooperation.id}>
 									<Card
+										kind="project"
 										big
 										key={i.cooperation.id}
 										id={i.cooperation.id}
@@ -93,6 +94,7 @@ export default function Events() {
 											})}
 										/>
 										<Card.Details
+											kind="project"
 											date={i.cooperation.date}
 											title={i.base_content.title}
 											org={{ link: '/events/by/1', name: i.users.name }}
@@ -133,7 +135,7 @@ export default function Events() {
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (
-							<Card key={i.cooperation.id} id={i.cooperation.id}>
+							<Card kind="project" key={i.cooperation.id} id={i.cooperation.id}>
 								<Card.Preview
 									image={i.cooperation.coverImage}
 									alt=""
@@ -143,6 +145,7 @@ export default function Events() {
 									})}
 								/>
 								<Card.Details
+									kind="project"
 									date={i.cooperation.date}
 									title={i.base_content.title}
 									org={{ link: '', name: i.users.name }}
