@@ -3,13 +3,13 @@ export const navLinks = [
 		title: 'Культурные мероприятия',
 		href: '/events',
 	},
-	{ title: 'Психологическая поддержка', href: '/support' },
+	// { title: 'Психологическая поддержка', href: '/support' },
 	{
 		title: 'Деловое сотрудничество',
-		href: '/business',
+		href: '/projects',
 	},
 	{ title: 'О проекте', href: '/about' },
-	{ title: 'Блог', href: '/blog' },
+	// { title: 'Блог', href: '/blog' },
 ];
 
 export const footerLinks = [

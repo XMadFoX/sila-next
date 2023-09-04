@@ -68,7 +68,7 @@ export function CardDetails({ kind, ...props }: CardDetailsProps) {
 					Прием заявок до:{' '}
 					{props.date.toLocaleString('ru-RU', {
 						dateStyle: 'short',
-						timeStyle: 'medium',
+						timeStyle: 'short',
 					})}
 				</time>
 			)}
