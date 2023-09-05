@@ -26,7 +26,7 @@ export default function AdPage({ kind }: { kind: 'event' | 'project' }) {
 	if (!params?.id || typeof params.id !== 'string')
 		throw new Error('No ad ID provided');
 	const id = parseInt(params.id);
-	const { data, error, isLoading } = trpc[kind].getOne.useQuery(id);
+	const { data, error, isLoading } = trpc.events.getOne.useQuery({ id, kind });
 	if (error?.data?.code && error.data.code === 'NOT_FOUND') notFound();
 	if (error) return <div>Unknown error: {JSON.stringify(error)}</div>;
 	if (isLoading) return <div>Загрузка...</div>;

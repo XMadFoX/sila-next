@@ -32,7 +32,7 @@ export default function EventMoreDropdown({
 
 	const router = useRouter();
 	const utils = trpc.useContext();
-	const refetch = () => utils[linkMap[kind]].getOne.invalidate(id);
+	const refetch = () => utils.events.getOne.invalidate({ id, kind });
 	const { mutate: updateStatus } = trpc.events.updateStatus.useMutation({
 		onSuccess: refetch,
 	});

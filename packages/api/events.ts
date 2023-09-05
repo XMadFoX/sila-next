@@ -157,8 +157,15 @@ export const eventRoutes = createTRPCRouter({
 		)
 		.query(async ({ input: d }) => getEvents(d)),
 	getOne: publicProcedure
-		.input(z.number().positive())
-		.query(async ({ input: id, ctx }) => getEvent(id, ctx.session)),
+		.input(
+			z.object({
+				id: z.number().positive(),
+				kind: z.enum(['event', 'project']),
+			})
+		)
+		.query(async ({ input: { id, kind }, ctx }) =>
+			getAd(id, kind, ctx.session)
+		),
 	updateStatus: protectedProcedure
 		.input(
 			z.object({
@@ -257,18 +264,35 @@ export const getEvents = async ({
 	return res;
 };
 
-export const getEvent = async (id: number, session: Session) => {
-	const res = await db.query.events.findFirst({
-		where: eq(events.id, id),
-		columns: {
-			baseId: false,
-			eventTypeId: false,
-		},
-		with: { text: true, base: true },
-	});
+export const getAd = async (
+	id: number,
+	kind: 'event' | 'project',
+	session: Session
+) => {
+	const res = await getAdBase(id, kind);
 	// if published as organization, return only org, not author
 	const isAuthor = res?.base.authorId === session?.user?.id;
 	if (!res || (!isAuthor && res.base.status !== 'published'))
 		throw new TRPCError({ code: 'NOT_FOUND' });
 	return { ...res, ableToEdit: isAuthor };
 };
+
+async function getAdBase(id: number, kind: 'event' | 'project') {
+	if (kind === 'event')
+		return await db.query.events.findFirst({
+			where: eq(events.id, id),
+			columns: {
+				baseId: false,
+				eventTypeId: false,
+			},
+			with: { text: true, base: true },
+		});
+	else
+		return await db.query.projects.findFirst({
+			where: eq(projects.id, id),
+			columns: {
+				baseId: false,
+			},
+			with: { text: true, base: true },
+		});
+}
