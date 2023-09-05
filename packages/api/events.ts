@@ -12,7 +12,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi, newProjectSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
-import { omit } from 'remeda';
+import { omit, pick } from 'remeda';
 import { projects } from './schema/cooperation.schema';
 
 export const kindToColumn = {
@@ -261,7 +261,10 @@ export const getEvents = async ({
 		// organization
 		.all();
 	// if published as organization, return only org, not author
-	return res;
+	return res.map((i) => ({
+		...i,
+		users: pick(i.users, ['id', 'name', 'image']),
+	}));
 };
 
 export const getAd = async (

@@ -13,7 +13,7 @@ type ItemType = Omit<
 type BaseType = ArrayElement<RouterOutput['events']['find']>['base_content'];
 type UserType = ArrayElement<RouterOutput['events']['find']>['users'];
 
-export default function FullCard<T>({
+export default function FullCard({
 	kind,
 	item,
 	user,

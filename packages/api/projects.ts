@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { and, eq, sql } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { projects } from './schema/cooperation.schema';
+import { omit, pick } from 'remeda';
 
 export const projectRoutes = createTRPCRouter({
 	// TODO: types: eventTypesRoutes,
@@ -55,7 +56,10 @@ export const getProjects = async ({
 		// organization
 		.all();
 	// if published as organization, return only org, not author
-	return res;
+	return res.map((i) => ({
+		...i,
+		users: pick(i.users, ['id', 'name', 'image']),
+	}));
 };
 
 export const getProject = async (id: number, session: Session) => {
