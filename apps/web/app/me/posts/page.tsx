@@ -1,15 +1,22 @@
 'use client';
 
-import { getBadges } from 'app/events/utils';
 import clsx from 'clsx';
 import CardList from 'components/landing/CardsContainer';
 import { trpc } from 'lib/trpc';
 import Image from 'next/image';
 import React from 'react';
-import { Button, Card } from 'ui';
+import { Button, FullCard } from 'ui';
 
 export default function Page() {
-	const { data } = trpc.events.find.useQuery({ status: null });
+	const { data: events } = trpc.events.find.useQuery({ status: null });
+	const { data: projects } = trpc.projects.find.useQuery({ status: null });
+	const data = [...(events ?? []), ...(projects ?? [])].sort((a, b) => {
+		return (
+			new Date(b.base_content.publishedAt).getTime() -
+			new Date(a.base_content.publishedAt).getTime()
+		);
+	});
+
 	return (
 		<div className="flex flex-col">
 			{data?.length === 0 ? (
@@ -31,31 +38,24 @@ export default function Page() {
 					<Publish className="ml-auto" />
 					<CardList>
 						{data?.map((i) => {
+							if ('events' in i)
+								return (
+									<FullCard
+										key={i.base_content.id}
+										base={i.base_content}
+										item={i.events}
+										user={i.users}
+										kind="event"
+									/>
+								);
 							return (
-								<Card key={i.events.id} id={i.events.id}>
-									<Card.Preview
-										image={i.events.coverImage}
-										alt=""
-										badges={getBadges({
-											entryType: i.events.entryType,
-											isOnline: i.events.isOnline ?? false,
-										})}
-									/>
-									<Card.Details
-										date={i.events.date}
-										title={i.base_content.title}
-										org={{ link: '', name: i.users.name }}
-										location={
-											i.events.city && i.events.address
-												? {
-														city: i.events.city,
-														address: i.events.address,
-												  }
-												: null
-										}
-										description={i.events.description}
-									/>
-								</Card>
+								<FullCard
+									key={i.base_content.id}
+									base={i.base_content}
+									item={i.cooperation}
+									user={i.users}
+									kind="project"
+								/>
 							);
 						})}
 					</CardList>

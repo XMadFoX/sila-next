@@ -17,6 +17,7 @@ export const projectRoutes = createTRPCRouter({
 					end: z.date().optional(),
 					status: z
 						.enum(['draft', 'published', 'changesRequested', 'ready'])
+						.nullable()
 						.optional(),
 				})
 				.optional()
@@ -36,7 +37,7 @@ export const getProjects = async ({
 	isImportant?: boolean;
 	start?: Date;
 	end?: Date;
-	status?: BaseContent['status'];
+	status?: BaseContent['status'] | null;
 } = {}) => {
 	const res = await db
 		.select()
@@ -46,7 +47,7 @@ export const getProjects = async ({
 				isImportant ? eq(projects.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
 				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
-				eq(baseContent.status, status)
+				...(status ? [eq(baseContent.status, status)] : [])
 			)
 		)
 		.innerJoin(baseContent, eq(projects.baseId, baseContent.id))
