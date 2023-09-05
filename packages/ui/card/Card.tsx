@@ -22,7 +22,7 @@ export const linkMap = {
 export function Card({ children, big, id, gradientClass, kind }: CardProps) {
 	return (
 		<Link
-			href={`${linkMap[kind]}/${id}`}
+			href={`/${linkMap[kind]}/${id}`}
 			draggable={false}
 			onClick={(e: React.MouseEvent<HTMLElement>) => {
 				const allowedTags = [
