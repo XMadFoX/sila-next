@@ -7,16 +7,9 @@ const NewEvent = dynamic(() => import('ui/events').then((m) => m.NewEvent), {
 });
 
 export default function Page() {
-	const [project, setProject] = useState(false);
 	return (
 		<>
-			<button
-				onClick={() => setProject((v) => !v)}
-				className={project ? 'bg-blue' : 'bg-error'}
-			>
-				toggle
-			</button>
-			<NewEvent project={project} />
+			<NewEvent />
 		</>
 	);
 }

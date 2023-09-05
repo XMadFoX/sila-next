@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { InputField, cn } from 'ui';
+import { cn } from 'ui';
 import { NewEvent } from 'ui/events';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { Check } from 'lucide-react';
 
-type Types = 'events' | 'cooperation';
+type Kinds = 'event' | 'project';
 
 export default function NewPost() {
-	const [type, setType] = React.useState<Types>('events');
+	const [kind, setKind] = React.useState<Kinds>('event');
 
 	return (
 		<div className="-mt-5">
@@ -18,18 +18,18 @@ export default function NewPost() {
 				<div className="flex gap-4 items-center">
 					<Select
 						title="Культурные мероприятия"
-						value="events"
-						active={type}
-						setType={setType}
+						value="event"
+						active={kind}
+						setType={setKind}
 					/>
 					<Select
 						title="Деловое сотрудничество"
-						value="cooperation"
-						active={type}
-						setType={setType}
+						value="project"
+						active={kind}
+						setType={setKind}
 					/>
 				</div>
-				<NewEvent type={type} />
+				<NewEvent kind={kind} />
 			</form>
 		</div>
 	);
@@ -42,9 +42,9 @@ const Select = ({
 	setType,
 }: {
 	title: string;
-	value: Types;
-	active: Types;
-	setType: (value: Types) => void;
+	value: Kinds;
+	active: Kinds;
+	setType: (value: Kinds) => void;
 }) => {
 	return (
 		<>

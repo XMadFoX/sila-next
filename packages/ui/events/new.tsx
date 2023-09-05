@@ -39,25 +39,24 @@ import {
 import { linkMap } from '../card';
 
 export function NewEvent({
-	type = 'events',
+	kind = 'event',
 	upd,
-	project,
 }: {
-	type?: 'events' | 'cooperation';
+	kind?: 'event' | 'project';
 	upd?: {
 		id: number;
 		values: any;
 	};
-	project?: boolean;
 }) {
 	const methods = useForm<
 		z.infer<typeof newEventSchema> | z.infer<typeof newProjectSchema>
 	>({
-		resolver: project
-			? // @ts-ignore: TS2589
-			  zodResolver(newProjectSchema)
-			: // @ts-ignore
-			  zodResolver(newEventSchema),
+		resolver:
+			kind === 'event'
+				? // @ts-ignore: TS2589
+				  zodResolver(newEventSchema)
+				: // @ts-ignore
+				  zodResolver(newProjectSchema),
 		defaultValues: async () => {
 			if (upd?.values) return upd.values;
 			const raw = localStorage.getItem('newEvent');
@@ -88,8 +87,7 @@ export function NewEvent({
 
 	const router = useRouter();
 	useEffect(() => {
-		if (insertedId)
-			router.push(`/${linkMap[project ? 'project' : 'event']}/${insertedId}`);
+		if (insertedId) router.push(`/${linkMap[kind]}/${insertedId}`);
 	}, [insertedId, router]);
 
 	const editorRef = React.useRef<EditorJS | null>(null);
@@ -98,7 +96,6 @@ export function NewEvent({
 
 	return (
 		<div className="w-full max-w-3xl">
-			{type}
 			<FormProvider {...methods}>
 				<form
 					onInvalid={(e) => {
@@ -121,7 +118,7 @@ export function NewEvent({
 							// send
 							const payload = {
 								...d,
-								kind: (project ? 'project' : 'event') as 'event' | 'project',
+								kind: kind,
 								articleData,
 								timestamp: combinedDateTime,
 							};
@@ -206,7 +203,7 @@ export function NewEvent({
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
 					/>
-					{!project && eventTypes && eventTypes?.length > 0 && (
+					{kind === 'event' && eventTypes && eventTypes?.length > 0 && (
 						<Combobox
 							{...methods.register('eventTypeId')}
 							label="Тип"
@@ -248,7 +245,7 @@ export function NewEvent({
 							</FormItem>
 						)}
 					/>
-					{!project && (
+					{kind === 'project' && (
 						<EventInputField
 							aria-label="Ссылка на регистраю"
 							{...methods.register('registrationUrl')}
