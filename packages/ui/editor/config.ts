@@ -11,18 +11,22 @@ import Warning from '@editorjs/warning';
 import NestedList from '@editorjs/nested-list';
 import TelegramPost from 'editorjs-telegram-post';
 
+export const basePlugins = {
+	underline: Underline,
+	marker: Marker,
+	quote: Quote,
+};
+
 export const userPlugins = {
 	header: {
 		class: Header,
 		config: { defaultLevel: 2, levels: [2, 3, 4] },
 	},
+	...basePlugins,
 	list: List,
-	underline: Underline,
 	link: Link,
-	marker: Marker,
 	checklist: CheckList,
 	delimiter: Delimiter,
-	quote: Quote,
 	table: Table,
 	warning: Warning,
 	nestedList: NestedList,

@@ -6,11 +6,12 @@ import React, {
 } from 'react';
 import styles from './editor.module.scss';
 import EditorJS from '@editorjs/editorjs';
-import { userPlugins } from './config';
+import { basePlugins, userPlugins } from './config';
 import DragDrop from 'editorjs-drag-drop';
 
 interface EditorProps {
 	data?: any;
+	restricted?: true;
 }
 
 export const EditorContainer = forwardRef((props: EditorProps, ref) => {
@@ -36,7 +37,7 @@ export const EditorContainer = forwardRef((props: EditorProps, ref) => {
 			if (!prevEditor) {
 				const editor = new EditorJS({
 					holder: holderId,
-					tools: userPlugins,
+					tools: props.restricted ? basePlugins : userPlugins,
 					onReady: () => {
 						const extraDiv = document.getElementById(holderId)?.children;
 						extraDiv?.length === 2 && extraDiv[1].remove();
@@ -44,14 +45,6 @@ export const EditorContainer = forwardRef((props: EditorProps, ref) => {
 					},
 					data: props?.data ?? {
 						blocks: [
-							{
-								id: 'Gjq-FU6zUv',
-								type: 'header',
-								data: {
-									text: 'Заголвок статьи',
-									level: 2,
-								},
-							},
 							{
 								id: 'SGe6wcZQO6',
 								type: 'paragraph',
