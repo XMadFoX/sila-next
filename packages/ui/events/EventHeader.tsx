@@ -1,7 +1,7 @@
 import React from 'react';
 import { newButtonVariants } from '../general';
 import { cn } from '../lib/utils';
-import entryTypes from '@sila/api/entryTypes';
+import entryTypes from '@sila/api/ads/entryTypes';
 
 interface EventHeaderProps {
 	timestamp: Date;

@@ -1,11 +1,11 @@
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { db, verificationTokens, users } from './schema';
-import { ShortUser, findOne, shortUser, createUser } from './user';
+import { db, verificationTokens, users } from '../db/schema';
+import { ShortUser, findOne, shortUser, createUser } from '../user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
-import { env } from './env.mjs';
+import { env } from '../env.mjs';
 import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
@@ -86,6 +86,7 @@ export async function register(
 		name: credentials.name,
 		email: credentials.email,
 		emailVerified: null,
+		image: null,
 		totp: null,
 		totpEnabled: null,
 	};

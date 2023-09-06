@@ -1,17 +1,17 @@
 import { eq } from 'drizzle-orm';
 import { authenticator } from 'otplib';
 import { z } from 'zod';
-import { db, users } from './schema';
+import { db, users } from '../db/schema';
 import crypto from 'crypto';
 
 import {
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
-} from './trpc-server';
+} from '../trpc-server';
 import { decrypt, encrypt } from './encryption';
-import { findOne } from './user';
-import ErrorMessages from './ErrorMessages';
+import { findOne } from '../user';
+import ErrorMessages from '../ErrorMessages';
 
 export const totpRoutes = createTRPCRouter({
 	generateTotp: protectedProcedure.query(async ({ ctx }) => {

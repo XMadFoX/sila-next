@@ -2,7 +2,7 @@ import { Config } from 'drizzle-kit';
 import { envCore as env } from './env.mjs';
 
 export default {
-	schema: './schema.ts',
+	schema: './db/schema.ts',
 	driver: 'turso',
 	dbCredentials: {
 		url: env.DB_URL,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertDialog } from '../general/AlertDialog';
 import { trpc } from '../lib';
-import { BaseContent } from '@sila/api/schema';
+import { BaseContent } from '@sila/api/db/schema';
 import { linkMap } from '../card';
 
 export function PublishDialog({

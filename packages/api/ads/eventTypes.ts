@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
-import { db, eventTypes, insertEventTypesSchema } from './schema';
+import { db, eventTypes, insertEventTypesSchema } from '../db/schema';
 import {
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
-} from './trpc-server';
+} from '../trpc-server';
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 

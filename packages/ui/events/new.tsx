@@ -24,7 +24,7 @@ import countries from '@sila/api/countries.json';
 import cities from '@sila/api/clientCities25.json';
 import { EditorContainer } from '../editor/editor';
 import clsx from 'clsx';
-import { newEventSchema, newProjectSchema } from '@sila/api/eventsSchema';
+import { newEventSchema, newProjectSchema } from '@sila/api/ads/eventsSchema';
 import { trpc } from '../lib';
 import { useRouter } from 'next/navigation';
 import EditorJS from '@editorjs/editorjs';

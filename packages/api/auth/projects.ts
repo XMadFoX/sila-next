@@ -1,10 +1,10 @@
-import { Session, createTRPCRouter, publicProcedure } from './trpc-server';
-import { db, users } from './schema';
-import { BaseContent, baseContent } from './schema/contentBase.schema';
+import { Session, createTRPCRouter, publicProcedure } from '../trpc-server';
+import { db, users } from '../db/schema';
+import { BaseContent, baseContent } from '../schema/contentBase.schema';
 import { z } from 'zod';
 import { and, eq, sql } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
-import { projects } from './schema/cooperation.schema';
+import { projects } from '../schema/cooperation.schema';
 import { omit, pick } from 'remeda';
 
 export const projectRoutes = createTRPCRouter({

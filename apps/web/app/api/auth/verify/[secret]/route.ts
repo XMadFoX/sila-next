@@ -1,4 +1,4 @@
-import { verifyEmail } from '@sila/api/auth';
+import { verifyEmail } from '@sila/api/auth/auth';
 
 export async function GET(request: Request, { params }) {
 	if (!params?.secret) {

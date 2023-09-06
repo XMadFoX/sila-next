@@ -1,4 +1,4 @@
-import { db, roles } from '../schema';
+import { db, roles } from '../db/schema';
 import { createTRPCRouter, protectedProcedure } from '../trpc-server';
 import { TRPCError } from '@trpc/server';
 

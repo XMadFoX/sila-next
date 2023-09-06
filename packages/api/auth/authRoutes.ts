@@ -1,10 +1,10 @@
-import { db, users } from './schema';
+import { db, users } from '../db/schema';
 import { login, register } from './auth';
 import {
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
-} from './trpc-server';
+} from '../trpc-server';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 

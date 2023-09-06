@@ -5,7 +5,7 @@ import {
 	users,
 	usersToRoles,
 } from './schema/user.schema';
-import { db } from './schema';
+import { db } from './db/schema';
 import { eq } from 'drizzle-orm';
 import { omit } from 'remeda';
 

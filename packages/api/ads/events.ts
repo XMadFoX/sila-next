@@ -3,17 +3,17 @@ import {
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
-} from './trpc-server';
-import { db, users } from './schema';
-import { BaseContent, baseContent } from './schema/contentBase.schema';
+} from '../trpc-server';
+import { db, users } from '../db/schema';
+import { BaseContent, baseContent } from '../schema/contentBase.schema';
 import { z } from 'zod';
-import { articleText, events } from './schema/events.schema';
+import { articleText, events } from '../schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { newEventSchemaApi, newProjectSchemaApi } from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
 import { omit, pick } from 'remeda';
-import { projects } from './schema/cooperation.schema';
+import { projects } from '../schema/cooperation.schema';
 
 export const kindToColumn = {
 	event: events,

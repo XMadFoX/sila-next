@@ -1,4 +1,4 @@
-import { BaseContent } from '@sila/api/schema';
+import { BaseContent } from '@sila/api/db/schema';
 import Link from 'next/link';
 
 const data = {

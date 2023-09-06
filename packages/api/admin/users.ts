@@ -1,5 +1,5 @@
 import { and, eq } from 'drizzle-orm';
-import { db, roles, users, usersToRoles } from '../schema';
+import { db, roles, users, usersToRoles } from '../db/schema';
 import { createTRPCRouter, protectedProcedure } from '../trpc-server';
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';

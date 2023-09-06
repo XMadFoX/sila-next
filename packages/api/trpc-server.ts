@@ -5,7 +5,7 @@ import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { ShortUser, findOne } from './user';
 import { IronSession, getIronSession } from 'iron-session';
 import { envCore } from './env.mjs';
-import { User } from './schema';
+import { User } from './db/schema';
 
 type UserSession = { user: ShortUser };
 export type Session = IronSession<UserSession>;

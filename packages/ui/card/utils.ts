@@ -1,4 +1,4 @@
-import entryTypes from '@sila/api/entryTypes';
+import entryTypes from '@sila/api/ads/entryTypes';
 
 export const getBadges = ({
 	entryType,

@@ -12,7 +12,7 @@ import { trpc } from '../lib';
 import { AlertDialog } from '../general/AlertDialog';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BaseContent } from '@sila/api/schema';
+import { BaseContent } from '@sila/api/db/schema';
 import { linkMap } from '../card';
 
 export default function EventMoreDropdown({

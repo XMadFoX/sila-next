@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"migrate": "ts-node migrate.ts",
+		"migrate": "ts-node db/migrate.ts",
 		"generate": "drizzle-kit generate:sqlite",
 		"push": "drizzle-kit push:sqlite",
 		"test": "echo \"Error: no test specified\" && exit 1"
