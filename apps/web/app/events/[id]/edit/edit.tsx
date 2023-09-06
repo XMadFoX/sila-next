@@ -9,7 +9,10 @@ import { DangerZone } from 'ui/events';
 export default function Edit({ kind }: { kind: 'event' | 'project' }) {
 	const params = useParams();
 	const id = parseInt(params?.id as string);
-	const { data, isLoading, isError, error } = trpc[kind].getOne.useQuery(id);
+	const { data, isLoading, isError, error } = trpc.events.getOne.useQuery({
+		id,
+		kind,
+	});
 	if (isLoading) return <div>Загрузка...</div>;
 	if (isError) return <div>Ошибка: {error.message}</div>;
 	if (!data) return <p>no data</p>;
@@ -26,7 +29,7 @@ export default function Edit({ kind }: { kind: 'event' | 'project' }) {
 
 	return (
 		<>
-			<NewEvent upd={{ id, values: values as any }} />
+			<NewEvent upd={{ id, values: values as any }} kind={kind} />
 			<DangerZone id={id} />
 		</>
 	);

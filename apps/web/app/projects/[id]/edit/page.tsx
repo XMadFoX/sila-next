@@ -3,5 +3,5 @@
 import Edit from '../../../events/[id]/edit/edit';
 
 export default function EditProject() {
-	return Edit;
+	return <Edit kind="project" />;
 }
