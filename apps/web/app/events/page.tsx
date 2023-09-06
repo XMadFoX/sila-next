@@ -10,6 +10,8 @@ import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FullCard } from 'ui/card';
+import useSession from 'ui/useSession';
+import Link from 'next/link';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
@@ -52,8 +54,18 @@ function Events() {
 		});
 	}, []);
 
+	const { data: session } = useSession();
+
 	return (
 		<main className="mt-16 text-black max-w-[1400px]">
+			{session?.user?.roles?.includes('mod') && (
+				<Link href="/events/mod">Модерация</Link>
+			)}
+			{session?.user?.roles?.includes('admin') && (
+				<Link className="ml-2" href="/admin/events/types">
+					Типы мероприятий
+				</Link>
+			)}
 			<div className="flex flex-wrap px-2">
 				<h1 className="text-2xl font-medium md:w-1/2">
 					Раздел направлен

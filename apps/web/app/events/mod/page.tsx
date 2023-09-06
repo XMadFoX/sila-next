@@ -7,7 +7,7 @@ import { FullCard } from 'ui/card';
 
 export default function ModPage() {
 	const { data } = trpc.events.find.useQuery({ status: 'ready' });
-	return (
+	return data && data?.length > 0 ? (
 		<CardList>
 			{data?.map((i) => (
 				<FullCard
@@ -19,5 +19,7 @@ export default function ModPage() {
 				/>
 			))}
 		</CardList>
+	) : (
+		<p>Пока нечего проверять</p>
 	);
 }
