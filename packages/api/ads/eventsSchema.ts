@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 const baseSchema = z.object({
 	title: z.string().min(3).max(64),
-	description: z.string().min(3).max(255),
 	// later image id on CF images
 	coverImage: z.string().min(3).max(255).url(),
 	date: z.date().min(new Date()),
@@ -81,12 +80,14 @@ export const newEventSchema = z.discriminatedUnion('isOnline', [
 ]);
 
 const apiSchema = eventBaseSchema.extend({
+	description: z.string().min(3).max(255),
 	kind: z.literal('event'),
 	timestamp: z.date().min(new Date()),
 	articleData: z.any(),
 });
 
 const projectApiSchema = projectBaseSchema.extend({
+	description: z.string().min(3).max(255),
 	kind: z.literal('project'),
 	timestamp: z.date().min(new Date()),
 	articleData: z.any(),

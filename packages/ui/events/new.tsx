@@ -122,6 +122,7 @@ export function NewEvent({
 								...d,
 								kind: kind,
 								articleData,
+								description: jsonToText(articleData),
 								timestamp: combinedDateTime,
 							};
 
@@ -142,10 +143,10 @@ export function NewEvent({
 						aria-label="Заголовок"
 						{...methods.register('title')}
 					/>
-					<EventInputField
-						aria-label="Описание"
-						{...methods.register('description')}
-					/>
+					{/* <EventInputField */}
+					{/* 	aria-label="Описание" */}
+					{/* 	{...methods.register('description')} */}
+					{/* /> */}
 					<FormField
 						control={methods.control}
 						name="date"
@@ -195,7 +196,11 @@ export function NewEvent({
 						)}
 					/>
 					<Address />
-					<EditorContainer ref={editorRef} data={upd?.values?.text} />
+					<EditorContainer
+						ref={editorRef}
+						data={upd?.values?.text}
+						restricted
+					/>
 					<EventInputField
 						aria-label="Время начала"
 						type="time"
@@ -364,3 +369,16 @@ const Address = () => {
 		</>
 	);
 };
+
+function jsonToText(json: any) {
+	// json blocks with {text: string} to plain text
+	const shortDescription = json.blocks.reduce((acc: string, curr: any) => {
+		if (['paragraph'].includes(curr.type)) {
+			return acc !== '' ? `${acc}. ${curr.data.text}` : curr.data.text;
+		}
+		return acc;
+	}, '');
+	// strip html tags
+	const stripped = shortDescription.replace(/(<([^>]+)>)/gi, '');
+	return stripped.slice(0, 200);
+}
