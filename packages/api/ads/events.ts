@@ -91,14 +91,15 @@ export const eventRoutes = createTRPCRouter({
 		)
 		.mutation(async ({ input, ctx }) => {
 			const { id, data } = input;
+			const adColumn = kindToColumn[data.kind];
 
 			// TODO: allow editing by mods
 			// TODO: allow editing by org members
 			const base = await db
 				.select({ id: baseContent.id, authorId: baseContent.authorId })
-				.from(events)
-				.where(eq(events.id, id))
-				.innerJoin(baseContent, eq(events.baseId, baseContent.id))
+				.from(adColumn)
+				.where(eq(adColumn.id, id))
+				.innerJoin(baseContent, eq(adColumn.baseId, baseContent.id))
 				.get({ id: baseContent.id, authorId: baseContent.authorId });
 			console.log(base);
 			if (!base || base.authorId !== ctx.session.user.id) {
@@ -106,7 +107,7 @@ export const eventRoutes = createTRPCRouter({
 			}
 
 			const res = await db
-				.update(data.kind === 'event' ? events : projects)
+				.update(adColumn)
 				.set({
 					date: data.timestamp,
 					...omit(data, [
@@ -120,8 +121,8 @@ export const eventRoutes = createTRPCRouter({
 						'kind',
 					]),
 				})
-				.where(eq(events.id, id))
-				.returning({ id: events.id, bId: events.baseId })
+				.where(eq(adColumn.id, id))
+				.returning({ id: adColumn.id, bId: adColumn.baseId })
 				.get();
 			await db
 				.update(articleText)

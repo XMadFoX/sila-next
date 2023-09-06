@@ -207,7 +207,9 @@ export function NewEvent({
 					/>
 					{eventTypes && eventTypes?.length > 0 && (
 						<Combobox
-							{...methods.register('eventTypeId')}
+							{...methods.register(
+								kind === 'project' ? 'projectTopicId' : 'eventTypeId'
+							)}
 							label="Тип"
 							placeholder="Выберите тип"
 							searchText="Начните вводить"
