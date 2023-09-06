@@ -36,6 +36,10 @@ export function CardPreview({
 				height={big ? 330 : 200}
 				width={big ? 624 : 377}
 				draggable={false}
+				className={clsx(
+					big ? 'w-[624px] h-[330px' : 'w-[377] h-[200px]',
+					'object-cover'
+				)}
 			/>
 			<ul className="flex absolute right-3 bottom-3 gap-4">
 				{badges.map((text) => (
