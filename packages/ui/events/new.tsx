@@ -92,7 +92,9 @@ export function NewEvent({
 
 	const editorRef = React.useRef<EditorJS | null>(null);
 
-	const { data: eventTypes } = trpc.events.types.list.useQuery();
+	const { data: eventTypes } = trpc.events.types.list.useQuery(
+		kind === 'project' ? 'project' : undefined
+	);
 
 	return (
 		<div className="w-full max-w-3xl">
@@ -203,7 +205,7 @@ export function NewEvent({
 						aria-label="Обложка"
 						{...methods.register('coverImage')}
 					/>
-					{kind === 'event' && eventTypes && eventTypes?.length > 0 && (
+					{eventTypes && eventTypes?.length > 0 && (
 						<Combobox
 							{...methods.register('eventTypeId')}
 							label="Тип"
@@ -245,7 +247,7 @@ export function NewEvent({
 							</FormItem>
 						)}
 					/>
-					{kind === 'project' && (
+					{kind === 'event' && (
 						<EventInputField
 							aria-label="Ссылка на регистраю"
 							{...methods.register('registrationUrl')}
