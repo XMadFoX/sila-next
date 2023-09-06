@@ -6,10 +6,13 @@ import { trpc } from 'lib/trpc';
 import Image from 'next/image';
 import React from 'react';
 import { Button, FullCard } from 'ui';
+import useSession from 'ui/useSession';
 
 export default function Page() {
-	const { data: events } = trpc.events.find.useQuery({ status: null });
-	const { data: projects } = trpc.projects.find.useQuery({ status: null });
+	const { data: session } = useSession();
+	const options = { status: null, author: session?.user.id };
+	const { data: events } = trpc.events.find.useQuery(options);
+	const { data: projects } = trpc.projects.find.useQuery(options);
 	const data = [...(events ?? []), ...(projects ?? [])].sort((a, b) => {
 		return (
 			new Date(b.base_content.publishedAt).getTime() -

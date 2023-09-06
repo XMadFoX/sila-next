@@ -8,8 +8,8 @@ const CreateEvent = dynamic(() => import('ui/admin/events/types/create'), {
 export default function page() {
 	return (
 		<div className="flex flex-col justify-center h-full grow">
-			<ListEvents />
-			<CreateEvent />
+			<ListEvents kind={undefined} />
+			<CreateEvent kind={undefined} />
 		</div>
 	);
 }

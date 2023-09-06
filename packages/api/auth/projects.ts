@@ -16,6 +16,7 @@ export const projectRoutes = createTRPCRouter({
 					isImportant: z.boolean().optional(),
 					start: z.date().optional(),
 					end: z.date().optional(),
+					author: z.string().optional(),
 					status: z
 						.enum(['draft', 'published', 'changesRequested', 'ready'])
 						.nullable()
@@ -33,11 +34,13 @@ export const getProjects = async ({
 	isImportant,
 	start,
 	end,
+	author,
 	status = 'published',
 }: {
 	isImportant?: boolean;
 	start?: Date;
 	end?: Date;
+	author?: string;
 	status?: BaseContent['status'] | null;
 } = {}) => {
 	const res = await db
@@ -48,6 +51,7 @@ export const getProjects = async ({
 				isImportant ? eq(projects.isImportant, isImportant) : sql`true`,
 				start ? sql`timestamp >= ${start.getTime()}` : sql`true`,
 				end ? sql`timestamp <= ${end.getTime()}` : sql`true`,
+				author ? eq(baseContent.authorId, author) : sql`true`,
 				...(status ? [eq(baseContent.status, status)] : [])
 			)
 		)
