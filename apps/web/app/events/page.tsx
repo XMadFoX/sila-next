@@ -1,15 +1,15 @@
 'use client';
 
 import CardList from 'components/landing/CardsContainer';
-import React, { useEffect } from 'react';
-import { Card, CardSkeleton, Heading, Slide, Slider } from 'ui';
+import React, { Suspense, useEffect } from 'react';
+import { CardSkeleton, Heading, Slide, Slider } from 'ui';
 import DatesBar from './DatesBar';
 import { useStore } from '@nanostores/react';
 import { $filter, today } from './filter.atom';
 import { trpc } from 'lib/trpc';
 import { addDays, differenceInHours } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getBadges, FullCard } from 'ui/card';
+import { FullCard } from 'ui/card';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
@@ -18,7 +18,7 @@ const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 
 const kind = 'event' as const;
 
-export default function Events() {
+function Events() {
 	const filter = useStore($filter);
 
 	const { data } = trpc.events.find.useQuery({
@@ -120,5 +120,13 @@ export default function Events() {
 				</CardList>
 			</section>
 		</main>
+	);
+}
+
+export default function EventsPage() {
+	return (
+		<Suspense fallback="Загрузка">
+			<Events />
+		</Suspense>
 	);
 }
