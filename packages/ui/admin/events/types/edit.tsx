@@ -8,6 +8,7 @@ import { Button } from '../../../general';
 import { InputField } from '../../../input';
 import { Check, X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+import { kind } from '@sila/api/ads/eventTypes';
 
 const insertEventTypesSchema = z.object({
 	name: z.string(),
@@ -17,10 +18,12 @@ export default function EditEvent({
 	value,
 	id,
 	cancel,
+	kind,
 }: {
 	value: string;
 	id: number;
 	cancel: () => void;
+	kind: kind;
 }) {
 	const methods = useForm<z.infer<typeof insertEventTypesSchema>>({
 		resolver: zodResolver(insertEventTypesSchema),
@@ -53,7 +56,7 @@ export default function EditEvent({
 				<form
 					className="flex flex-col gap-2 w-full"
 					onSubmit={handleSubmit(({ name }) => {
-						mutate({ id, name });
+						mutate({ id, name, kind });
 					})}
 				>
 					<InputField

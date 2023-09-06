@@ -4,9 +4,10 @@ import React from 'react';
 import { trpc } from '../../../lib';
 import { Pencil } from 'lucide-react';
 import EditEvent from './edit';
+import { kind } from '@sila/api/ads/eventTypes';
 
-export default function EventTypesList() {
-	const { data } = trpc.events.types.list.useQuery();
+export default function EventTypesList({ kind }: { kind: kind }) {
+	const { data } = trpc.events.types.list.useQuery(kind);
 	const [edit, setEdit] = React.useState<number | null>(null);
 
 	return (
@@ -30,6 +31,7 @@ export default function EventTypesList() {
 								value={type.name}
 								id={type.id}
 								cancel={() => setEdit(null)}
+								kind={kind}
 							/>
 						)}
 					</li>

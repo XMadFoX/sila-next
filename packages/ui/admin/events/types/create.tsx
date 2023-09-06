@@ -6,12 +6,13 @@ import { z } from 'zod';
 import { trpc } from '../../../lib';
 import { Button } from '../../../general';
 import { InputField } from '../../../input';
+import { kind } from '@sila/api/ads/eventTypes';
 
 const insertEventTypesSchema = z.object({
 	name: z.string(),
 });
 
-export default function CreateEvent() {
+export default function CreateEvent({ kind }: { kind: kind }) {
 	const methods = useForm<z.infer<typeof insertEventTypesSchema>>({
 		resolver: zodResolver(insertEventTypesSchema),
 		mode: 'onChange',
@@ -37,7 +38,7 @@ export default function CreateEvent() {
 				<form
 					className="flex flex-col gap-2"
 					onSubmit={handleSubmit(({ name }) => {
-						mutate({ name });
+						mutate({ name, kind });
 					})}
 				>
 					<legend className="text-lg font-bold">Создать новый тип</legend>
