@@ -29,8 +29,8 @@ export default function NewPost() {
 						setType={setKind}
 					/>
 				</div>
-				<NewEvent kind={kind} />
 			</form>
+			<NewEvent kind={kind} />
 		</div>
 	);
 }
