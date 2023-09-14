@@ -43,6 +43,7 @@ export default function AdPage({ kind }: { kind: 'event' | 'project' }) {
 					</Link>
 				</p>
 			)}
+			{/* TODO: awaiting moderation */}
 			<div className="flex justify-between items-center w-full">
 				<h1 className="my-10 text-3xl font-medium text-black">
 					{data.base.title}

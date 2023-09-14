@@ -256,7 +256,7 @@ export function NewEvent({
 					/>
 					{kind === 'event' && (
 						<EventInputField
-							aria-label="Ссылка на регистраю"
+							aria-label="Ссылка на регистрацию"
 							{...methods.register('registrationUrl')}
 						/>
 					)}
@@ -326,7 +326,7 @@ const Address = () => {
 					label="Страна"
 					{...methods.register('country')}
 					placeholder="Выберите страну"
-					searchText="Начните вводить называние страны"
+					searchText="Начните вводить название страны"
 					noResultsText="Нет результатов"
 					formDescription=""
 					options={countries.map((c) => ({
@@ -342,7 +342,7 @@ const Address = () => {
 					label="Город"
 					{...methods.register('city')}
 					placeholder="Выберите город"
-					searchText="Начните вводить называние города"
+					searchText="Начните вводить название города"
 					noResultsText="Нет результатов"
 					formDescription=""
 					options={cities
