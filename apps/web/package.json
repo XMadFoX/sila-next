@@ -21,6 +21,8 @@
 		"@trpc/client": "^10.37.1",
 		"@trpc/react-query": "^10.37.1",
 		"@trpc/server": "^10.37.1",
+		"@upstash/ratelimit": "^0.4.4",
+		"@upstash/redis": "^1.22.0",
 		"@use-gesture/react": "^10.2.27",
 		"bufferutil": "^4.0.7",
 		"clsx": "^1.2.1",
