@@ -1,5 +1,8 @@
 import { appRouter, createTRPCContext } from '@sila/api';
+import { TRPCError } from '@trpc/server';
 import { createNextApiHandler } from '@trpc/server/adapters/next';
+import { Ratelimit } from '@upstash/ratelimit';
+import ratelimit from 'lib/ratelimit';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const nextApiHandler = createNextApiHandler({
@@ -28,6 +31,14 @@ export default async function handler(
 		res.writeHead(200);
 		return res.end();
 	}
+
+	const id = (req.headers['x-real-ip'] as string) || 'api';
+	const rate = await ratelimit(Ratelimit.fixedWindow(20, '15s')).limit(id);
+	console.log(id, rate);
+	if (!rate.success)
+		throw new TRPCError({
+			code: 'TOO_MANY_REQUESTS',
+		});
 
 	return nextApiHandler(req, res);
 }
