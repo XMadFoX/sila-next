@@ -1,5 +1,5 @@
 import { envCore } from '@sila/api/env.mjs';
-import { Ratelimit } from '@upstash/ratelimit';
+import { Algorithm, Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
@@ -7,9 +7,11 @@ const redis = new Redis({
 	token: envCore.UPSTASH_REDIS_TOKEN,
 });
 
-const ratelimit = new Ratelimit({
-	redis: redis,
-	limiter: Ratelimit.fixedWindow(5, '5 s'),
-});
+const ratelimit = (alg: Algorithm<any>) =>
+	new Ratelimit({
+		redis: redis,
+		limiter: alg,
+		prefix: 'ratelimit',
+	});
 
 export default ratelimit;
