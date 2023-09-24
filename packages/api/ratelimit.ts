@@ -1,4 +1,5 @@
-import { envCore } from '@sila/api/env.mjs';
+import { TRPCError } from '@trpc/server';
+import { envCore } from './env.mjs';
 import { Algorithm, Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
@@ -14,4 +15,14 @@ const ratelimit = (alg: Algorithm<any>) =>
 		prefix: 'ratelimit',
 	});
 
-export default ratelimit;
+const throwTooMantRequests = async (id: string, alg: Algorithm<any>) => {
+	const { success } = await ratelimit(alg).limit(id);
+	if (!success) {
+		throw new TRPCError({
+			code: 'TOO_MANY_REQUESTS',
+		});
+	}
+};
+
+export { ratelimit };
+export default throwTooMantRequests;

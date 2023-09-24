@@ -33,12 +33,6 @@ export default async function handler(
 	}
 
 	const id = (req.headers['x-real-ip'] as string) || 'api';
-	const rate = await ratelimit(Ratelimit.fixedWindow(20, '15s')).limit(id);
-	console.log(id, rate);
-	if (!rate.success)
-		throw new TRPCError({
-			code: 'TOO_MANY_REQUESTS',
-		});
-
+	await ratelimit(id, Ratelimit.fixedWindow(20, '15s'));
 	return nextApiHandler(req, res);
 }
