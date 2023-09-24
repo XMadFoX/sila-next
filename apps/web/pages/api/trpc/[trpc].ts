@@ -2,7 +2,7 @@ import { appRouter, createTRPCContext } from '@sila/api';
 import { TRPCError } from '@trpc/server';
 import { createNextApiHandler } from '@trpc/server/adapters/next';
 import { Ratelimit } from '@upstash/ratelimit';
-import ratelimit from 'lib/ratelimit';
+import ratelimit from '@sila/api/ratelimit';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const nextApiHandler = createNextApiHandler({
