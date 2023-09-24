@@ -15,10 +15,12 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 		cookieName: 'auth',
 		password: envCore.ESECRET,
 	});
+	const ip = opts.req.headers['x-real-ip'] || opts.req.socket.remoteAddress;
 
-	return { session, user: undefined } as {
+	return { session, user: undefined, limitId: ip } as {
 		session: typeof session;
 		user: User | undefined;
+		limitId: string;
 	};
 };
 
@@ -55,6 +57,7 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		ctx: {
 			session: ctx.session,
 			user,
+			limitId: user.id || ctx.limitId,
 		},
 	});
 });

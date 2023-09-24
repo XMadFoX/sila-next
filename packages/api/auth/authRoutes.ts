@@ -7,6 +7,9 @@ import {
 } from '../trpc-server';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
+import ratelimit from '../ratelimit';
+import { Ratelimit } from '@upstash/ratelimit';
+import { TRPCError } from '@trpc/server';
 
 export const loginSchema = z.object({
 	email: z.string().email(),
@@ -19,12 +22,14 @@ export const registerSchema = loginSchema.extend({
 
 export const authRoutes = createTRPCRouter({
 	session: publicProcedure.query(async ({ ctx }) => {
+		await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
 		const session = ctx.session;
 		return session;
 	}),
 	register: publicProcedure
 		.input(registerSchema)
 		.mutation(async ({ input, ctx }) => {
+			await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
 			const user = await register(input);
 			ctx.session.user = user;
 			await ctx.session.save();
@@ -38,6 +43,9 @@ export const authRoutes = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input, ctx }) => {
+			await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
+			// TODO: it locks out the user if someone tries to bruteforce
+			// probably should send an email to the user with a message about bruteforce and a login link
 			const user = await login(input);
 			ctx.session.user = user;
 			await ctx.session.save();
@@ -52,6 +60,7 @@ export const authRoutes = createTRPCRouter({
 	update: protectedProcedure
 		.input(z.object({ name: z.string(), email: z.string().email() }))
 		.mutation(async ({ input, ctx }) => {
+			await ratelimit(ctx.limitId, Ratelimit.fixedWindow(3, '60 m'));
 			const user = ctx.user;
 			const res = await db
 				.update(users)
