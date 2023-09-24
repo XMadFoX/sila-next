@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import ratelimit from '../ratelimit';
 import { Ratelimit } from '@upstash/ratelimit';
-import { TRPCError } from '@trpc/server';
 
 export const loginSchema = z.object({
 	email: z.string().email(),

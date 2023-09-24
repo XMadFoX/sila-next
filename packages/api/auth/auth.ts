@@ -7,7 +7,7 @@ import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
 import { env } from '../env.mjs';
 import { loginSchema, registerSchema } from './authRoutes';
-import { TRPCError } from 'trpc';
+import { TRPCError } from '@trpc/server';
 
 export async function login(
 	credentials: z.infer<typeof loginSchema>
@@ -22,9 +22,12 @@ export async function login(
 			(await verify(credentials.password, user.password))
 		)
 			return shortUser(user);
-		throw new TRPCError(400, { message: 'Invalid credentials' });
+		throw new TRPCError({
+			code: 'BAD_REQUEST',
+			message: 'Invalid credentials',
+		});
 	}
-	throw new TRPCError(400, { message: 'Invalid credentials' });
+	throw new TRPCError({ code: 'BAD_REQUEST', message: 'Invalid credentials' });
 }
 
 export async function register(
