@@ -1,16 +1,16 @@
 {
-  "name": "emails",
-  "version": "1.0.0",
-  "scripts": {
-    "dev": "email dev"
-  },
-  "dependencies": {
-    "@mertasan/tailwindcss-variables": "^2.6.1",
-    "@react-email/button": "0.0.10",
-    "@react-email/html": "0.0.4",
-    "@react-email/tailwind": "0.0.8",
-    "react-email": "1.9.4",
-    "tailwind-config": "workspace:*",
-    "web": "workspace:^"
-  }
+	"name": "@sila/emails",
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "email dev --skip-install"
+	},
+	"dependencies": {
+		"@mertasan/tailwindcss-variables": "^2.6.1",
+		"@react-email/button": "0.0.10",
+		"@react-email/html": "0.0.4",
+		"@react-email/tailwind": "0.0.8",
+		"react-email": "1.9.5",
+		"tailwind-config": "workspace:*",
+		"web": "workspace:^"
+	}
 }

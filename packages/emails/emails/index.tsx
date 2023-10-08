@@ -3,28 +3,25 @@ import { Html } from '@react-email/html';
 import { Tailwind } from '@react-email/tailwind';
 import * as React from 'react';
 import config from 'tailwind-config';
-// import 'web/app/global.css';
-import './global.css';
+
+const tailwindConfig = {
+	...config,
+	theme: {
+		extend: {},
+	},
+};
 
 export default function Email() {
 	return (
-		<Html>
-			<Tailwind config={config as any}>
-				{/* <style> */}
-				{/* 	:root { */}
-				{/* 		--error: #cb1212; */}
-				{/* }</style> */}
-				{/* {JSON.stringify(config.theme)} */}
+		<Tailwind config={tailwindConfig as any}>
+			<Html>
 				<Button
-					pX={20}
-					pY={12}
-					href="https://example.com"
-					style={{ background: 'red', color: '#fff' }}
+					href="https://google.com"
+					className="p-4 text-white bg-blue-900"
 				>
-					Click me
+					Google
 				</Button>
-				<Button className="p-4 bg-green-500 bg-error">tailwind</Button>
-			</Tailwind>
-		</Html>
+			</Html>
+		</Tailwind>
 	);
 }
