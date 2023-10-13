@@ -131,7 +131,7 @@ export function Wrap(
 		return (
 			<GradientWrapper
 				className={cn(
-					'mr-2 mb-2 text-white from-primary-a to-primary-c',
+					'text-white from-primary-a to-primary-c',
 					wrapperClassName
 				)}
 				rounded="full"

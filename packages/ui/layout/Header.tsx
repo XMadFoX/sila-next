@@ -33,8 +33,9 @@ export function Header() {
           /> */}
 					<div className="flex gap-2 items-center ml-auto">
 						<Button
+							size={null}
 							intent="outlined"
-							className="flex ml-auto text-black uppercase"
+							className="flex items-center px-8 ml-auto h-11 text-black uppercase"
 							bg="#fff"
 							href={session ? '/me/posts/new' : '/auth/login'}
 							onClick={() => {
@@ -44,7 +45,7 @@ export function Header() {
 								// }, 100);
 							}}
 						>
-							Создать <span className="hidden md:inline">объявление</span>
+							Создать <span className="hidden ml-1 md:inline">объявление</span>
 						</Button>
 
 						{/* <p>{session.user.name}</p> */}
