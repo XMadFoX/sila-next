@@ -173,9 +173,10 @@ export const eventRoutes = createTRPCRouter({
 				id: z.number().positive(),
 				status: z.enum(['draft', 'published', 'changesRequested', 'ready']),
 				kind: z.enum(['event', 'project']),
+				message: z.string().optional(),
 			})
 		)
-		.mutation(async ({ input: { id, status, kind }, ctx }) => {
+		.mutation(async ({ input: { id, status, kind, message }, ctx }) => {
 			const column = kindToColumn[kind];
 			const base = await db
 				.select({
@@ -202,6 +203,16 @@ export const eventRoutes = createTRPCRouter({
 			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
+			// notify author via email
+			if (status === 'changesRequested' && base.status !== 'changesRequested') {
+				if (ctx.user.id !== base.authorId) {
+					console.log('send email');
+					console.log(
+						`${base.authorId} new status ${status} message: ${message}`
+					);
+				}
+			}
+			console.log('preupdate');
 			await db
 				.update(baseContent)
 				.set({ status })
