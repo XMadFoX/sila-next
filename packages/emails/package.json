@@ -1,15 +1,16 @@
 {
-	"name": "emails",
-	"version": "1.0.0",
-	"scripts": {
-		"dev": "email preview ./templates --host --port=3001"
-	},
-	"dependencies": {
-		"@jsx-email/all": "^2.2.0",
-		"@jsx-email/cli": "^1.1.0",
-		"@mertasan/tailwindcss-variables": "^2.6.1",
-		"tailwind-config": "workspace:*",
-		"tsconfig": "workspace:^",
-		"web": "workspace:^"
-	}
+  "name": "@sila/emails",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "email preview ./templates --host --port=3001"
+  },
+  "dependencies": {
+    "@jsx-email/all": "^2.2.0",
+    "@jsx-email/cli": "^1.1.0",
+    "@mertasan/tailwindcss-variables": "^2.6.1",
+    "tailwind-config": "workspace:*",
+    "tsconfig": "workspace:^",
+    "web": "workspace:^"
+  }
 }
