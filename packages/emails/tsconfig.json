@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"resolveJsonModule": true
+	},
+	"extends": "tsconfig/react-library.json",
+	"include": [
+		".",
+		"../tsconfig/stories"
+	],
+	"exclude": [
+		"dist",
+		"build",
+		"node_modules"
+	]
+}
