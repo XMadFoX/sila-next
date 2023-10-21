@@ -5,14 +5,14 @@ import { ShortUser, findOne, shortUser, createUser } from '../user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
-import { env, envCore } from '../env.mjs';
+import { env } from '../env.mjs';
 import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
 import { render } from '@jsx-email/render';
-import { NewLoginTemplate, Template } from '@sila/emails';
+import { NewLoginTemplate } from '@sila/emails';
 import { NextApiRequest } from 'next';
-import UAParser from 'ua-parser-js';
+import getLoginDetails from './getLoginDetails';
 
 const nodemailer = NodeMailer.createTransport({
 	url: env.SMTP_URL,
@@ -32,16 +32,9 @@ export async function login(
 			// and matches
 			(await verify(credentials.password, user.password))
 		) {
-			const { ip, ua, time } = {
-				ip: req.headers['x-real-ip'] || req.socket.remoteAddress,
-				ua: req.headers['user-agent'],
-				time: new Date(),
-			};
+			const { ip, time, os, browser } = getLoginDetails(req);
 
-			const { browser, os } = new UAParser(ua).getResult();
-
-			await nodemailer.sendMail({
-				from: envCore.SMTP_FROM,
+			nodemailer.sendMail({
 				to: user.email,
 				subject: 'Вход в аккаунт',
 				html: render(
