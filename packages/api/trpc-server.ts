@@ -6,6 +6,7 @@ import { ShortUser, findOne } from './user';
 import { IronSession, getIronSession } from 'iron-session';
 import { envCore } from './env.mjs';
 import { User } from './db/schema';
+import { NextApiRequest } from 'next';
 
 type UserSession = { user: ShortUser };
 export type Session = IronSession<UserSession>;
@@ -16,9 +17,10 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 		password: envCore.ESECRET,
 	});
 
-	return { session, user: undefined } as {
+	return { session, user: undefined, req: opts.req } as {
 		session: typeof session;
 		user: User | undefined;
+		req: NextApiRequest;
 	};
 };
 
@@ -55,6 +57,7 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		ctx: {
 			session: ctx.session,
 			user,
+			req: ctx.req,
 		},
 	});
 });
