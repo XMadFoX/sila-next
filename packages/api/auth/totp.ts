@@ -12,6 +12,16 @@ import {
 import { decrypt, encrypt } from './encryption';
 import { findOne } from '../user';
 import ErrorMessages from '../ErrorMessages';
+import NodeMailer from 'nodemailer';
+import { env } from '../env.mjs';
+import { render } from '@jsx-email/render';
+import { TotpStatusChanged } from '@sila/emails';
+import getLoginDetails from './getLoginDetails';
+
+const nodemailer = NodeMailer.createTransport({
+	url: env.SMTP_URL,
+	from: env.SMTP_FROM,
+});
 
 export const totpRoutes = createTRPCRouter({
 	/**
@@ -65,6 +75,24 @@ export const totpRoutes = createTRPCRouter({
 			ctx.session.user.totpEnabled = new Date();
 			ctx.session.user.totp = random;
 			await ctx.session.save();
+
+			const { ip, time, os, browser } = getLoginDetails(ctx.req);
+
+			nodemailer.sendMail({
+				to: ctx.user.email,
+				subject: 'Включена двухфакторная аутентификации',
+				html: render(
+					TotpStatusChanged({
+						to: 'enabled' as const,
+						os: `${os.name} ${os.version}`,
+						browser: `${browser.name} ${browser.version}`,
+						ip,
+						timestamp: time.toLocaleString('ru-RU'),
+						url: env.VERCEL_URL + '/me',
+					})
+				),
+			});
+
 			return;
 		}),
 	/**
@@ -113,6 +141,24 @@ export const totpRoutes = createTRPCRouter({
 			ctx.session.user.totpEnabled = null;
 			ctx.session.user.totp = null;
 			await ctx.session.save();
+
+			const { ip, time, os, browser } = getLoginDetails(ctx.req);
+
+			nodemailer.sendMail({
+				to: ctx.user.email,
+				subject: 'Отключена двухфакторная аутентификации',
+				html: render(
+					TotpStatusChanged({
+						to: 'disabled' as const,
+						os: `${os.name} ${os.version}`,
+						browser: `${browser.name} ${browser.version}`,
+						ip,
+						timestamp: time.toLocaleString('ru-RU'),
+						url: env.VERCEL_URL + '/me',
+					})
+				),
+			});
+
 			return;
 		}),
 });
