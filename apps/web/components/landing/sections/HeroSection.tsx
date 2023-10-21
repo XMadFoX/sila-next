@@ -27,7 +27,10 @@ export default function HeroSection() {
 					свое, а также получать полезную информацию по психологии и другим
 					направлениям.
 				</p>
-				<Button className="mx-auto mt-10 uppercase md:ml-0 bg-primary">
+				<Button
+					href="/auth/login"
+					className="mx-auto mt-10 uppercase md:ml-0 bg-primary"
+				>
 					Присоединиться
 				</Button>
 			</div>

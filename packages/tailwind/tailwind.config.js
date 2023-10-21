@@ -46,15 +46,15 @@ module.exports = {
 				foreground: 'hsl(var(--destructive-foreground))',
 			},
 			muted: {
-				DEFAULT: 'hsl(var(--muted))',
-				foreground: 'hsl(var(--muted-foreground))',
+				DEFAULT: 'var(--background)',
+				foreground: 'hsl(var(--black))',
 			},
 			accent: {
 				DEFAULT: 'hsl(var(--accent))',
 				foreground: 'hsl(var(--accent-foreground))',
 			},
 			popover: {
-				DEFAULT: 'hsl(var(--popover))',
+				DEFAULT: 'hsl(var(--background))',
 				foreground: 'hsl(var(--popover-foreground))',
 			},
 			card: {

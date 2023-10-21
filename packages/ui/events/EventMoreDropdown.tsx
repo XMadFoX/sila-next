@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BaseContent } from '@sila/api/db/schema';
 import { linkMap } from '../card';
+import { UnpublishDialog } from './UnpublishDialog';
 
 export default function EventMoreDropdown({
 	id,
@@ -64,9 +65,17 @@ export default function EventMoreDropdown({
 									<button
 										onClick={() => updateStatus({ id, status: 'draft', kind })}
 									>
-										{status === 'published'
-											? 'Снять с публикации'
-											: 'Отменить публикацию'}
+										{status === 'published' ? (
+											<button
+												onClick={() =>
+													updateStatus({ id, status: 'draft', kind })
+												}
+											>
+												Снять с публикации
+											</button>
+										) : (
+											'Отменить публикацию'
+										)}
 									</button>
 								)}
 								{['changesRequested', 'draft'].includes(status) && (
@@ -89,11 +98,7 @@ export default function EventMoreDropdown({
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
 								{status === 'published' && (
-									<button
-										onClick={() =>
-											updateStatus({ id, status: 'changesRequested', kind })
-										}
-									>
+									<button onClick={() => setDialog('mod:unpublish')}>
 										Снять с публикации
 									</button>
 								)}
@@ -117,6 +122,12 @@ export default function EventMoreDropdown({
 				description="Вы уверены что хотете безвозвратно удалить объявление?"
 				actionCallback={() => deleteEvent(id)}
 				open={dialog === 'editor:delete'}
+				close={() => setDialog(null)}
+			/>
+			<UnpublishDialog
+				id={id}
+				kind={kind}
+				open={dialog === 'mod:unpublish'}
 				close={() => setDialog(null)}
 			/>
 		</>

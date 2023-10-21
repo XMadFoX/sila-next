@@ -58,7 +58,7 @@ function Projects() {
 				<h1 className="text-2xl font-medium md:w-1/2">
 					Раздел направлен
 					<br />
-					на развитие деловых связеймежду участниками сообщества.
+					на развитие деловых связей между участниками сообщества.
 				</h1>
 				<div className="md:w-1/2">
 					<p className="mt-4 text-lg">
