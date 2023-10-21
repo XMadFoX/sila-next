@@ -4,13 +4,13 @@ export const TemplateName = 'MainTemplate';
 
 export const Template = (props: {
 	title: string;
-	subtitle: string;
+	subtitle?: string;
 	text: string;
 	actionText: string;
 	actionUrl: string;
 }) => {
 	const { title, subtitle, text, actionText, actionUrl } =
-		Object.values(props).length === 5
+		Object.values(props).length >= 4
 			? props
 			: {
 					title: 'Title',

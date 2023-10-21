@@ -5,12 +5,22 @@ import { ShortUser, findOne, shortUser, createUser } from '../user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
-import { env } from '../env.mjs';
+import { env, envCore } from '../env.mjs';
 import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
+import { render } from '@jsx-email/render';
+import { Template } from '@sila/emails';
+import { NextApiRequest } from 'next';
+
+const nodemailer = NodeMailer.createTransport({
+	url: env.SMTP_URL,
+	from: env.SMTP_FROM,
+});
+
 export async function login(
-	credentials: z.infer<typeof loginSchema>
+	credentials: z.infer<typeof loginSchema>,
+	req: NextApiRequest
 ): Promise<ShortUser> {
 	const user = await findOne(credentials.email);
 	if (user) {
@@ -20,8 +30,28 @@ export async function login(
 			user.password &&
 			// and matches
 			(await verify(credentials.password, user.password))
-		)
+		) {
+			const { ip, ua, time } = {
+				ip: req.headers['x-real-ip'] || req.socket.remoteAddress,
+				ua: req.headers['user-agent'],
+				time: new Date(),
+			};
+
+			await nodemailer.sendMail({
+				from: envCore.SMTP_FROM,
+				to: user.email,
+				subject: 'Вход в аккаунт',
+				html: render(
+					Template({
+						title: 'Новый вход в аккаунт',
+						text: `В Ваш аккаунт выполнен вход. Если это были не вы, мы рекомендуем Вам сменить пароль КАК МОЖНО БЫСТРЕЕ чтобы защитить Ваш аккаунт. Сменив пароль, все устройства выйдут с этого аккаунта.`,
+						actionText: 'Личный кабинет',
+						actionUrl: `${env.VERCEL_URL}/me`,
+					})
+				),
+			});
 			return shortUser(user);
+		}
 		throw new TRPCError(400, { message: 'Invalid credentials' });
 	}
 	throw new TRPCError(400, { message: 'Invalid credentials' });

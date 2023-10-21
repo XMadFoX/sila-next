@@ -11,8 +11,10 @@
 	},
 	"dependencies": {
 		"@auth/core": "^0.8.1",
+		"@jsx-email/render": "^1.1.0",
 		"@libsql/client": "^0.2.2",
 		"@planetscale/database": "^1.7.0",
+		"@sila/emails": "workspace:^",
 		"@t3-oss/env-core": "^0.6.0",
 		"@trpc/server": "^10.37.1",
 		"@types/nodemailer": "^6.4.8",
