@@ -10,8 +10,9 @@ import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
 import { render } from '@jsx-email/render';
-import { Template } from '@sila/emails';
+import { NewLoginTemplate, Template } from '@sila/emails';
 import { NextApiRequest } from 'next';
+import UAParser from 'ua-parser-js';
 
 const nodemailer = NodeMailer.createTransport({
 	url: env.SMTP_URL,
@@ -37,16 +38,19 @@ export async function login(
 				time: new Date(),
 			};
 
+			const { browser, os } = new UAParser(ua).getResult();
+
 			await nodemailer.sendMail({
 				from: envCore.SMTP_FROM,
 				to: user.email,
 				subject: 'Вход в аккаунт',
 				html: render(
-					Template({
-						title: 'Новый вход в аккаунт',
-						text: `В Ваш аккаунт выполнен вход. Если это были не вы, мы рекомендуем Вам сменить пароль КАК МОЖНО БЫСТРЕЕ чтобы защитить Ваш аккаунт. Сменив пароль, все устройства выйдут с этого аккаунта.`,
-						actionText: 'Личный кабинет',
-						actionUrl: `${env.VERCEL_URL}/me`,
+					NewLoginTemplate({
+						os: `${os.name} ${os.version}`,
+						browser: `${browser.name} ${browser.version}`,
+						ip,
+						timestamp: time.toLocaleString('ru-RU'),
+						url: env.VERCEL_URL + '/me',
 					})
 				),
 			});
