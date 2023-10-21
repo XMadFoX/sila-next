@@ -1,4 +1,13 @@
-import { Body, Button, Heading, Html, Tailwind, Text } from '@jsx-email/all';
+import {
+	Body,
+	Button,
+	Container,
+	Heading,
+	Html,
+	Section,
+	Tailwind,
+	Text,
+} from '@jsx-email/all';
 
 export const TemplateName = 'MainTemplate';
 
@@ -8,8 +17,9 @@ export const Template = (props: {
 	text: string;
 	actionText: string;
 	actionUrl: string;
+	body?: JSX.Element;
 }) => {
-	const { title, subtitle, text, actionText, actionUrl } =
+	const { title, subtitle, text, actionText, actionUrl, body } =
 		Object.values(props).length >= 4
 			? props
 			: {
@@ -18,6 +28,7 @@ export const Template = (props: {
 					text: 'Long text',
 					actionText: 'Action',
 					actionUrl: 'https://example.com',
+					body: undefined,
 			  };
 	return (
 		<Html lang="ru">
@@ -33,7 +44,10 @@ export const Template = (props: {
 				<Body className="text-center">
 					<Heading as="h1">{title}</Heading>
 					<Heading as="h2">{subtitle}</Heading>
-					<Text>{text}</Text>
+					<Container>
+						<Text className="text-start">{text}</Text>
+					</Container>
+					{body && <Container>{body}</Container>}
 					<Button
 						href={actionUrl}
 						className="p-4 rounded-xl text-white"
