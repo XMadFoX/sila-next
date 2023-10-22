@@ -4,7 +4,7 @@ import {
 	protectedProcedure,
 	publicProcedure,
 } from '../trpc-server';
-import { db, users } from '../db/schema';
+import { db, roles, users, usersToRoles } from '../db/schema';
 import { BaseContent, baseContent } from '../schema/contentBase.schema';
 import { z } from 'zod';
 import { articleText, events } from '../schema/events.schema';
@@ -14,6 +14,16 @@ import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
 import { omit, pick } from 'remeda';
 import { projects } from '../schema/cooperation.schema';
+
+import NodeMailer from 'nodemailer';
+import { env } from '../env.mjs';
+import { render } from '@jsx-email/render';
+import { ModRequest, Template, TotpStatusChanged } from '@sila/emails';
+
+const nodemailer = NodeMailer.createTransport({
+	url: env.SMTP_URL,
+	from: env.SMTP_FROM,
+});
 
 export const kindToColumn = {
 	event: events,
@@ -183,6 +193,7 @@ export const eventRoutes = createTRPCRouter({
 					id: baseContent.id,
 					authorId: baseContent.authorId,
 					status: baseContent.status,
+					title: baseContent.title,
 				})
 				.from(column)
 				.where(eq(column.id, id))
@@ -203,10 +214,35 @@ export const eventRoutes = createTRPCRouter({
 			) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
+			if (status === 'ready') {
+				// find all mods
+				const mods = await db
+					.select()
+					.from(users)
+					.leftJoin(usersToRoles, eq(usersToRoles.userId, users.id))
+					.leftJoin(roles, eq(roles.id, usersToRoles.roleId))
+					.where(eq(roles.name, 'mod'))
+					.all();
+				mods.forEach((mod) => {
+					nodemailer.sendMail({
+						to: mod.users.email,
+						subject: 'Новое событие',
+						html: render(
+							ModRequest({
+								title: base.title,
+								url: `${env.VERCEL_URL}/${kind}s/${id}`,
+								timestamp: new Date().toLocaleString(),
+								username: ctx.user.name,
+							})
+						),
+					});
+				});
+			}
+
 			// notify author via email
 			if (status === 'changesRequested' && base.status !== 'changesRequested') {
 				if (ctx.user.id !== base.authorId) {
-					console.log('send email');
+					// TODO: send email
 					console.log(
 						`${base.authorId} new status ${status} message: ${message}`
 					);
