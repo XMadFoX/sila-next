@@ -18,7 +18,13 @@ import { projects } from '../schema/cooperation.schema';
 import NodeMailer from 'nodemailer';
 import { env } from '../env.mjs';
 import { render } from '@jsx-email/render';
-import { ModRequest, Template, TotpStatusChanged } from '@sila/emails';
+import {
+	ChangesRequested,
+	ModRequest,
+	PublishedTemplate,
+	Template,
+	TotpStatusChanged,
+} from '@sila/emails';
 
 const nodemailer = NodeMailer.createTransport({
 	url: env.SMTP_URL,
@@ -194,10 +200,12 @@ export const eventRoutes = createTRPCRouter({
 					authorId: baseContent.authorId,
 					status: baseContent.status,
 					title: baseContent.title,
+					author: users,
 				})
 				.from(column)
 				.where(eq(column.id, id))
 				.innerJoin(baseContent, eq(column.baseId, baseContent.id))
+				.innerJoin(users, eq(baseContent.authorId, users.id))
 				.get({ id: baseContent.id, authorId: baseContent.authorId });
 			if (!base || base.authorId !== ctx.user.id) {
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
@@ -242,11 +250,32 @@ export const eventRoutes = createTRPCRouter({
 			// notify author via email
 			if (status === 'changesRequested' && base.status !== 'changesRequested') {
 				if (ctx.user.id !== base.authorId) {
-					// TODO: send email
-					console.log(
-						`${base.authorId} new status ${status} message: ${message}`
-					);
+					nodemailer.sendMail({
+						to: base.author.email,
+						subject: 'Изменения запрошены',
+						html: render(
+							ChangesRequested({
+								title: base.title,
+								url: `${env.VERCEL_URL}/${kind}s/${id}`,
+								timestamp: new Date().toLocaleString(),
+								message,
+							})
+						),
+					});
 				}
+			}
+			if (status === 'published' && base.status !== 'published') {
+				nodemailer.sendMail({
+					to: base.author.email,
+					subject: 'Опубликовано',
+					html: render(
+						PublishedTemplate({
+							title: base.title,
+							url: `${env.VERCEL_URL}/${kind}s/${id}`,
+							timestamp: new Date().toLocaleString(),
+						})
+					),
+				});
 			}
 			console.log('preupdate');
 			await db

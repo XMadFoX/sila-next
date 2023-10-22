@@ -11,7 +11,7 @@ export const Template = ({
 }: {
 	timestamp: string;
 	title: string;
-	message: string;
+	message?: string;
 	url: string;
 }) => {
 	return (
@@ -22,8 +22,12 @@ export const Template = ({
 			actionUrl={url}
 			body={
 				<>
-					<Heading>Сообщение</Heading>
-					<Text className="text-start">{message}</Text>
+					{message && (
+						<>
+							<Heading>Сообщение</Heading>
+							<Text className="text-start">{message}</Text>
+						</>
+					)}
 					<Text className="text-center">{timestamp} по UTC</Text>
 				</>
 			}

@@ -10,8 +10,6 @@ export const Template = ({
 }: {
 	timestamp: string;
 	title: string;
-	message: string;
-	username: string;
 	url: string;
 }) => {
 	return (
