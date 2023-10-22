@@ -11,7 +11,7 @@ export const Template = ({
 	url,
 }: {
 	timestamp: string;
-	ip: string;
+	ip?: string;
 	browser: string;
 	os: string;
 	url: string;

@@ -13,7 +13,7 @@ export const Template = ({
 }: {
 	to: 'enabled' | 'disabled';
 	timestamp: string;
-	ip: string;
+	ip?: string;
 	browser: string;
 	os: string;
 	url: string;
