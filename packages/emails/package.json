@@ -10,7 +10,6 @@
     "@jsx-email/cli": "^1.1.0",
     "@mertasan/tailwindcss-variables": "^2.6.1",
     "tailwind-config": "workspace:*",
-    "tsconfig": "workspace:^",
-    "web": "workspace:^"
+    "tsconfig": "workspace:^"
   }
 }
