@@ -9,7 +9,7 @@ export const Template = ({
 	username,
 	url,
 }: {
-	timestamp: string;
+	timestamp: Date;
 	title: string;
 	username: string;
 	url: string;
@@ -20,11 +20,7 @@ export const Template = ({
 			text={`Запрос на публикацию ${title} от ${username}`}
 			actionText="Открыть"
 			actionUrl={url}
-			body={
-				<>
-					<Text className="text-center">{timestamp} по UTC</Text>
-				</>
-			}
+			time={timestamp}
 		/>
 	);
 };

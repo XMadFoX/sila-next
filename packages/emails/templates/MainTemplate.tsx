@@ -14,13 +14,14 @@ export const TemplateName = 'MainTemplate';
 export const Template = (props: {
 	title: string;
 	subtitle?: string;
-	text: string;
+	text?: string;
 	actionText: string;
 	actionUrl: string;
 	body?: JSX.Element;
+	time?: Date;
 }) => {
-	const { title, subtitle, text, actionText, actionUrl, body } =
-		Object.values(props).length >= 4
+	const { title, subtitle, text, actionText, actionUrl, body, time } =
+		Object.values(props).length >= 3
 			? props
 			: {
 					title: 'Title',
@@ -29,6 +30,7 @@ export const Template = (props: {
 					actionText: 'Action',
 					actionUrl: 'https://example.com',
 					body: undefined,
+					time: undefined || new Date(),
 			  };
 	return (
 		<Html lang="ru">
@@ -44,9 +46,11 @@ export const Template = (props: {
 				<Body className="text-center">
 					<Heading as="h1">{title}</Heading>
 					<Heading as="h2">{subtitle}</Heading>
-					<Container>
-						<Text className="text-start">{text}</Text>
-					</Container>
+					{text && (
+						<Container>
+							<Text className="text-start">{text}</Text>
+						</Container>
+					)}
 					{body && <Container>{body}</Container>}
 					<Button
 						href={actionUrl}
@@ -59,6 +63,21 @@ export const Template = (props: {
 						{actionText}
 					</Button>
 				</Body>
+				{time && (
+					<Section className="text-center">
+						<Text>
+							{time?.toLocaleString('ru-RU', {
+								hour: 'numeric',
+								minute: 'numeric',
+								second: 'numeric',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							})}{' '}
+							по UTC
+						</Text>
+					</Section>
+				)}
 			</Tailwind>
 		</Html>
 	);

@@ -18,13 +18,7 @@ import { projects } from '../schema/cooperation.schema';
 import NodeMailer from 'nodemailer';
 import { env } from '../env.mjs';
 import { render } from '@jsx-email/render';
-import {
-	ChangesRequested,
-	ModRequest,
-	PublishedTemplate,
-	Template,
-	TotpStatusChanged,
-} from '@sila/emails';
+import { ChangesRequested, ModRequest, PublishedTemplate } from '@sila/emails';
 
 const nodemailer = NodeMailer.createTransport({
 	url: env.SMTP_URL,
@@ -239,7 +233,7 @@ export const eventRoutes = createTRPCRouter({
 							ModRequest({
 								title: base.title,
 								url: `${env.VERCEL_URL}/${kind}s/${id}`,
-								timestamp: new Date().toLocaleString(),
+								timestamp: new Date(),
 								username: ctx.user.name,
 							})
 						),
@@ -272,7 +266,7 @@ export const eventRoutes = createTRPCRouter({
 						PublishedTemplate({
 							title: base.title,
 							url: `${env.VERCEL_URL}/${kind}s/${id}`,
-							timestamp: new Date().toLocaleString(),
+							timestamp: new Date(),
 						})
 					),
 				});

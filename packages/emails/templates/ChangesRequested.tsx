@@ -28,7 +28,6 @@ export const Template = ({
 							<Text className="text-start">{message}</Text>
 						</>
 					)}
-					<Text className="text-center">{timestamp} по UTC</Text>
 				</>
 			}
 		/>

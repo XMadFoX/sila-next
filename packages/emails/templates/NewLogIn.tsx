@@ -10,7 +10,7 @@ export const Template = ({
 	os,
 	url,
 }: {
-	timestamp: string;
+	timestamp: Date;
 	ip?: string;
 	browser: string;
 	os: string;
@@ -26,7 +26,7 @@ export const Template = ({
 				<>
 					<Section className="text-start">
 						<Heading as="h3">Информация о входе</Heading>
-						<Text>Время: {timestamp} по UTC</Text>
+						<Text>Время: {timestamp?.toLocaleString('ru-RU')} по UTC</Text>
 						<Text>IP: {ip}</Text>
 						<Text>Браузер: {browser}</Text>
 						<Text>ОС: {os}</Text>

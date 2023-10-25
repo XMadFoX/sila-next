@@ -42,7 +42,7 @@ export async function login(
 						os: `${os.name} ${os.version}`,
 						browser: `${browser.name} ${browser.version}`,
 						ip,
-						timestamp: time.toLocaleString('ru-RU'),
+						timestamp: time,
 						url: env.VERCEL_URL + '/me',
 					})
 				),

@@ -8,7 +8,7 @@ export const Template = ({
 	title,
 	url,
 }: {
-	timestamp: string;
+	timestamp: Date;
 	title: string;
 	url: string;
 }) => {
@@ -18,11 +18,7 @@ export const Template = ({
 			text=""
 			actionText="Открыть"
 			actionUrl={url}
-			body={
-				<>
-					<Text className="text-center">{timestamp} по UTC</Text>
-				</>
-			}
+			time={timestamp}
 		/>
 	);
 };

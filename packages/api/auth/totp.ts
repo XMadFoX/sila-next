@@ -87,7 +87,7 @@ export const totpRoutes = createTRPCRouter({
 						os: `${os.name} ${os.version}`,
 						browser: `${browser.name} ${browser.version}`,
 						ip,
-						timestamp: time.toLocaleString('ru-RU'),
+						timestamp: time,
 						url: env.VERCEL_URL + '/me',
 					})
 				),
@@ -146,14 +146,14 @@ export const totpRoutes = createTRPCRouter({
 
 			nodemailer.sendMail({
 				to: ctx.user.email,
-				subject: 'Отключена двухфакторная аутентификации',
+				subject: 'Отключена двухфакторная аутентификация',
 				html: render(
 					TotpStatusChanged({
 						to: 'disabled' as const,
 						os: `${os.name} ${os.version}`,
 						browser: `${browser.name} ${browser.version}`,
 						ip,
-						timestamp: time.toLocaleString('ru-RU'),
+						timestamp: time,
 						url: env.VERCEL_URL + '/me',
 					})
 				),
