@@ -10,7 +10,7 @@ import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from 'trpc';
 
 import { render } from '@jsx-email/render';
-import { NewLoginTemplate } from '@sila/emails';
+import { NewLoginTemplate, RegisterVerification } from '@sila/emails';
 import { NextApiRequest } from 'next';
 import getLoginDetails from './getLoginDetails';
 
@@ -63,11 +63,6 @@ export async function register(
 	const { salt, hash } = await hashPassword(credentials.password);
 	// use nodemailer to send verification email
 	const verificationToken = crypto.randomBytes(16).toString('hex');
-	// create nodemailer transporter
-	const nodemailer = NodeMailer.createTransport({
-		url: env.SMTP_URL,
-		from: env.SMTP_FROM,
-	});
 
 	const userId = crypto.randomUUID();
 	const tokenValues = {
@@ -102,7 +97,11 @@ export async function register(
 			from: env.SMTP_FROM,
 			to: credentials.email,
 			subject: 'Verify your email',
-			html: `Click <a href="${env.VERCEL_URL}/api/auth/verify/${verificationToken}">this link</a> to verify your email. Link is active for 10 minutes.`,
+			html: render(
+				RegisterVerification({
+					url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+				})
+			),
 		})
 		.catch((err) => {
 			console.error("Can't send verification email", err);
