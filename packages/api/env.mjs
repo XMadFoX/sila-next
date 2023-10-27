@@ -14,6 +14,8 @@ const serverVariables = {
 	SMTP_URL: z.string().url(),
 	SMTP_FROM: z.string().email().optional(),
 	ESECRET: z.string().min(1),
+	UPSTASH_REDIS_URL: z.string().url(),
+	UPSTASH_REDIS_TOKEN: z.string().min(1),
 };
 
 export const env = createEnv({

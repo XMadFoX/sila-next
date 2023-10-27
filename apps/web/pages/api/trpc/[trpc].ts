@@ -1,5 +1,7 @@
 import { appRouter, createTRPCContext } from '@sila/api';
 import { createNextApiHandler } from '@trpc/server/adapters/next';
+import { Ratelimit } from '@upstash/ratelimit';
+import ratelimit from '@sila/api/ratelimit';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const nextApiHandler = createNextApiHandler({
@@ -29,5 +31,7 @@ export default async function handler(
 		return res.end();
 	}
 
+	const id = (req.headers['x-real-ip'] as string) || 'api';
+	await ratelimit(id, Ratelimit.fixedWindow(20, '15s'));
 	return nextApiHandler(req, res);
 }

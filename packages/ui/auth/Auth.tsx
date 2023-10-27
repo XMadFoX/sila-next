@@ -50,7 +50,10 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 			onError: (err) => {
 				setError('password', {});
 				setError('email', {});
-				setError('root', { message: err.message, type: 'credentials' });
+				setError('root', {
+					message: err.message,
+					type: err.data?.code,
+				});
 			},
 		});
 	const { mutate: login, isLoading: isLoginLoading } =
@@ -88,7 +91,10 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 			onError: (err) => {
 				setError('password', {});
 				setError('email', {});
-				setError('root', { message: err.message, type: 'credentials' });
+				setError('root', {
+					message: err.message,
+					type: err.data?.code,
+				});
 			},
 		});
 	const [loggedIn, setLoggedIn] = React.useState(false);
@@ -197,8 +203,10 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 					/>
 					{errors?.root && (
 						<label className="text-error">
-							{errors.root.type === 'credentials'
+							{errors.root.type === 'BAD_REQUEST'
 								? 'Не правильный логин или пароль'
+								: errors.root.type === 'TOO_MANY_REQUESTS'
+								? 'Слишком много попыток, подождите.'
 								: errors.root.message}
 						</label>
 					)}
