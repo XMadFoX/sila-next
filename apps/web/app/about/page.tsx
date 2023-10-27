@@ -3,7 +3,7 @@ import AccardionSection from 'components/about/AccardionSection';
 
 export default function Page() {
 	return (
-		<main className=" w-full mt-10 px-5 xl:px-24">
+		<main className=" w-full max-w-[1400px] mt-10 px-4 2xl:px-0">
 			<AboutSection />
 			<AccardionSection />
 		</main>
