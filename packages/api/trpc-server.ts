@@ -1,21 +1,27 @@
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
-import { getServerSession } from 'next-auth/next';
 import { TRPCError } from 'trpc';
-import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { findOne } from './user';
-import type { Session } from 'next-auth';
-import { User } from './schema';
+import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
+import { ShortUser, findOne } from './user';
+import { IronSession, getIronSession } from 'iron-session';
+import { envCore } from './env.mjs';
+import { User } from './db/schema';
+import { NextApiRequest } from 'next';
 
-// overwrite session type for user to be User
-export interface SessionFullUser extends Session {
-	user: User;
-}
+type UserSession = { user: ShortUser };
+export type Session = IronSession<UserSession>;
 
-export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
-	const session = await getServerSession();
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+	const session = await getIronSession<UserSession>(opts.req, opts.res, {
+		cookieName: 'auth',
+		password: envCore.ESECRET,
+	});
 
-	return { session };
+	return { session, user: undefined, req: opts.req } as {
+		session: typeof session;
+		user: User | undefined;
+		req: NextApiRequest;
+	};
 };
 
 export const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -29,7 +35,6 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 		});
 	}
 	const user = await findOne(ctx.session.user.email);
-	ctx.session.user = user;
 	if (!user?.emailVerified) {
 		throw new TRPCError(403, {
 			message: 'UNVERIFIED',
@@ -47,10 +52,12 @@ const isAuthed = t.middleware(async ({ next, ctx }) => {
 			});
 		}
 	}
+
 	return next({
 		ctx: {
-			// Infers the `session` as non-nullable
-			session: ctx.session as SessionFullUser,
+			session: ctx.session,
+			user,
+			req: ctx.req,
 		},
 	});
 });
@@ -61,3 +68,4 @@ export const router = t.router;
 
 export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthed);
+// export const protectedNoTOTPProcedure = t.procedure.use(a => isAuthed(...a));

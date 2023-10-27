@@ -4,12 +4,19 @@ import { useContext } from 'react';
 import { Button } from '../general';
 import { navLinks } from './navLinks';
 import { EnvironmentContext } from '../env/';
-import { useSession, signOut } from 'next-auth/react';
+import useSession from '../useSession';
+import useLogout from '../useLogout';
+import { getAvatarUrl } from '../profile/avatar';
+import { router } from '@sila/api';
+import { useRouter } from 'next/navigation';
 
-export function Header({ signIn }: { signIn: () => void }) {
+export function Header() {
 	const { Image, Link, usePathname } = useContext(EnvironmentContext);
 	const pathname = usePathname();
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
+	const logout = useLogout();
+
+	const rt = useRouter();
 
 	return (
 		<header className="flex flex-col pt-4 mx-auto w-full max-w-[1400px]">
@@ -24,27 +31,53 @@ export function Header({ signIn }: { signIn: () => void }) {
             disabled
             className="rounded-full"
           /> */}
-					{status === 'authenticated' ? (
-						<div className="flex gap-2 items-center ml-auto">
-							<p>{session?.user?.name}</p>
-							<div className="w-11 h-11 rounded-full bg-dark-grey"></div>
-							<Button
-								onClick={() => signOut()}
-								className="px-8 h-11 text-sm uppercase"
-								size={null}
-							>
-								Выйти
-							</Button>
-						</div>
-					) : (
+					<div className="flex gap-2 items-center ml-auto">
 						<Button
 							size={null}
-							href="/auth/login"
-							className="flex items-center px-8 ml-auto h-11 text-sm uppercase"
+							intent="outlined"
+							className="flex items-center px-8 ml-auto h-11 text-black uppercase"
+							bg="#fff"
+							href={session ? '/me/posts/new' : '/auth/login'}
+							onClick={() => {
+								// console.log('click');
+								// setTimeout(() => {
+								// 	rt.push('/auth/login');
+								// }, 100);
+							}}
 						>
-							Войти
+							Создать <span className="hidden ml-1 md:inline">объявление</span>
 						</Button>
-					)}
+
+						{/* <p>{session.user.name}</p> */}
+						{session ? (
+							<>
+								<Link href="/me">
+									<Image
+										alt=""
+										src={getAvatarUrl(session.user.image, session.user.id)}
+										width={44}
+										height={44}
+										className="w-11 h-11 rounded-full"
+									/>
+								</Link>
+								{/* <Button */}
+								{/* 	onClick={() => logout()} */}
+								{/* 	className="px-8 h-11 text-sm uppercase" */}
+								{/* 	size={null} */}
+								{/* > */}
+								{/* 	Выйти */}
+								{/* </Button> */}
+							</>
+						) : (
+							<Button
+								size={null}
+								href="/auth/login"
+								className="flex items-center px-8 ml-auto h-11 text-sm uppercase"
+							>
+								Войти
+							</Button>
+						)}
+					</div>
 				</ul>
 			</nav>
 			<nav className="mx-auto mt-7">

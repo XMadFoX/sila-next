@@ -1,4 +1,4 @@
-import { InferModel } from 'drizzle-orm';
+import { InferModel, relations, sql } from 'drizzle-orm';
 import { AdapterAccount } from '@auth/core/adapters';
 import {
 	sqliteTable,
@@ -16,7 +16,9 @@ export const users = sqliteTable(
 		emailVerified: integer('email_verified', { mode: 'timestamp_ms' }),
 		name: text('name', { length: 32 }).notNull(),
 		password: text('password', { length: 255 }),
-		createdAt: integer('created_at', { mode: 'timestamp_ms' }),
+		createdAt: integer('created_at', { mode: 'timestamp_ms' }).default(
+			sql`CURRENT_TIMESTAMP`
+		),
 		image: text('avatar', { length: 255 }),
 		totpSecret: text('totp_secret', { length: 255 }),
 		totpEnabled: integer('totp_enabled', { mode: 'timestamp_ms' }),
@@ -71,3 +73,38 @@ export const verificationTokens = sqliteTable(
 		compoundKey: primaryKey(vt.identifier, vt.token),
 	})
 );
+
+export const roles = sqliteTable('roles', {
+	id: integer('id').notNull().primaryKey(),
+	name: text('name', { length: 255 }).notNull(),
+});
+
+export const userRelations = relations(users, ({ many }) => ({
+	usersToRoles: many(usersToRoles),
+}));
+
+export const roleRelations = relations(roles, ({ many }) => ({
+	usersToRoles: many(usersToRoles),
+}));
+
+export const usersToRoles = sqliteTable(
+	'users_to_roles',
+	{
+		userId: text('userId', { length: 255 }).notNull(),
+		roleId: integer('roleId').notNull(),
+	},
+	(t) => ({
+		pk: primaryKey(t.userId, t.roleId),
+	})
+);
+
+export const userRoleRelations = relations(usersToRoles, ({ one }) => ({
+	role: one(roles, {
+		fields: [usersToRoles.roleId],
+		references: [roles.id],
+	}),
+	user: one(users, {
+		fields: [usersToRoles.userId],
+		references: [users.id],
+	}),
+}));

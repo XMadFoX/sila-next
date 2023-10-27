@@ -43,6 +43,48 @@
       "when": 1687899306713,
       "tag": "0005_purple_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1691323885859,
+      "tag": "0006_first_veda",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1692305988519,
+      "tag": "0007_gorgeous_hairball",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1692382063144,
+      "tag": "0008_flawless_thunderball",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1692732784991,
+      "tag": "0009_sharp_pandemic",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1693065452317,
+      "tag": "0010_quiet_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1693678486982,
+      "tag": "0011_talented_peter_quill",
+      "breakpoints": true
     }
   ]
 }

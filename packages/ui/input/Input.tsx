@@ -7,7 +7,8 @@ import { useController } from 'react-hook-form';
 import { GradientWrapper } from '../general';
 import { cn } from '../lib/utils';
 
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputFieldProps
+	extends React.InputHTMLAttributes<HTMLInputElement> {
 	rightItem?: React.ReactNode;
 	labelVisible?: boolean;
 	errors?: {
@@ -48,7 +49,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 		return (
 			<div className="flex flex-col">
 				<label
-					className={labelVisible ? 'mb-2' : 'invisible w-0 h-0'}
+					className={labelVisible ? 'mb-1' : 'invisible w-0 h-0'}
 					aria-label={props.name}
 				>
 					{labelVisible ? props['aria-label'] : props.placeholder}
@@ -57,19 +58,23 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					<input
 						ref={ref}
 						className={cn(
-							'py-2 px-4 w-full rounded-lg ring transition-all duration-300 outline-none focus:ring-transparent ring-dark-grey',
+							'py-2 px-4 w-full rounded-lg ring transition-all dark:bg-black duration-300 appearance-none outline-none focus:ring-transparent ring-dark-grey',
 							field.value?.length > 0 && 'ring-transparent',
 							fieldState.isTouched && fieldState?.error && 'border-error border'
 						)}
 						{...props}
 					/>
-					{rightItem && <div className="absolute right-2">{rightItem}</div>}
+					{rightItem && (
+						<div className="flex absolute right-2 items-center">
+							{rightItem}
+						</div>
+					)}
 				</GradientWrapper>
 				<ErrorMessage
 					errors={errors}
 					name={props.name!}
 					render={(err) => (
-						<label aria-label="name" className="text-error">
+						<label htmlFor={props.name} className="text-error">
 							{err.message}
 						</label>
 					)}

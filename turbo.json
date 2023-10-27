@@ -1,10 +1,17 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalDependencies": ["**/.env.*local"],
+	"globalDependencies": [
+		"**/.env.*local"
+	],
 	"pipeline": {
 		"build": {
-			"dependsOn": ["^build"],
-			"outputs": [".next/**", "!.next/cache/**"]
+			"dependsOn": [
+				"^build"
+			],
+			"outputs": [
+				".next/**",
+				"!.next/cache/**"
+			]
 		},
 		"lint": {},
 		"dev": {
@@ -13,8 +20,7 @@
 		}
 	},
 	"globalEnv": [
-		"NEXT_PUBLIC_TRPC_ENDPOINT",
-		"NEXTAUTH_URL",
+		"NEXT_PUBLIC_TRPC_PREFIX",
 		"DB_URL",
 		"DB_AUTH_TOKEN",
 		"SMTP_URL",
@@ -22,6 +28,7 @@
 		"GOOGLE_ID",
 		"GOOGLE_SECRET",
 		"ESECRET",
-		"NODE_ENV"
+		"NODE_ENV",
+		"VERCEL_URL"
 	]
 }

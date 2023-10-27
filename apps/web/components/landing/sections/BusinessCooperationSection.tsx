@@ -1,9 +1,21 @@
+'use client';
+
 import React from 'react';
-import { GradientWrapper, Heading, Slider, Card, Button, Slide } from 'ui';
+import { GradientWrapper, Heading, Slider, Button, Slide, FullCard } from 'ui';
 import CardList from '../CardsContainer';
-import { cardMock } from '../../mock';
+import { trpc } from 'lib/trpc';
+import { today } from 'app/events/filter.atom';
 
 export default function BusinessCooperationSection() {
+	const { data: important } = trpc.projects.find.useQuery({
+		isImportant: true,
+		start: today,
+	});
+	const { data: projects } = trpc.projects.find.useQuery({
+		isImportant: false,
+		start: today,
+	});
+
 	return (
 		<section className="flex flex-col justify-center mt-24 max-w-[1400px]">
 			<h2 className="text-3xl font-bold uppercase md:text-4xl">
@@ -28,43 +40,53 @@ export default function BusinessCooperationSection() {
 					</p>
 				</div>
 			</div>
-			<section className="flex flex-col justify-center">
-				<Heading className="mt-9 text-3xl font-medium" as="h3">
-					Важные проекты
-				</Heading>
-				<div className="flex mx-auto max-w-fit">
-					<Slider className="mx-auto mt-8">
-						{Array.from({ length: 9 }, (_, i) => (
-							<Slide key={i}>
-								<Card big gradientClass="min-w-max w-full">
-									<Card.Preview
-										className="max-w-min"
+			{important && important.length > 0 && (
+				<section className="flex flex-col justify-center">
+					<Heading className="mt-9 text-3xl font-medium" as="h3">
+						Важные проекты
+					</Heading>
+					<div className="flex mx-auto max-w-fit">
+						<Slider className="mx-auto mt-8">
+							{important.map((i) => (
+								<Slide key={i.base_content.id}>
+									<FullCard
+										kind="project"
+										base={i.base_content}
+										item={i.cooperation}
+										user={i.users}
+										key={i.base_content.id}
 										big
-										{...cardMock.preview}
+										gradientClass="w-full min-w-max"
 									/>
-									<Card.Details {...cardMock.details} />
-								</Card>
-							</Slide>
-						))}
-					</Slider>
-				</div>
-			</section>
-			<section className="flex flex-col mx-auto mt-20 w-auto">
+								</Slide>
+							))}
+						</Slider>
+					</div>
+				</section>
+			)}
+			<section className="flex flex-col mx-auto mt-20 w-full">
 				<Heading className="inline w-full text-3xl font-medium" as="h3">
 					Другие проекты
 				</Heading>
 				<CardList>
-					{Array.from({ length: 6 }, (_, i) => (
-						<li className="mx-auto min-w-fit" key={i}>
-							<Card key={i} gradientClass="h-full">
-								<Card.Preview {...cardMock.preview} />
-								<Card.Details {...cardMock.details} />
-							</Card>
+					{projects?.map((i) => (
+						<li className="mx-auto min-w-fit" key={i.base_content.id}>
+							<FullCard
+								kind="project"
+								base={i.base_content}
+								item={i.cooperation}
+								user={i.users}
+								key={i.base_content.id}
+								gradientClass="h-full"
+							/>
 						</li>
 					))}
 				</CardList>
 			</section>
-			<Button className="mx-auto mt-9 text-center uppercase w-[260px]" href="#">
+			<Button
+				className="mx-auto mt-9 text-center uppercase w-[260px]"
+				href="/projects"
+			>
 				Каталог проектов
 			</Button>
 		</section>

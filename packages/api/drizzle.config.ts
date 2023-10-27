@@ -1,12 +1,8 @@
 import { Config } from 'drizzle-kit';
-import dotenv from 'dotenv';
-import { env } from './env.mjs';
-dotenv.config(
-	env.NODE_ENV === 'production' ? undefined : { path: '.env.local' }
-);
+import { envCore as env } from './env.mjs';
 
 export default {
-	schema: './schema.ts',
+	schema: './db/schema.ts',
 	driver: 'turso',
 	dbCredentials: {
 		url: env.DB_URL,

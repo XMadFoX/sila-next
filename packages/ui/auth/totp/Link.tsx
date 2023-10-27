@@ -5,15 +5,27 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '../../general';
-import { useSession } from 'next-auth/react';
 import { CodeInput } from './CodeInput';
 import { schema } from './schema';
 import { useRouter } from 'next/navigation';
 import safeBack from '../../utils/safeBack';
 import { toast } from 'react-toastify';
+import useSession from '../../useSession';
+import { trpc } from '../../lib';
 
-export function LinkTOTP() {
-	const session = useSession();
+export function LinkTOTP({ closeModal }: { closeModal?: () => void }) {
+	const { data: session, invalidate } = useSession();
+	const { mutate } = trpc.totp.linkTotp.useMutation({
+		onSuccess: () => {
+			closeModal && closeModal();
+			safeBack(window, router);
+			toast.success('Поключено');
+			invalidate();
+		},
+		onError: (err) => {
+			setError('code', { message: err.message });
+		},
+	});
 	const router = useRouter();
 
 	const methods = useForm<z.infer<typeof schema>>({
@@ -31,14 +43,7 @@ export function LinkTOTP() {
 	const [alreadyEnabled, setAlreadyEnabled] = useState(false);
 
 	useEffect(() => {
-		console.log('session updated', session.data);
-		if (session?.data?.user?.totpEnabled) setAlreadyEnabled(true);
-		if (session?.data?.user?.totp) {
-			safeBack(window, router);
-			toast.success('Поключено');
-		} else {
-			setError('code', { message: 'Неправильный код' });
-		}
+		if (session?.user?.totpEnabled) setAlreadyEnabled(true);
 	}, [session]);
 
 	return (
@@ -47,9 +52,8 @@ export function LinkTOTP() {
 				<FormProvider {...methods}>
 					<form
 						className="flex flex-col gap-4 p-4"
-						onSubmit={handleSubmit(async (d: z.infer<typeof schema>) => {
-							console.log(d);
-							session.update({ totpToken: d.code });
+						onSubmit={handleSubmit((d: z.infer<typeof schema>) => {
+							mutate(d.code);
 						})}
 					>
 						<legend className="text-xl font-bold">

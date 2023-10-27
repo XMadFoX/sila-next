@@ -8,6 +8,7 @@ export const cardMock = {
 		as: Image,
 	},
 	details: {
+		kind: 'event' as const,
 		title: 'Hellow world',
 		location: {
 			city: 'Tbilisi',

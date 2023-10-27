@@ -4,14 +4,19 @@ import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Button, InputField } from '..';
+import { Button, InputField, trpc } from '..';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
-import { signIn, SignInResponse, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import safeBack from '../utils/safeBack';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import useSession from '../useSession';
+import { Eye, EyeOff } from 'lucide-react';
+
+function isString(d: unknown): d is string {
+	return typeof d === 'string';
+}
 
 export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [value, setValue] = React.useState('default');
@@ -19,7 +24,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const schema = z.object({
 		email: z.string().email(),
 		password: z.string().min(10),
-		...(isRegister && { name: z.string().min(2) }),
+		...(isRegister && { name: z.string().min(2).max(32) }),
 	});
 	const methods = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
@@ -27,7 +32,7 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 		reValidateMode: 'onChange',
 	});
 	const {
-		register,
+		register: registerField,
 		handleSubmit,
 		setError,
 		formState: { errors },
@@ -35,22 +40,61 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const router = useRouter();
 
+	const { data: session, invalidate } = useSession();
+	const { mutate: register, isLoading: isRegisterLoading } =
+		trpc.auth.register.useMutation({
+			onSuccess: (data) => {
+				router.replace('/auth/success?type=register_email');
+				invalidate();
+			},
+			onError: (err) => {
+				setError('password', {});
+				setError('email', {});
+				setError('root', { message: err.message, type: 'credentials' });
+			},
+		});
+	const { mutate: login, isLoading: isLoginLoading } =
+		trpc.auth.login.useMutation({
+			onSuccess: (data) => {
+				invalidate();
+				if (data.totpRequired) {
+					closeModal && closeModal();
+					setTimeout(() => router.replace('/auth/totp/verify'), 50);
+				} else {
+					closeModal && closeModal();
+					safeBack(window, router);
+					toast.success('Успешный вход');
+					toast.info(
+						<div className="inline">
+							Для повышения безопасности аккаунта рекомендуем{' '}
+							<Link
+								href="/auth/totp/generate"
+								className="inline-block underline text-blue"
+								onClick={() => toast.dismiss('suggestEnableTotp')}
+								replace
+							>
+								включить двухфакторную аутентификацию
+							</Link>
+						</div>,
+						{
+							toastId: 'suggestEnableTotp',
+							autoClose: false,
+							closeOnClick: false,
+							icon: false,
+						}
+					);
+				}
+			},
+			onError: (err) => {
+				setError('password', {});
+				setError('email', {});
+				setError('root', { message: err.message, type: 'credentials' });
+			},
+		});
 	const [loggedIn, setLoggedIn] = React.useState(false);
-	const handleResponse = (res: SignInResponse) => {
-		if (res.error) {
-			setError('password', {});
-			setError('email', {});
-			setError('root', { message: res.error, type: 'credentials' });
-			return;
-		}
-		if (isRegister) router.replace('/auth/success?type=register_email');
-		else setLoggedIn(true);
-	};
-
-	const session = useSession();
 
 	useEffect(() => {
-		if (loggedIn && session?.data?.user?.totpEnabled) {
+		if (loggedIn && session?.user?.totpEnabled) {
 			closeModal && closeModal();
 			setTimeout(() => router.replace('/auth/totp/verify'), 50);
 		} else if (loggedIn) {
@@ -80,29 +124,23 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 
 	return (
 		<div>
-			<button
-				className="bg-green"
-				onClick={() => {
-					closeModal && closeModal();
-					router.replace('/auth/totp/verify');
-				}}
-			>
-				close
-			</button>
 			<FormProvider {...methods}>
 				<form
 					className="flex flex-col gap-4 p-4"
-					onSubmit={handleSubmit(async (d: z.infer<typeof schema>) => {
-						console.log(d);
-						const res = await signIn('credentials', {
-							redirect: false,
-							email: d.email,
-							...(isRegister && { name: d.name }),
-							password: d.password,
-							register: isRegister,
-						});
-						console.log('res', res);
-						res && handleResponse(res);
+					onSubmit={handleSubmit((d: z.infer<typeof schema>) => {
+						if (isRegister) {
+							if (isString(d.name)) {
+								register({
+									email: d.email,
+									password: d.password,
+									name: d.name,
+								});
+							}
+						} else
+							login({
+								email: d.email,
+								password: d.password,
+							});
 					})}
 				>
 					<RadioGroup.Root
@@ -125,28 +163,35 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 					</RadioGroup.Root>
 					{isRegister && (
 						<InputField
-							{...register('name')}
+							{...registerField('name')}
 							placeholder="Имя или псевдоним"
+							autoComplete="name"
 							errors={errors}
 						/>
 					)}
 					<InputField
-						{...register('email')}
+						{...registerField('email')}
 						placeholder="Почта"
 						type="email"
+						autoComplete="email"
 						errors={errors}
 					/>
 					<InputField
-						{...register('password')}
+						{...registerField('password')}
 						placeholder="Пароль"
 						type={showPassword ? 'text' : 'password'}
+						autoComplete="new-password"
 						errors={errors}
 						rightItem={
 							<button
 								type="button"
 								onClick={() => setShowPassword((prev) => !prev)}
 							>
-								👁
+								{showPassword ? (
+									<Eye className="w-5 h-5" />
+								) : (
+									<EyeOff className="w-5 h-5" />
+								)}
 							</button>
 						}
 					/>
@@ -179,7 +224,7 @@ function RadioItem({ id, value, label }: any) {
 			</RadioGroup.Item>
 			<label
 				className={clsx(
-					'peer-aria-checked:before:w-full before:h-0.5',
+					'peer-aria-checked:before:w-full before:h-0.5 cursor-pointer',
 					'relative before:absolute before:w-0 before:bg-primary before:-bottom-2',
 					'before:duration-300 before:transition-all'
 				)}

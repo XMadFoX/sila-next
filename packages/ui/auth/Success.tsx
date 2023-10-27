@@ -35,7 +35,7 @@ export default function Success() {
 }
 
 function Content() {
-	const type = useSearchParams().get('type');
+	const type = useSearchParams()?.get('type');
 
 	switch (type) {
 		case 'register_email':

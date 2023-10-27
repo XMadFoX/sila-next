@@ -1,0 +1,1 @@
+ALTER TABLE base_content ADD `contacts` json DEFAULT [object Object] NOT NULL;
