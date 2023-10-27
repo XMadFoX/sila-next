@@ -7,12 +7,12 @@ export default function AboutSection() {
 			<div className="min-[900px]:max-w-md lg:max-w-xl text-lg md:mr-14">
 				<Heading
 					centerOnSmall={false}
-					className="text-transparent bg-clip-text bg-primary bg-[length:200%] bg-[275%] uppercase text-2xl text-left font-bold xl:text-3xl xl:text-black xl:normal-case lg:before:hidden"
+					className="before:hidden md:before:block md:before:absolute text-2xl xl:text-3xl md:text-black font-medium text-transparent bg-clip-text bg-primary bg-[length:40%]"
 					as="h1"
 				>
 					О проекте
 				</Heading>
-				<p className="mt-5 ">
+				<p className="mt-5 md:mt-10">
 					Цель проекта “Сила взаимопомощи” в развитие социальной сети
 					взаимоподдержки. Здесь вы сможете искать партнеров для коммерческого
 					или социального проекта, принять участие в группе психологической
