@@ -31,6 +31,8 @@
 		"superjson": "^1.12.3",
 		"trpc": "^0.11.3",
 		"tsconfig": "workspace:*",
+		"@sila/env": "workspace:*",
+		"@sila/emails": "workspace:*",
 		"typescript": "^5.1.3",
 		"ua-parser-js": "^1.0.37",
 		"zod": "^3.21.4"

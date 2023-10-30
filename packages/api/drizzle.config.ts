@@ -1,5 +1,5 @@
 import { Config } from 'drizzle-kit';
-import { envCore as env } from './env.mjs';
+import { envCore as env } from '@sila/env';
 
 export default {
 	schema: './db/schema.ts',

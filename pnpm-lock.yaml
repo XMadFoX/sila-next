@@ -35,6 +35,9 @@ importers:
       '@sila/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@sila/env':
+        specifier: workspace:^
+        version: link:../../packages/env
       '@t3-oss/env-nextjs':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.1.3)(zod@3.22.4)
@@ -189,6 +192,12 @@ importers:
       '@planetscale/database':
         specifier: ^1.7.0
         version: 1.7.0
+      '@sila/emails':
+        specifier: workspace:*
+        version: link:../emails
+      '@sila/env':
+        specifier: workspace:*
+        version: link:../env
       '@t3-oss/env-core':
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.1.3)(zod@3.22.4)
@@ -221,7 +230,7 @@ importers:
         version: 8.0.0-alpha.0
       next:
         specifier: ^13.4.13
-        version: 13.5.6(react-dom@18.2.0)(react@18.2.0)
+        version: 13.5.6(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5)
       nodemailer:
         specifier: ^6.9.3
         version: 6.9.3
@@ -268,12 +277,42 @@ importers:
       '@mertasan/tailwindcss-variables':
         specifier: ^2.6.1
         version: 2.7.0(autoprefixer@10.4.16)(postcss@8.4.31)
+      '@sila/env':
+        specifier: workspace:^
+        version: link:../env
+      '@types/nodemailer':
+        specifier: ^6.4.8
+        version: 6.4.8
+      nodemailer:
+        specifier: ^6.9.3
+        version: 6.9.3
       tailwind-config:
         specifier: workspace:*
         version: link:../tailwind
       tsconfig:
         specifier: workspace:^
         version: link:../tsconfig
+
+  packages/env:
+    dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.6.0
+        version: 0.6.0(typescript@5.1.3)(zod@3.22.4)
+      '@t3-oss/env-nextjs':
+        specifier: ^0.6.0
+        version: 0.6.1(typescript@5.1.3)(zod@3.22.4)
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.3
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
 
   packages/eslint-config:
     dependencies:
@@ -430,7 +469,7 @@ importers:
         version: 0.288.0(react@18.2.0)
       next:
         specifier: ^13.5.6
-        version: 13.5.6(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5)
+        version: 13.5.6(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5)
       qrcode:
         specifier: ^1.5.3
         version: 1.5.3
@@ -7679,6 +7718,16 @@ packages:
       zod: 3.22.4
     dev: false
 
+  /@t3-oss/env-core@0.6.1(typescript@5.1.3)(zod@3.22.4):
+    resolution: {integrity: sha512-KQD7qEDJtkWIWWmTVjNvk0wnHpkvAQ6CRbUxbWMFNG/fiosBQDQvtRpBNu6USxBscJCoC4z6y7P9MN52/mLOzw==}
+    peerDependencies:
+      typescript: '>=4.7.2'
+      zod: ^3.0.0
+    dependencies:
+      typescript: 5.1.3
+      zod: 3.22.4
+    dev: false
+
   /@t3-oss/env-core@0.7.1(typescript@5.1.3)(zod@3.22.4):
     resolution: {integrity: sha512-3+SQt39OlmSaRLqYVFv8uRm1BpFepM5TIiMytRqO9cjH+wB77o6BIJdeyM5h5U4qLBMEzOJWCY4MBaU/rLwbYw==}
     peerDependencies:
@@ -7688,6 +7737,17 @@ packages:
       typescript:
         optional: true
     dependencies:
+      typescript: 5.1.3
+      zod: 3.22.4
+    dev: false
+
+  /@t3-oss/env-nextjs@0.6.1(typescript@5.1.3)(zod@3.22.4):
+    resolution: {integrity: sha512-z1dIC++Vxj9kmzX5nSPfcrCSkszy3dTEPC4Ssx7Ap5AqR3c2Qa7S0xf8axn6coy7D/vCXDAAnHYnCMDhtcY3SQ==}
+    peerDependencies:
+      typescript: '>=4.7.2'
+      zod: ^3.0.0
+    dependencies:
+      '@t3-oss/env-core': 0.6.1(typescript@5.1.3)(zod@3.22.4)
       typescript: 5.1.3
       zod: 3.22.4
     dev: false
@@ -13733,7 +13793,7 @@ packages:
       - '@babel/core'
       - babel-plugin-macros
 
-  /next@13.5.6(react-dom@18.2.0)(react@18.2.0):
+  /next@13.5.6(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5):
     resolution: {integrity: sha512-Y2wTcTbO4WwEsVb4A8VSnOsG1I9ok+h74q0ZdxkwM3EODqrs4pasq7O0iUxbcS9VtWMicG7f3+HAj0r1+NtKSw==}
     engines: {node: '>=16.14.0'}
     hasBin: true
@@ -13751,10 +13811,11 @@ packages:
       '@next/env': 13.5.6
       '@swc/helpers': 0.5.2
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001554
+      caniuse-lite: 1.0.30001482
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      sass: 1.69.5
       styled-jsx: 5.1.1(@babel/core@7.21.8)(react@18.2.0)
       watchpack: 2.4.0
     optionalDependencies:

@@ -16,6 +16,7 @@
 		"@auth/core": "^0.8.1",
 		"@nanostores/react": "^0.7.1",
 		"@sila/api": "workspace:*",
+		"@sila/env": "workspace:^",
 		"@t3-oss/env-nextjs": "^0.7.1",
 		"@tanstack/react-query": "^4.32.6",
 		"@trpc/client": "^10.37.1",

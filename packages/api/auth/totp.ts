@@ -13,13 +13,12 @@ import { decrypt, encrypt } from './encryption';
 import { findOne } from '../user';
 import ErrorMessages from '../ErrorMessages';
 import NodeMailer from 'nodemailer';
-import { env } from '../env.mjs';
+import { env } from '@sila/env';
 import { render } from '@jsx-email/render';
 import { TotpStatusChanged } from '@sila/emails';
 import getLoginDetails from './getLoginDetails';
 
 const nodemailer = NodeMailer.createTransport({
-	url: env.SMTP_URL,
 	from: env.SMTP_FROM,
 });
 

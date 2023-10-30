@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import { envCore } from './env.mjs';
+import { envCore } from '@sila/env';
 import { Algorithm, Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 

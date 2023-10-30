@@ -4,7 +4,7 @@ import { TRPCError } from 'trpc';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { ShortUser, findOne } from './user';
 import { IronSession, getIronSession } from 'iron-session';
-import { envCore } from './env.mjs';
+import { envCore } from '@sila/env';
 import { User } from './db/schema';
 import { NextApiRequest } from 'next';
 

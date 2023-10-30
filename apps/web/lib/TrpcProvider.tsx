@@ -5,7 +5,7 @@ import { TRPCClientError, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import { trpc } from './trpc';
 import superjson from 'superjson';
-import { env } from '@sila/api/env.mjs';
+import { env } from '@sila/env';
 
 export const TrpcProvider: React.FC<{ children: React.ReactNode }> = (p) => {
 	const [queryClient] = useState(

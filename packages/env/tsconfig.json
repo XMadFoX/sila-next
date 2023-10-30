@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"allowJs": true
+	},
+	"extends": "tsconfig/base.json",
+	"include": [
+		"env.mjs"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

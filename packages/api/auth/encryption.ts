@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { env } from '../env.mjs';
+import { env } from '@sila/env';
 
 const algorithm = 'aes-256-ctr';
 const secretKey = env.ESECRET;

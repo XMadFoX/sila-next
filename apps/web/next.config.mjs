@@ -1,4 +1,4 @@
-import { env as _ } from '@sila/api/env.mjs';
+import { env as _ } from '@sila/env/env.mjs';
 
 /** @type {import("next").NextConfig} */
 const config = {

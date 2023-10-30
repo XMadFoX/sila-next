@@ -5,7 +5,7 @@ import { ShortUser, findOne, shortUser, createUser } from '../user';
 import crypto from 'crypto';
 import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
-import { env } from '../env.mjs';
+import { env } from '@sila/env';
 import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from '@trpc/server';
 

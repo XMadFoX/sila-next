@@ -16,13 +16,12 @@ import { omit, pick } from 'remeda';
 import { projects } from '../schema/cooperation.schema';
 
 import NodeMailer from 'nodemailer';
-import { env } from '../env.mjs';
+import { env, envCore } from '@sila/env';
 import { render } from '@jsx-email/render';
 import { ChangesRequested, ModRequest, PublishedTemplate } from '@sila/emails';
 
 const nodemailer = NodeMailer.createTransport({
-	url: env.SMTP_URL,
-	from: env.SMTP_FROM,
+	from: envCore.SMTP_FROM,
 });
 
 export const kindToColumn = {
