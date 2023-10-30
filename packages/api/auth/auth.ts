@@ -3,21 +3,15 @@ import { z } from 'zod';
 import { db, verificationTokens, users } from '../db/schema';
 import { ShortUser, findOne, shortUser, createUser } from '../user';
 import crypto from 'crypto';
-import NodeMailer from 'nodemailer';
 import { hash as hashPassword, verify } from './hash';
 import { env } from '@sila/env';
 import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from '@trpc/server';
 
 import { render } from '@jsx-email/render';
-import { NewLoginTemplate, RegisterVerification } from '@sila/emails';
+import { NewLoginTemplate, RegisterVerification, sendMail } from '@sila/emails';
 import { NextApiRequest } from 'next';
 import getLoginDetails from './getLoginDetails';
-
-const nodemailer = NodeMailer.createTransport({
-	url: env.SMTP_URL,
-	from: env.SMTP_FROM,
-});
 
 export async function login(
 	credentials: z.infer<typeof loginSchema>,
@@ -34,7 +28,7 @@ export async function login(
 		) {
 			const { ip, time, os, browser } = getLoginDetails(req);
 
-			nodemailer.sendMail({
+			sendMail({
 				to: user.email,
 				subject: 'Вход в аккаунт',
 				html: render(
@@ -95,20 +89,17 @@ export async function register(
 			} else throw err;
 		});
 
-	nodemailer
-		.sendMail({
-			from: env.SMTP_FROM,
-			to: credentials.email,
-			subject: 'Verify your email',
-			html: render(
-				RegisterVerification({
-					url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
-				})
-			),
-		})
-		.catch((err) => {
-			console.error("Can't send verification email", err);
-		});
+	sendMail({
+		to: credentials.email,
+		subject: 'Verify your email',
+		html: render(
+			RegisterVerification({
+				url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+			})
+		),
+	}).catch((err) => {
+		console.error("Can't send verification email", err);
+	});
 
 	return {
 		id: userId,

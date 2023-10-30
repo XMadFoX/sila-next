@@ -15,14 +15,14 @@ import { eventTypesRoutes } from './eventTypes';
 import { omit, pick } from 'remeda';
 import { projects } from '../schema/cooperation.schema';
 
-import NodeMailer from 'nodemailer';
-import { env, envCore } from '@sila/env';
+import { env } from '@sila/env';
 import { render } from '@jsx-email/render';
-import { ChangesRequested, ModRequest, PublishedTemplate } from '@sila/emails';
-
-const nodemailer = NodeMailer.createTransport({
-	from: envCore.SMTP_FROM,
-});
+import {
+	ChangesRequested,
+	ModRequest,
+	PublishedTemplate,
+	sendMail,
+} from '@sila/emails';
 
 export const kindToColumn = {
 	event: events,
@@ -225,7 +225,7 @@ export const eventRoutes = createTRPCRouter({
 					.where(eq(roles.name, 'mod'))
 					.all();
 				mods.forEach((mod) => {
-					nodemailer.sendMail({
+					sendMail({
 						to: mod.users.email,
 						subject: 'Новое событие',
 						html: render(
@@ -243,7 +243,7 @@ export const eventRoutes = createTRPCRouter({
 			// notify author via email
 			if (status === 'changesRequested' && base.status !== 'changesRequested') {
 				if (ctx.user.id !== base.authorId) {
-					nodemailer.sendMail({
+					sendMail({
 						to: base.author.email,
 						subject: 'Изменения запрошены',
 						html: render(
@@ -258,7 +258,7 @@ export const eventRoutes = createTRPCRouter({
 				}
 			}
 			if (status === 'published' && base.status !== 'published') {
-				nodemailer.sendMail({
+				sendMail({
 					to: base.author.email,
 					subject: 'Опубликовано',
 					html: render(

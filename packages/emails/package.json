@@ -9,6 +9,9 @@
     "@jsx-email/all": "^2.2.0",
     "@jsx-email/cli": "^1.1.0",
     "@mertasan/tailwindcss-variables": "^2.6.1",
+    "@sila/env": "workspace:^",
+    "@types/nodemailer": "^6.4.8",
+    "nodemailer": "^6.9.3",
     "tailwind-config": "workspace:*",
     "tsconfig": "workspace:^"
   }

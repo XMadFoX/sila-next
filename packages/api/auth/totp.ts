@@ -12,15 +12,10 @@ import {
 import { decrypt, encrypt } from './encryption';
 import { findOne } from '../user';
 import ErrorMessages from '../ErrorMessages';
-import NodeMailer from 'nodemailer';
 import { env } from '@sila/env';
 import { render } from '@jsx-email/render';
-import { TotpStatusChanged } from '@sila/emails';
+import { TotpStatusChanged, sendMail } from '@sila/emails';
 import getLoginDetails from './getLoginDetails';
-
-const nodemailer = NodeMailer.createTransport({
-	from: env.SMTP_FROM,
-});
 
 export const totpRoutes = createTRPCRouter({
 	/**
@@ -77,7 +72,7 @@ export const totpRoutes = createTRPCRouter({
 
 			const { ip, time, os, browser } = getLoginDetails(ctx.req);
 
-			nodemailer.sendMail({
+			sendMail({
 				to: ctx.user.email,
 				subject: 'Включена двухфакторная аутентификации',
 				html: render(
@@ -143,7 +138,7 @@ export const totpRoutes = createTRPCRouter({
 
 			const { ip, time, os, browser } = getLoginDetails(ctx.req);
 
-			nodemailer.sendMail({
+			sendMail({
 				to: ctx.user.email,
 				subject: 'Отключена двухфакторная аутентификация',
 				html: render(

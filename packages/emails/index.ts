@@ -5,3 +5,5 @@ export { Template as TotpStatusChanged } from './templates/TotpStatusChanged';
 export { Template as ModRequest } from './templates/ModRequest';
 export { Template as ChangesRequested } from './templates/ChangesRequested';
 export { Template as PublishedTemplate } from './templates/Published';
+
+export { sendMail } from './emails';
