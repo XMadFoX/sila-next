@@ -9,7 +9,12 @@ import { loginSchema, registerSchema } from './authRoutes';
 import { TRPCError } from '@trpc/server';
 
 import { render } from '@jsx-email/render';
-import { NewLoginTemplate, RegisterVerification, sendMail } from '@sila/emails';
+import {
+	NewLoginTemplate,
+	RegisterVerification,
+	Template,
+	sendMail,
+} from '@sila/emails';
 import { NextApiRequest } from 'next';
 import getLoginDetails from './getLoginDetails';
 
@@ -83,23 +88,55 @@ export async function register(
 			);
 			await trx.insert(verificationTokens).values(tokenValues).run();
 		})
-		.catch((err: Error) => {
+		.then(() => {
+			sendMail({
+				to: credentials.email,
+				subject: 'Подтвердите вашу регистрацию',
+				html: render(
+					RegisterVerification({
+						url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+					})
+				),
+			}).catch((err) => {
+				console.error("Can't send verification email", err);
+			});
+		})
+		.catch(async (err: Error) => {
 			if (err.message.includes('UNIQUE constraint failed')) {
-				// TODO: handle it, send fake success, send email that already registred, suggest to login/reset password
+				const user = await db
+					.select()
+					.from(users)
+					.where(eq(users.email, credentials.email))
+					.get();
+				if (!user) throw new Error('User not found');
+				if (user?.emailVerified)
+					sendMail({
+						to: credentials.email,
+						subject: 'У вас уже есть аккаунт',
+						html: render(
+							Template({
+								title: 'У вас уже есть аккаунт',
+								body: 'Только что вы пытались создать аккаунт, но он у вас есть. Войдите в него.',
+								actionText: 'Войти',
+								actionUrl: `${env.VERCEL_URL}/auth/login`,
+							})
+						),
+					});
+				else {
+					tokenValues.userId = user.id;
+					db.insert(verificationTokens).values(tokenValues).run();
+					sendMail({
+						to: credentials.email,
+						subject: 'Подтвердите email',
+						html: render(
+							RegisterVerification({
+								url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+							})
+						),
+					});
+				}
 			} else throw err;
 		});
-
-	sendMail({
-		to: credentials.email,
-		subject: 'Verify your email',
-		html: render(
-			RegisterVerification({
-				url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
-			})
-		),
-	}).catch((err) => {
-		console.error("Can't send verification email", err);
-	});
 
 	return {
 		id: userId,
