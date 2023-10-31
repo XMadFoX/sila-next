@@ -173,5 +173,5 @@ export async function verifyEmail(token: string) {
 		.set({ emailVerified: new Date() })
 		.where(eq(users.id, verificationToken.userId))
 		.run();
-	return true;
+	return user;
 }

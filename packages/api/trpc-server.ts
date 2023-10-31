@@ -8,7 +8,7 @@ import { envCore } from '@sila/env';
 import { User } from './db/schema';
 import { NextApiRequest } from 'next';
 
-type UserSession = { user: ShortUser };
+export type UserSession = { user: ShortUser };
 export type Session = IronSession<UserSession>;
 
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
