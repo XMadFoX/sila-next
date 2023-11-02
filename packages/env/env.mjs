@@ -20,6 +20,7 @@ const serverVariables = {
 	ESECRET: z.string().min(1),
 	UPSTASH_REDIS_URL: z.string().url(),
 	UPSTASH_REDIS_TOKEN: z.string().min(1),
+	TURNSTILE_SECRET_KEY: z.string().min(1),
 };
 
 export const env = createEnv({
@@ -29,6 +30,7 @@ export const env = createEnv({
 	},
 	client: {
 		NEXT_PUBLIC_TRPC_PREFIX: z.string().optional(),
+		NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
 	},
 	// For Next.js >= 13.4.4, you only need to destructure client variables:
 	experimental__runtimeEnv: {
@@ -36,6 +38,7 @@ export const env = createEnv({
 		VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL
 			? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
 			: 'http://localhost:3000',
+		NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
 	},
 });
 
