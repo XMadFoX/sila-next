@@ -10,13 +10,16 @@ import { eq } from 'drizzle-orm';
 import ratelimit from '../ratelimit';
 import { Ratelimit } from '@upstash/ratelimit';
 
+export const captchaZod = z.string().min(10);
 export const loginSchema = z.object({
 	email: z.string().email(),
 	password: z.string(),
+	captcha: z.string(),
 });
 
 export const registerSchema = loginSchema.extend({
 	name: z.string().min(3).max(32),
+	captcha: z.string(),
 });
 
 export const authRoutes = createTRPCRouter({
@@ -34,26 +37,17 @@ export const authRoutes = createTRPCRouter({
 			await ctx.session.save();
 			return { totpRequired: user.totpEnabled };
 		}),
-	login: publicProcedure
-		.input(
-			z.object({
-				email: z.string().email(),
-				password: z.string(),
-			})
-		)
-		.mutation(async ({ input, ctx }) => {
-			await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
-			// TODO: it locks out the user if someone tries to bruteforce
-			// probably should send an email to the user with a message about bruteforce and a login link
-			const user = await login(input, ctx.req);
-			ctx.session.user = user;
-			await ctx.session.save();
-			return { totpRequired: user.totpEnabled };
-		}),
+	login: publicProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
+		await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
+		// TODO: it locks out the user if someone tries to bruteforce
+		// probably should send an email to the user with a message about bruteforce and a login link
+		const user = await login(input, ctx.req);
+		ctx.session.user = user;
+		await ctx.session.save();
+		return { totpRequired: user.totpEnabled };
+	}),
 	logout: publicProcedure.mutation(async ({ ctx }) => {
-		// ctx.session.user = undefined;
 		await ctx.session.destroy();
-		// return createResponse(res, 'Logged out');
 		return 'ok';
 	}),
 	update: protectedProcedure

@@ -17,11 +17,13 @@ import {
 } from '@sila/emails';
 import { NextApiRequest } from 'next';
 import getLoginDetails from './getLoginDetails';
+import captcha from '../captcha';
 
 export async function login(
 	credentials: z.infer<typeof loginSchema>,
 	req: NextApiRequest
 ): Promise<ShortUser> {
+	await captcha(credentials.captcha);
 	const user = await findOne(credentials.email);
 	if (user) {
 		// try to log in
@@ -59,6 +61,7 @@ export async function login(
 export async function register(
 	credentials: z.infer<typeof registerSchema>
 ): Promise<ShortUser> {
+	await captcha(credentials.captcha);
 	// TODO: resend verification email if expired
 	if (!credentials?.name) throw new Error('Name is required');
 	// hash password
@@ -116,7 +119,7 @@ export async function register(
 						html: render(
 							Template({
 								title: 'У вас уже есть аккаунт',
-								body: 'Только что вы пытались создать аккаунт, но он у вас есть. Войдите в него.',
+								text: 'Только что вы пытались создать аккаунт, но он у вас есть. Войдите в него.',
 								actionText: 'Войти',
 								actionUrl: `${env.VERCEL_URL}/auth/login`,
 							})
