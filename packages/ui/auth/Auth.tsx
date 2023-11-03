@@ -13,17 +13,22 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import useSession from '../useSession';
 import { Eye, EyeOff } from 'lucide-react';
+import { Captcha } from '../general/Captcha';
+import { useTurnstile } from 'react-turnstile';
+import { ErrorMessage } from '@hookform/error-message';
 
 function isString(d: unknown): d is string {
 	return typeof d === 'string';
 }
 
 export function Auth({ closeModal }: { closeModal?: () => void }) {
+	const turnstile = useTurnstile();
 	const [value, setValue] = React.useState('default');
 	const isRegister = value === 'register';
 	const schema = z.object({
 		email: z.string().email(),
 		password: z.string().min(10),
+		captcha: z.string(),
 		...(isRegister && { name: z.string().min(2).max(32) }),
 	});
 	const methods = useForm<z.infer<typeof schema>>({
@@ -35,7 +40,9 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 		register: registerField,
 		handleSubmit,
 		setError,
+		setValue: setFormValue,
 		formState: { errors },
+		watch,
 	} = methods;
 	const [showPassword, setShowPassword] = React.useState(false);
 	const router = useRouter();
@@ -89,15 +96,23 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 				}
 			},
 			onError: (err) => {
-				setError('password', {});
-				setError('email', {});
-				setError('root', {
-					message: err.message,
-					type: err.data?.code,
-				});
+				if (err.message === 'captcha.invalid')
+					setError('captcha', { message: 'Неверная капча' });
+				else {
+					setError('password', {});
+					setError('email', {});
+					setError('root', {
+						message: err.message,
+						type: err.data?.code,
+					});
+				}
+				setFormValue('captcha' as const, null as any);
+				turnstile.reset();
 			},
 		});
 	const [loggedIn, setLoggedIn] = React.useState(false);
+
+	const captchaValue = watch('captcha');
 
 	useEffect(() => {
 		if (loggedIn && session?.user?.totpEnabled) {
@@ -140,12 +155,14 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 									email: d.email,
 									password: d.password,
 									name: d.name,
+									captcha: d.captcha,
 								});
 							}
 						} else
 							login({
 								email: d.email,
 								password: d.password,
+								captcha: d.captcha,
 							});
 					})}
 				>
@@ -210,10 +227,19 @@ export function Auth({ closeModal }: { closeModal?: () => void }) {
 								: errors.root.message}
 						</label>
 					)}
+					<Captcha onVerify={(t) => setFormValue('captcha' as const, t)} />
+					<ErrorMessage
+						errors={errors}
+						name="captcha"
+						render={({ message }) => (
+							<label className="text-error">Не правильная капча</label>
+						)}
+					/>
 					<Button
 						type="submit"
 						rounded="lg"
-						className="w-full h-11"
+						className="w-full h-11 disabled:opacity-50"
+						disabled={typeof captchaValue !== 'string'}
 						size={null}
 					>
 						{isRegister ? 'Регистрация' : 'Войти'}
