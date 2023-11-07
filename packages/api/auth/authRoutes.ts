@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import ratelimit from '../ratelimit';
 import { Ratelimit } from '@upstash/ratelimit';
+import { randomInt } from 'crypto';
 
 export const captchaZod = z.string().min(10);
 export const loginSchema = z.object({
@@ -32,6 +33,7 @@ export const authRoutes = createTRPCRouter({
 		.input(registerSchema)
 		.mutation(async ({ input, ctx }) => {
 			await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
+			await new Promise((r) => setTimeout(r, randomInt(0, 500)));
 			const user = await register(input);
 			ctx.session.user = user;
 			await ctx.session.save();
@@ -41,6 +43,7 @@ export const authRoutes = createTRPCRouter({
 		await ratelimit(ctx.limitId, Ratelimit.fixedWindow(10, '60 s'));
 		// TODO: it locks out the user if someone tries to bruteforce
 		// probably should send an email to the user with a message about bruteforce and a login link
+		await new Promise((r) => setTimeout(r, randomInt(0, 500)));
 		const user = await login(input, ctx.req);
 		ctx.session.user = user;
 		await ctx.session.save();
