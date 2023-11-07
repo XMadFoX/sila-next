@@ -31,6 +31,7 @@ export const env = createEnv({
 	client: {
 		NEXT_PUBLIC_TRPC_PREFIX: z.string().optional(),
 		NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
+		NEXT_PUBLIC_OFFLINE: z.boolean().optional(),
 	},
 	// For Next.js >= 13.4.4, you only need to destructure client variables:
 	experimental__runtimeEnv: {
@@ -39,6 +40,7 @@ export const env = createEnv({
 			? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}`
 			: 'http://localhost:3000',
 		NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+		NEXT_PUBLIC_OFFLINE: process.env.NEXT_PUBLIC_OFFLINE === 'true',
 	},
 });
 
