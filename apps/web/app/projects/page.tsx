@@ -109,7 +109,7 @@ function Projects() {
 					{isLoading &&
 						Array(6)
 							.fill(null)
-							.map((_, idx) => <CardSkeleton key={idx} />)}
+							.map((_, idx) => <CardSkeleton key={idx} idx={idx} />)}
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (

@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { FullCard } from 'ui/card';
 import useSession from 'ui/useSession';
 import Link from 'next/link';
+import { AnimatePresence } from 'framer-motion';
 
 const dateMonth = new Intl.DateTimeFormat('ru-RU', {
 	day: 'numeric',
@@ -23,14 +24,15 @@ const kind = 'event' as const;
 function Events() {
 	const filter = useStore($filter);
 
-	const { data } = trpc.events.find.useQuery({
+	const { data, isLoading } = trpc.events.find.useQuery({
 		start: filter.start,
 		end: filter.end,
 	});
-	const { data: important, isLoading } = trpc.events.find.useQuery({
-		isImportant: true,
-		start: today,
-	});
+	const { data: important, isLoading: isLoadingImportant } =
+		trpc.events.find.useQuery({
+			isImportant: true,
+			start: today,
+		});
 
 	const router = useRouter();
 	const params = useSearchParams();
@@ -113,10 +115,12 @@ function Events() {
 				</Heading>
 				<DatesBar />
 				<CardList>
-					{isLoading &&
-						Array(6)
-							.fill(null)
-							.map((_, idx) => <CardSkeleton key={idx} />)}
+					<AnimatePresence>
+						{isLoading &&
+							Array(6)
+								.fill(null)
+								.map((_, idx) => <CardSkeleton key={idx} idx={idx} />)}
+					</AnimatePresence>
 					{!isLoading && data?.length === 0 && 'Ничего не найдено'}
 					{data?.map((i) => {
 						return (
