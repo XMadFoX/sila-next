@@ -17,12 +17,15 @@ export interface InputFieldProps
 }
 
 function calcilateVariant({
+	disabled,
 	invalid,
 	filled,
 }: {
+	disabled: boolean;
 	invalid: boolean;
 	filled: boolean;
 }) {
+	if (disabled) return 'disabled';
 	if (invalid) return 'invalid';
 	if (filled) return 'filled';
 	return 'default';
@@ -31,7 +34,8 @@ function calcilateVariant({
 const wrapper = cva('flex relative flex-col transition-all duration-300', {
 	variants: {
 		intent: {
-			default: ['bg-primary'],
+			disabled: ['opacity-50 bg-black'],
+			default: ['bg-primary peer-disabled:opacity-50'],
 			invalid: ['bg-error'],
 			filled: ['bg-black focus-within:bg-primary'],
 		},
@@ -39,9 +43,10 @@ const wrapper = cva('flex relative flex-col transition-all duration-300', {
 });
 
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
-	({ rightItem, errors, labelVisible, ...props }, ref) => {
+	({ rightItem, errors, labelVisible, className, ...props }, ref) => {
 		const { fieldState, field } = useController({ name: props.name! });
 		const variant = calcilateVariant({
+			disabled: props?.disabled || false,
 			invalid: fieldState.isTouched && fieldState?.error ? true : false,
 			filled: field?.value?.length > 0,
 		});
@@ -58,9 +63,12 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
 					<input
 						ref={ref}
 						className={cn(
-							'py-2 px-4 w-full rounded-lg ring transition-all dark:bg-black duration-300 appearance-none outline-none focus:ring-transparent ring-dark-grey',
+							'py-2 px-4 w-full rounded-lg ring transition-all group dark:bg-blac duration-300 appearance-none outline-none focus:ring-transparent ring-dark-grey bg-white',
 							field.value?.length > 0 && 'ring-transparent',
-							fieldState.isTouched && fieldState?.error && 'border-error border'
+							fieldState.isTouched &&
+								fieldState?.error &&
+								'border-error border',
+							className
 						)}
 						{...props}
 					/>
