@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { InputField } from '../input';
@@ -23,10 +23,24 @@ export default function Profile() {
 		register,
 		handleSubmit,
 		setError,
+		setValue,
 		formState: { isValid },
 	} = methods;
 
+	const { data } = trpc.auth.session.useQuery(undefined, {
+		refetchOnWindowFocus: false,
+		refetchOnReconnect: false,
+		refetchOnMount: false,
+	});
+
+	useEffect(() => {
+		if (!data) return;
+		setValue('name', data?.user.name);
+		setValue('email', data?.user.email);
+	}, [data, setValue]);
+
 	const { mutate } = trpc.auth.update.useMutation();
+
 	return (
 		<>
 			<div className="flex mt-10">
@@ -40,26 +54,35 @@ export default function Profile() {
 						<InputField
 							aria-label="Имя пользователя"
 							labelVisible
+							disabled
+							className="cursor-not-allowed"
 							{...register('name')}
 						/>
 						<InputField
 							aria-label="Email"
 							labelVisible
+							disabled
+							className="cursor-not-allowed"
 							{...register('email')}
 						/>
 					</form>
 				</FormProvider>
-				<Button
-					intent="outlined"
-					className="py-3.5 px-5 mb-auto text-black uppercase"
-					wrapperClassName="mb-auto"
-					bg="var(--white)"
-					size={null}
-				>
-					Удалить аккаунт
-				</Button>
+				{/* <Button */}
+				{/* 	intent="outlined" */}
+				{/* 	className="py-3.5 px-5 mb-auto text-black uppercase" */}
+				{/* 	wrapperClassName="mb-'auto" */}
+				{/* 	bg="var(--white)" */}
+				{/* 	size={null} */}
+				{/* > */}
+				{/* 	Удалить аккаунт */}
+				{/* </Button> */}
 			</div>
-			<Button className="py-3.5 px-5 mt-9 uppercase" size={null}>
+			<Button
+				className="py-3.5 px-5 mt-9 uppercase opacity-50"
+				title="Пока не доступно"
+				disabled
+				size={null}
+			>
 				Сменить пароль
 			</Button>
 		</>
