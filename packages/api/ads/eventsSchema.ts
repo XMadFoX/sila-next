@@ -61,7 +61,7 @@ const projectBaseSchema = baseSchema.extend({
 const onlineCond = {
 	isOnline: z.literal(true),
 };
-const offlineCond = {
+export const offlineCond = {
 	isOnline: z.literal(false),
 	country: z.string().length(2),
 	city: z.string().min(3).max(255),

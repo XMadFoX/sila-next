@@ -9,7 +9,11 @@ import { BaseContent, baseContent } from '../schema/contentBase.schema';
 import { z } from 'zod';
 import { articleText, events } from '../schema/events.schema';
 import { and, eq, sql } from 'drizzle-orm';
-import { newEventSchemaApi, newProjectSchemaApi } from './eventsSchema';
+import {
+	newEventSchemaApi,
+	newProjectSchemaApi,
+	offlineCond,
+} from './eventsSchema';
 import { TRPCError } from '@trpc/server';
 import { eventTypesRoutes } from './eventTypes';
 import { omit, pick } from 'remeda';
@@ -115,20 +119,31 @@ export const eventRoutes = createTRPCRouter({
 				throw new TRPCError({ code: 'UNAUTHORIZED' });
 			}
 
+			type DataKeys = keyof typeof data;
+			type Y = keyof typeof offlineCond;
+			type X = keyof z.infer<typeof newEventSchemaApi>;
+			type Z = X | Y;
+			const baseOmit = [
+				'title',
+				'contacts',
+				'timestamp',
+				'date',
+				'articleData',
+				'entryType',
+				'text',
+				'kind',
+				'maps_link',
+				'time',
+			] as const;
+			const toUpd = {
+				...omit<any, Z>(data, baseOmit),
+			};
 			const res = await db
 				.update(adColumn)
 				.set({
 					date: data.timestamp,
-					...omit(data, [
-						'title',
-						'contacts',
-						'timestamp',
-						'date',
-						'time',
-						'articleData',
-						'text',
-						'kind',
-					]),
+					mapData: data.isOnline ? null : data.maps_link,
+					...toUpd,
 				})
 				.where(eq(adColumn.id, id))
 				.returning({ id: adColumn.id, bId: adColumn.baseId })
