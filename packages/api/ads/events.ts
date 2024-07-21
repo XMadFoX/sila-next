@@ -143,6 +143,9 @@ export const eventRoutes = createTRPCRouter({
 				.set({
 					date: data.timestamp,
 					mapData: data.isOnline ? null : data.maps_link,
+					city: data.isOnline ? null : data.city,
+					country: data.isOnline ? null : data.country,
+					address: data.isOnline ? null : data.address,
 					...toUpd,
 				})
 				.where(eq(adColumn.id, id))
