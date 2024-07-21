@@ -11,7 +11,7 @@ const serverVariables = {
 	DB_URL: z.string().url(),
 	DB_AUTH_TOKEN: z.string().min(1),
 	NODE_ENV: z.string().min(1).optional(),
-	SMTP_USER: z.string().email(),
+	SMTP_USER: z.string(),
 	SMTP_PASS: z.string().min(1),
 	SMTP_HOST: z.string().min(1),
 	SMTP_PORT: z.coerce.number(),
