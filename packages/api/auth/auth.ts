@@ -19,6 +19,8 @@ import { NextApiRequest } from 'next';
 import getLoginDetails from './getLoginDetails';
 import captcha from '../captcha';
 
+const BASE_URL = env?.BASE_URL || env.VERCEL_URL;
+
 export async function login(
 	credentials: z.infer<typeof loginSchema>,
 	req: NextApiRequest
@@ -44,7 +46,7 @@ export async function login(
 						browser: `${browser.name} ${browser.version}`,
 						ip,
 						timestamp: time,
-						url: env.VERCEL_URL + '/me',
+						url: BASE_URL + '/me',
 					})
 				),
 			});
@@ -97,7 +99,7 @@ export async function register(
 				subject: 'Подтвердите вашу регистрацию',
 				html: render(
 					RegisterVerification({
-						url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+						url: `${BASE_URL}/api/auth/verify/${verificationToken}`,
 					})
 				),
 			}).catch((err) => {
@@ -121,7 +123,7 @@ export async function register(
 								title: 'У вас уже есть аккаунт',
 								text: 'Только что вы пытались создать аккаунт, но он у вас есть. Войдите в него.',
 								actionText: 'Войти',
-								actionUrl: `${env.VERCEL_URL}/auth/login`,
+								actionUrl: `${BASE_URL}/auth/login`,
 							})
 						),
 					});
@@ -133,7 +135,7 @@ export async function register(
 						subject: 'Подтвердите email',
 						html: render(
 							RegisterVerification({
-								url: `${env.VERCEL_URL}/api/auth/verify/${verificationToken}`,
+								url: `${BASE_URL}/api/auth/verify/${verificationToken}`,
 							})
 						),
 					});

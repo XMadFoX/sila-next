@@ -10,6 +10,7 @@ dotenv.config({ path: '.env.local' });
 const serverVariables = {
 	DB_URL: z.string().url(),
 	DB_AUTH_TOKEN: z.string().min(1),
+	BASE_URL: z.string().optional(),
 	NODE_ENV: z.string().min(1).optional(),
 	SMTP_USER: z.string(),
 	SMTP_PASS: z.string().min(1),
